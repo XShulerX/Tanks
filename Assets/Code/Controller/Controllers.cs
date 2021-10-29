@@ -2,11 +2,10 @@ using System.Collections.Generic;
 
 namespace MVC
 {
-    internal sealed class Controllers : ICleanup, IExecute, ILateExecute, IInitialization, IPhysicsExecute
+    internal sealed class Controllers : ICleanup, IExecute, IInitialization, IPhysicsExecute
     {
         private readonly List<ICleanup> _cleanupControllers;
         private readonly List<IExecute> _executeControllers;
-        private readonly List<ILateExecute> _lateExecuteControllers;
         private readonly List<IInitialization> _initializeControllers;
         private readonly List<IPhysicsExecute> _physicsExecuteControllers;
 
@@ -14,7 +13,6 @@ namespace MVC
         {
             _cleanupControllers = new List<ICleanup>();
             _executeControllers = new List<IExecute>();
-            _lateExecuteControllers = new List<ILateExecute>();
             _initializeControllers = new List<IInitialization>();
             _physicsExecuteControllers = new List<IPhysicsExecute>();
         }
@@ -29,11 +27,6 @@ namespace MVC
             if (controller is IExecute executeController)
             {
                 _executeControllers.Add(executeController);
-            }
-
-            if (controller is ILateExecute lateExecuteController)
-            {
-                _lateExecuteControllers.Add(lateExecuteController);
             }
 
             if (controller is IInitialization initializationController)
@@ -70,14 +63,6 @@ namespace MVC
             for (var index = 0; index < _initializeControllers.Count; ++index)
             {
                 _initializeControllers[index].Initilazation();
-            }
-        }
-
-        public void LateExecute(float deltaTime)
-        {
-            for (var index = 0; index < _lateExecuteControllers.Count; ++index)
-            {
-                _lateExecuteControllers[index].LateExecute(deltaTime);
             }
         }
 

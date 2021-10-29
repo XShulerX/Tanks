@@ -1,14 +1,22 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace MVC
 {
     public sealed class GameStarter : MonoBehaviour
     {
+        [SerializeField]
+        private Enemy enemy;
+        [SerializeField]
+        private Player player;
+
         private Controllers _controllers;
 
         private void Start()
         {
+            IPlayerTurn[] players = new IPlayerTurn[2] {enemy, player};
             _controllers = new Controllers();
+            new GameInitialization(_controllers, players);
             _controllers.Initilazation();
         }
 
@@ -18,10 +26,9 @@ namespace MVC
             _controllers.Execute(deltaTime);
         }
 
-        private void LateUpdate()
+        private void FixedUpdate()
         {
-            var deltaTime = Time.deltaTime;
-            _controllers.LateExecute(deltaTime);
+            _controllers.PhysicsExecute();
         }
 
         private void OnDestroy()
