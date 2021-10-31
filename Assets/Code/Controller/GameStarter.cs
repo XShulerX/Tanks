@@ -1,12 +1,11 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace MVC
 {
     public sealed class GameStarter : MonoBehaviour
     {
         [SerializeField]
-        private Enemy enemy;
+        private EnemyData _enemyData;
         [SerializeField]
         private Player player;
 
@@ -14,9 +13,8 @@ namespace MVC
 
         private void Start()
         {
-            IPlayerTurn[] players = new IPlayerTurn[2] {enemy, player};
             _controllers = new Controllers();
-            new GameInitialization(_controllers, players);
+            new GameInitialization(_controllers, _enemyData, player);
             _controllers.Initilazation();
         }
 

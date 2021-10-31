@@ -3,13 +3,18 @@ using UnityEngine;
 namespace MVC
 {
 
-    public class Enemy : MonoBehaviour, IPlayerTurn
+    public class Enemy : MonoBehaviour, IEnemy
     {
         public bool isYourTurn { get ; set; }
 
-        public Enemy()
+        private void Start()
         {
             isYourTurn = false;
+        }
+
+        private void Fire()
+        {
+
         }
     }
 }
