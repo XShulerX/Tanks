@@ -13,11 +13,11 @@ namespace MVC
 
         public IEnemy[] CreateEnemies()
         {
-            var (enemies, enemyPosition) = _data.GetEnemies();
+            var (enemies, enemyPosition, enemyRotation) = _data.GetEnemies();
             IEnemy[] enemiesList = new IEnemy[enemies.Length];
             for (var i = 0; i < enemies.Length; i++)
             {
-                enemiesList[i] = Object.Instantiate(enemies[i], enemyPosition[i], Quaternion.Euler(0f,-90f,0f));
+                enemiesList[i] = Object.Instantiate(enemies[i], enemyPosition[i], Quaternion.Euler(enemyRotation[i])) ;
             }
             return enemiesList;
         }

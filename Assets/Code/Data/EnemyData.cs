@@ -11,23 +11,27 @@ namespace MVC
         private struct EnemyInfo
         {
             public Vector3 Position;
-            public Quaternion Rotation;
+            public Vector3 Rotation;
             public Enemy EnemyPrefab;
         }
 
         [SerializeField]
         private List<EnemyInfo> _enemies;
 
-        public (Enemy[], Vector3[]) GetEnemies()
+        public (Enemy[], Vector3[], Vector3[]) GetEnemies()
         {
-            var (enemies, enemyPosition) = (new Enemy[_enemies.Count], new Vector3[_enemies.Count]);
+            var (enemies, enemyPosition, enemyRotation) =
+                (new Enemy[_enemies.Count],
+                new Vector3[_enemies.Count],
+                new Vector3[_enemies.Count]);
             for(var i = 0; i < _enemies.Count; i++)
             {
                 var enemy = _enemies[i];
                 enemies[i] = enemy.EnemyPrefab;
                 enemyPosition[i] = enemy.Position;
+                enemyRotation[i] = enemy.Rotation;
             }
-            return (enemies, enemyPosition);
+            return (enemies, enemyPosition, enemyRotation);
         }
     }
 }
