@@ -27,6 +27,10 @@ namespace MVC
             for(var i = 0; i < _enemies.Count; i++)
             {
                 var enemy = _enemies[i];
+                if(enemy.EnemyPrefab == null)
+                {
+                    throw new InvalidOperationException("Enemy prefab not found");
+                }
                 enemies[i] = enemy.EnemyPrefab;
                 enemyPosition[i] = enemy.Position;
                 enemyRotation[i] = enemy.Rotation;
