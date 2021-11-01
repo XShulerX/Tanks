@@ -17,7 +17,7 @@ namespace MVC
             IEnemy[] enemiesList = new IEnemy[enemies.Length];
             for (var i = 0; i < enemies.Length; i++)
             {
-                enemiesList[i] = Object.Instantiate(enemies[i], enemyPosition[i], Quaternion.Euler(enemyRotation[i])) ;
+                enemiesList[i] = Object.Instantiate(enemies[i], enemyPosition[i], Quaternion.Euler(enemyRotation[i]));
             }
             return enemiesList;
         }

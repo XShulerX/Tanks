@@ -14,13 +14,15 @@ namespace MVC
         [SerializeField]
         private Transform _turret;
 
-        public bool isYourTurn { get ; set; }
+        private int _currentHealthPoints;
 
         public event Action OnCollisionEnterChange;
+        public bool isYourTurn { get ; set; }
 
         private void Start()
         {
             isYourTurn = false;
+            _currentHealthPoints = 2;
         }
 
         public void Fire(Transform target)

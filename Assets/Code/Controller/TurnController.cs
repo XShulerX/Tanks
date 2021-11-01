@@ -6,11 +6,12 @@ namespace MVC
     {
 
         private Queue<IPlayerTurn> _queueGamers;
-        private float _delay;
+        private float _delayBeforeFire;
 
-        public TurnController(IPlayerTurn[] gamersList)
+        public TurnController(IPlayerTurn[] gamersList, float delayBeforeFire)
         {
             _queueGamers = new Queue<IPlayerTurn>(gamersList);
+            _delayBeforeFire = delayBeforeFire;
         }
 
         public void Execute(float deltaTime)
@@ -27,11 +28,6 @@ namespace MVC
             var currentPlayer = _queueGamers.Dequeue();
             _queueGamers.Enqueue(currentPlayer);
             _queueGamers.Peek().isYourTurn = true;
-        }
-
-        private void EndTurn()
-        {
-
         }
     }
 }

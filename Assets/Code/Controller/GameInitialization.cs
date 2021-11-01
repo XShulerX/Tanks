@@ -12,7 +12,8 @@ namespace MVC
             gamerList.Add(player);
             gamerList.AddRange(enemyInitialization.GetEnemies()); 
             controllers.Add(enemyInitialization);
-            controllers.Add(new TurnController(gamerList.ToArray()));
+            controllers.Add(new TurnController(gamerList.ToArray(), 60f));
+            controllers.Add(new EnemyFireController(player.transform, enemyInitialization.GetEnemies()));
         }
     }
 }

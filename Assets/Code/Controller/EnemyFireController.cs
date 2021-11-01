@@ -5,11 +5,12 @@ namespace MVC
 {
     public class EnemyFireController : IExecute
     { 
-        private List<Enemy> _enemies;
+        private List<IEnemy> _enemies;
         private readonly Transform _target;
 
-        public EnemyFireController(Transform target)
+        public EnemyFireController(Transform target, List<IEnemy> enemies)
         {
+            _enemies = enemies;
             _target = target;
         }
 
