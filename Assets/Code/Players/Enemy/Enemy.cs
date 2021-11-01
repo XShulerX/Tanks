@@ -12,18 +12,31 @@ namespace MVC
         private Transform _gun;
         [SerializeField]
         private Transform _turret;
-
+        [SerializeField]
         private int _currentHealthPoints;
 
-        public event Action OnCollisionEnterChange;
+        public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public event Action<Vector3> OnMouseUpChange;
 
-        public bool isYourTurn { get ; set; }
+        public bool IsYourTurn { get ; set; }
+        public bool IsDead { get; set; }
+        public int CurrentHealthPoints {
+            get => _currentHealthPoints;
+            set
+            {
+                if (value < 0)
+                {
+                    IsDead = true;
+                }
+                _currentHealthPoints = value;
+            }
+        }
 
         private void Start()
         {
-            isYourTurn = false;
-            _currentHealthPoints = 2;
+            IsDead = false;
+            IsYourTurn = false;
+            CurrentHealthPoints = 2;
         }
 
         public void Fire(Transform target)
@@ -35,7 +48,7 @@ namespace MVC
 
         private void OnCollisionEnter(Collision collision)
         {
-            OnCollisionEnterChange?.Invoke();
+            OnCollisionEnterChange?.Invoke(collision, this);
         }
 
         private void OnMouseUp()

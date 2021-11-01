@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MVC
 {
-    public sealed class Player : MonoBehaviour, IPlayerTurn
+    public sealed class Player : MonoBehaviour, IPlayer
     {
         [SerializeField]
         private GameObject _bullet;
@@ -15,12 +15,25 @@ namespace MVC
         private Vector3 _target;
         private int _currentHealthPoints;
 
-        public event Action OnCollisionEnterChange;
-        public bool isYourTurn { get ; set; }
+        public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
+        public bool IsYourTurn { get ; set; }
+        public bool IsDead { get; set; }
+        public int CurrentHealthPoints {
+            get => _currentHealthPoints;
+            set
+            {
+                if(value < 0)
+                {
+                    IsDead = true;
+                }
+                _currentHealthPoints = value;
+            }
+        }
 
         public Player()
         {
-            isYourTurn = true;
+            IsYourTurn = true;
+            IsDead = false;
             _currentHealthPoints = 100;
         }
 
@@ -38,7 +51,7 @@ namespace MVC
 
         private void OnCollisionEnter(Collision collision)
         {
-            OnCollisionEnterChange?.Invoke();
+            OnCollisionEnterChange?.Invoke(collision, this);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace MVC
 
         public void Execute(float deltaTime)
         {
-            if (!_player.isYourTurn)
+            if (!_player.IsYourTurn)
             {
                 return;
             }
@@ -21,7 +21,7 @@ namespace MVC
             if (Input.GetButtonDown(ButtonsManager.FIRE1))
             {
                 _player.Fire();
-                _player.isYourTurn = false;
+                _player.IsYourTurn = false;
             }
         }
     }

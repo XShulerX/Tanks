@@ -5,13 +5,13 @@ namespace MVC
     internal sealed class TurnController : IExecute
     {
 
-        private Queue<IPlayerTurn> _queueGamers;
+        private Queue<IGamer> _queueGamers;
         private float _currentTimer;
         private float _delayBeforeFire;
 
-        public TurnController(IPlayerTurn[] gamersList, float delayBeforeFire)
+        public TurnController(IEnumerable<IGamer> gamersList, float delayBeforeFire)
         {
-            _queueGamers = new Queue<IPlayerTurn>(gamersList);
+            _queueGamers = new Queue<IGamer>(gamersList);
             _delayBeforeFire = delayBeforeFire;
             _currentTimer = 0f;
         }
@@ -19,10 +19,16 @@ namespace MVC
         public void Execute(float deltaTime)
         {
             var currentPlayer = _queueGamers.Peek();
-            if (!currentPlayer.isYourTurn)
+            if (currentPlayer.IsDead)
+            {
+                currentPlayer.IsYourTurn = false;
+            }
+            if (!currentPlayer.IsYourTurn)
             {
                 if(Timer(_delayBeforeFire, deltaTime))
+                {
                     PassNext();
+                }
             }
         }
 
@@ -38,14 +44,13 @@ namespace MVC
                 _currentTimer = 0f;
                 return true;
             }
-
         }
 
         private void PassNext()
         {
             var currentPlayer = _queueGamers.Dequeue();
             _queueGamers.Enqueue(currentPlayer);
-            _queueGamers.Peek().isYourTurn = true;
+            _queueGamers.Peek().IsYourTurn = true;
         }
     }
 }

@@ -1,7 +1,9 @@
+using System.Collections.Generic;
+
 namespace MVC
 {
     public interface IEnemyFactory
     {
-        IEnemy[] CreateEnemies();
+        IEnumerable<IEnemy> CreateEnemies();
     }
 }

@@ -5,10 +5,10 @@ namespace MVC
 {
     internal sealed class EnemyFireController : IExecute
     { 
-        private List<IEnemy> _enemies;
+        private IEnumerable<IEnemy> _enemies;
         private readonly Transform _target;
 
-        public EnemyFireController(Transform target, List<IEnemy> enemies)
+        public EnemyFireController(Transform target, IEnumerable<IEnemy> enemies)
         {
             _enemies = enemies;
             _target = target;
@@ -18,10 +18,10 @@ namespace MVC
         {
             foreach(var enemy in _enemies)
             {
-                if (enemy.isYourTurn)
+                if (enemy.IsYourTurn && !enemy.IsDead)
                 {
                     enemy.Fire(_target);
-                    enemy.isYourTurn = false;
+                    enemy.IsYourTurn = false;
                 }
             }
         }

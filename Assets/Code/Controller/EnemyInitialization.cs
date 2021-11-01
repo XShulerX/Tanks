@@ -19,9 +19,12 @@ namespace MVC
         {
         }
 
-        public List<IEnemy> GetEnemies()
+        public IEnumerable<IEnemy> GetEnemies()
         {
-            return _enemies;
+            foreach(var enemy in _enemies)
+            {
+                yield return enemy;
+            }
         }
 
     }

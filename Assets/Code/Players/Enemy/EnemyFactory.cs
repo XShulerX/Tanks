@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MVC
@@ -11,7 +12,7 @@ namespace MVC
             _data = data;
         }
 
-        public IEnemy[] CreateEnemies()
+        public IEnumerable<IEnemy> CreateEnemies()
         {
             var (enemies, enemyPosition, enemyRotation) = _data.GetEnemies();
             IEnemy[] enemiesList = new IEnemy[enemies.Length];
