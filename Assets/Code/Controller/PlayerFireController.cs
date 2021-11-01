@@ -18,7 +18,7 @@ namespace MVC
                 return;
             }
 
-            if (Input.GetButtonDown("Fire"))
+            if (Input.GetButtonDown(ButtonsManager.FIRE1))
             {
                 _player.Fire();
                 _player.isYourTurn = false;

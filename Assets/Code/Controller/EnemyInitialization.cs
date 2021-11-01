@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace MVC
 {
-    public class EnemyInitialization : IInitialization
+    internal sealed class EnemyInitialization : IInitialization
     {
         private readonly IEnemyFactory _enemyFactory;
         private List<IEnemy> _enemies;

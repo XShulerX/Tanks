@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MVC
 {
 
-    public class Enemy : MonoBehaviour, IEnemy
+    public sealed class Enemy : MonoBehaviour, IEnemy
     {
         [SerializeField]
         private GameObject _bullet;

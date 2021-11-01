@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MVC
 {
-    public class EnemyFireController : IExecute
+    internal sealed class EnemyFireController : IExecute
     { 
         private List<IEnemy> _enemies;
         private readonly Transform _target;

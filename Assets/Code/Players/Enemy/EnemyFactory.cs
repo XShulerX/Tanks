@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace MVC
 {
-    public sealed class EnemyFactory : IEnemyFactory
+    internal sealed class EnemyFactory : IEnemyFactory
     {
         private readonly EnemyData _data;
 
