@@ -12,7 +12,7 @@ namespace MVC
             gamerList.Add(player);
             gamerList.AddRange(enemyInitialization.GetEnemies()); 
             controllers.Add(enemyInitialization);
-            controllers.Add(new TurnController(gamerList.ToArray(), 60f));
+            controllers.Add(new TurnController(gamerList.ToArray(), 2f));
             controllers.Add(new EnemyFireController(player.transform, enemyInitialization.GetEnemies()));
             controllers.Add(new PlayerFireController(player));
             controllers.Add(new PlayerTargetController(enemyInitialization.GetEnemies(), player));
