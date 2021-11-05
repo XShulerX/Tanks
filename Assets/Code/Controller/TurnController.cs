@@ -13,6 +13,7 @@ namespace MVC
         private IGamer _player;
         private TimerController _timerController;
         private TimeData _timer;
+        private int _maxTurnCount;
 
         private int _turnCount = 1;
         private const float DELAY_BEFOR_FIRE = 1f;
@@ -22,6 +23,7 @@ namespace MVC
             _queueGamers = new LinkedList<IGamer>(gamersList); // ѕерешел с очереди на Ћинкед лист дл€ возможности перестановки
             _timerController = timerController;
             _player = gamersList[0];
+            _maxTurnCount = (gamersList.Count - 1) * 2;
         }
 
         public void Execute(float deltaTime)
@@ -81,7 +83,7 @@ namespace MVC
                 _queueGamers.AddFirst(_player);
             }
 
-            if (_turnCount == 6) // ≈сли сделано 6 выстрелов - глобальный ход заверешн
+            if (_turnCount == _maxTurnCount) // ≈сли сделано 6 выстрелов - глобальный ход заверешн
             {
                 endGlobalTurn.Invoke();
                 _turnCount = 0;
