@@ -6,6 +6,11 @@ namespace MVC
     {
         public GameInitialization(Controllers controllers, EnemyData enemyData, Player player)
         {
+            var poolModel = new PoolModel();
+            var bulletPoolsInitialization = new BulletPoolsInitialization(poolModel);
+
+
+
             var timerController = new TimerController();
             controllers.Add(timerController);
             var enemyFactory = new EnemyFactory(enemyData);
@@ -19,6 +24,7 @@ namespace MVC
             controllers.Add(new PlayerFireController(player));
             controllers.Add(new PlayerTargetController(enemyInitialization.GetEnemies(), player));
             controllers.Add(new TakeDamageController(gamerList));
+            controllers.Add(new FireTargetAbilityController(bulletPoolsInitialization.GetBullets, timerController, poolModel));
         }
     }
 }
