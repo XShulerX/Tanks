@@ -6,7 +6,7 @@ namespace MVC
     {
         public int Damage;
 
-        public GameObject GetCollisionObject;
+        [HideInInspector] public GameObject GetCollisionObject;
 
         private Transform _container;
 

@@ -12,11 +12,6 @@ namespace MVC
     {
         [SerializeField] private List<GameObject> _bulletPrefabs;
 
-
         public List<GameObject> GetBulletPrefabs { get => _bulletPrefabs; }
-
-
-
-
     }
 }

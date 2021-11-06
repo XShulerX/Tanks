@@ -15,12 +15,11 @@ namespace MVC
         public TimeDataExtension()
         {
             _isTimerEnd = false;
-            OnTimerEndWithBool += ChangeTimerStatustension;
+            OnTimerEndWithBool += ChangeTimerStatusExtension;
         }
 
-        private void ChangeTimerStatustension()
+        private void ChangeTimerStatusExtension()
         {
-
             _isTimerEnd = true;
         }
 
@@ -35,7 +34,7 @@ namespace MVC
 
         public virtual void Dispose()
         {
-            OnTimerEndWithBool -= ChangeTimerStatustension;
+            OnTimerEndWithBool -= ChangeTimerStatusExtension;
         }
     }
 }

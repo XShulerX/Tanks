@@ -30,13 +30,12 @@ namespace MVC
 
         private void ChangeTimerStatus()
         {
-
             IsTimerEnd = true;
         }
 
         public void InvokeTimerEnd()
         {
-                OnTimerEnd.Invoke();
+            OnTimerEnd.Invoke();
         }
 
         public override void Dispose()

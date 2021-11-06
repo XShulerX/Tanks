@@ -30,24 +30,10 @@ namespace MVC
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                for(int i = 0; i< _bulletPools.Count; i++)
-                {
-                    if(_bulletPools[i].GetPrefab.layer == 4)
-                    {
-                        for(int j=0; j< NUMBER_OF_BULLETS; j++)
-                        {
-                            var timer = new TimeData(TIME_OF_ACTIVATION_BULLET + j * 2);
-                            timer.OnTimerEndWithBool += Fire;
-                            _timerController.AddTimer(timer);
-                        }
-                        var timer_1 = new TimeData(TIME_OF_ACTIVATION_BULLET + NUMBER_OF_BULLETS * 2);
-                        timer_1.OnTimerEndWithBool += EnemyTurn;
-                        _timerController.AddTimer(timer_1);
-                    }
-                }
+                WaterAbility();
             }
 
-            for(int i=0; i< _bullets.Count; i++)
+            for (int i=0; i< _bullets.Count; i++)
             {
                 if (_bullets[i].GetCollisionObject != null && _bullets[i].gameObject.layer == 4 && _bullets[i].GetCollisionObject.layer == 11)
                 {
@@ -59,6 +45,25 @@ namespace MVC
                 }
             }
             
+        }
+
+        private void WaterAbility()
+        {
+            for (int i = 0; i < _bulletPools.Count; i++)
+            {
+                if (_bulletPools[i].GetPrefab.layer == 4)
+                {
+                    for (int j = 0; j < NUMBER_OF_BULLETS; j++)
+                    {
+                        var timer = new TimeData(TIME_OF_ACTIVATION_BULLET + j * 2);
+                        timer.OnTimerEndWithBool += Fire;
+                        _timerController.AddTimer(timer);
+                    }
+                    var timer_1 = new TimeData(TIME_OF_ACTIVATION_BULLET + NUMBER_OF_BULLETS * 2);
+                    timer_1.OnTimerEndWithBool += EnemyTurn;
+                    _timerController.AddTimer(timer_1);
+                }
+            }
         }
 
         public void Fire()
