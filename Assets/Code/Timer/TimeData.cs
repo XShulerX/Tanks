@@ -6,7 +6,7 @@ using System;
 
 namespace MVC
 {
-    public class TimeData : IDisposable
+    public class TimeData : TimeDataExtension
     {
 
         public event Action OnTimerEnd = delegate () { };
@@ -30,16 +30,18 @@ namespace MVC
 
         private void ChangeTimerStatus()
         {
+
             IsTimerEnd = true;
         }
 
         public void InvokeTimerEnd()
         {
-            OnTimerEnd.Invoke();
+                OnTimerEnd.Invoke();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             OnTimerEnd -= ChangeTimerStatus;
         }
     }

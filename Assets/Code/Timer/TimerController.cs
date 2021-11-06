@@ -29,8 +29,8 @@ namespace MVC
                 if ((Time.time - _timers[i].GetStartTime) >= _timers[i].GetDeltaTime)
                 {
                     _timers[i].InvokeTimerEnd();
-
-                    if((Time.time - _timers[i].GetStartTime) >= REQUIRED_FOR_DELETING_TIMER_TIME)
+                    _timers[i].InvokeTimerEndWithBool();
+                    if ((Time.time - _timers[i].GetStartTime) >= REQUIRED_FOR_DELETING_TIMER_TIME)
                     {
                         RemoveTimeData(_timers[i]);
                     }
