@@ -15,6 +15,12 @@ namespace MVC
         private Vector3 _target;
         private int _currentHealthPoints;
 
+
+
+        /// <summary>
+            public Transform GetGun { get => _gun; }
+        /// </summary>
+
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public bool IsYourTurn { get ; set; }
         public bool IsDead { get; set; }

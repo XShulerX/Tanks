@@ -36,7 +36,6 @@ namespace MVC
         {
             IsDead = false;
             IsYourTurn = false;
-            CurrentHealthPoints = 2;
         }
 
         public void Fire(Transform target)
