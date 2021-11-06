@@ -5,6 +5,8 @@ namespace MVC
 {
     public sealed class Player : MonoBehaviour, IPlayer
     {
+        public Action wasKilled { get; set; } = delegate () { };
+
         [SerializeField]
         private GameObject _bullet;
         [SerializeField]
@@ -28,9 +30,10 @@ namespace MVC
             get => _currentHealthPoints;
             set
             {
-                if(value < 0)
+                if(value <= 0)
                 {
                     IsDead = true;
+                    wasKilled.Invoke();
                 }
                 _currentHealthPoints = value;
             }

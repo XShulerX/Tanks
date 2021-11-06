@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,16 +11,24 @@ namespace MVC
         private List<BulletPool> _bulletPools;
         private TimerController _timerController;
         private PoolModel _poolModel;
-        private List<Bullet> _bullets;
+        private List<Bullet> _bullets = new List<Bullet>();
         private Player _player;
+        private GameObject _box;
+        private int _abilityRandom;
+        private TurnController _turnController;
 
         private const int NUMBER_OF_BULLETS = 5;
         private const float TIME_OF_ACTIVATION_BULLET = 1f;
+        private const int WATER = 0;
+        private const int FIRE = 1;
 
-        public FireTargetAbilityController(List<BulletPool> bulletPools, TimerController timerController, PoolModel poolModel)
+        public FireTargetAbilityController(List<BulletPool> bulletPools, TimerController timerController, PoolModel poolModel, GameObject box, TurnController turnController)
         {
+            _turnController = turnController;
+            _turnController.endGlobalTurn += RandomizeAbility;
+            RandomizeAbility();
+            _box = box;
             _poolModel = poolModel;
-            _bullets = new List<Bullet>();
             _player = GameObject.FindObjectOfType<Player>();
             _bulletPools = bulletPools;
             _timerController = timerController;
@@ -30,12 +39,19 @@ namespace MVC
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                WaterAbility();
+                if (_abilityRandom <= 50)
+                {
+                    FireAbility();
+                }
+                else
+                {
+                    WaterAbility();
+                }
             }
 
-            for (int i=0; i< _bullets.Count; i++)
+            for (int i = 0; i < _bullets.Count; i++)
             {
-                if (_bullets[i].GetCollisionObject != null && _bullets[i].gameObject.layer == 4 && _bullets[i].GetCollisionObject.layer == 11)
+                if (_bullets[i].GetCollisionObject != null && (_bullets[i].gameObject.layer == 4 || _bullets[i].gameObject.layer == 6) && _bullets[i].GetCollisionObject.layer == 11)
                 {
                     Debug.Log("true");
                     _bullets[i].gameObject.transform.position = _poolModel.GetContainer.position;
@@ -44,33 +60,62 @@ namespace MVC
                     _bullets.RemoveAt(i);
                 }
             }
-            
+
+        }
+
+        private void FireAbility() // Ребята, переделайте это просто на один АоЕ снаряд, тут все на костылях, мне стыдно, но я хотел взрывающуюся коробку)))
+        {
+            _box.transform.Translate(Vector3.up * 10);
+            var timer = new TimeData(1f);
+            timer.OnTimerEndWithBool += BoxBlowUp;
+            _timerController.AddTimer(timer);
+        }
+
+        private void BoxBlowUp()
+        {
+            var spawnPosition = new Vector3(_box.transform.position.x, _box.transform.position.y + 2f, _box.transform.position.z);
+            _box.transform.Translate(Vector3.down * 10);
+
+            for (int i = 0; i < 50; i++)
+            {
+                var bullet = _bulletPools[FIRE].GetFreeElement();
+                bullet.transform.position = spawnPosition;
+                _bullets.Add(bullet.GetComponent<Bullet>());
+            }
+            var timer = new TimeData(1f);
+            timer.OnTimerEndWithBool += EndFireAbility;
+            _timerController.AddTimer(timer);
+        }
+
+        private void EndFireAbility()
+        {
+            for (int i = 0; i < _bullets.Count; i++)
+            {
+                _bullets[i].SetContainer(_bulletPools[FIRE].GetContainer);
+                _bullets[i].InvokeTimer();
+            }
+            Debug.Log("Turn");
+            _player.IsYourTurn = false;
         }
 
         private void WaterAbility()
         {
-            for (int i = 0; i < _bulletPools.Count; i++)
+            for (int j = 0; j < NUMBER_OF_BULLETS; j++)
             {
-                if (_bulletPools[i].GetPrefab.layer == 4)
-                {
-                    for (int j = 0; j < NUMBER_OF_BULLETS; j++)
-                    {
-                        var timer = new TimeData(TIME_OF_ACTIVATION_BULLET + j * 2);
-                        timer.OnTimerEndWithBool += Fire;
-                        _timerController.AddTimer(timer);
-                    }
-                    var timer_1 = new TimeData(TIME_OF_ACTIVATION_BULLET + NUMBER_OF_BULLETS * 2);
-                    timer_1.OnTimerEndWithBool += EnemyTurn;
-                    _timerController.AddTimer(timer_1);
-                }
+                var timer = new TimeData(TIME_OF_ACTIVATION_BULLET + j * 2);
+                timer.OnTimerEndWithBool += WaterShot;
+                _timerController.AddTimer(timer);
             }
+            var timer_1 = new TimeData(TIME_OF_ACTIVATION_BULLET + NUMBER_OF_BULLETS * 2);
+            timer_1.OnTimerEndWithBool += EnemyTurn;
+            _timerController.AddTimer(timer_1);
         }
 
-        public void Fire()
+        public void WaterShot()
         {
             Debug.Log("Fire");
-           if (_bulletPools[0].HasFreeElement(out var element))
-           {
+            if (_bulletPools[WATER].HasFreeElement(out var element))
+            {
                 _bullets.Add(element.GetComponent<Bullet>());
                 element.transform.position = _player.GetGun.position;
                 element.transform.rotation = _player.GetGun.rotation;
@@ -78,14 +123,17 @@ namespace MVC
                 element.GetComponent<Bullet>().SetContainer(_bulletPools[0].GetContainer);
                 element.GetComponent<Bullet>().InvokeTimer();
             }
-
-
         }
 
         public void EnemyTurn()
         {
             Debug.Log("Turn");
             _player.IsYourTurn = false;
+        }
+
+        private void RandomizeAbility()
+        {
+            _abilityRandom = UnityEngine.Random.Range(0, 100);
         }
     }
 }

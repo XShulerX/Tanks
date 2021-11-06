@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MVC
 {
-    internal sealed class TurnController : IExecute
+    public sealed class TurnController : IExecute
     {
         public Action endGlobalTurn = delegate () { };
 
@@ -24,6 +24,7 @@ namespace MVC
             _timerController = timerController;
             _player = gamersList[0];
             _maxTurnCount = (gamersList.Count - 1) * 2;
+
         }
 
         public void Execute(float deltaTime)
@@ -74,9 +75,11 @@ namespace MVC
             if (!currentPlayer.IsDead) // Если мертв, не возвращаем в очередь
             {
                 _queueGamers.AddLast(currentPlayer);
-            }
-
-            _turnCount++;
+                _turnCount++;
+            } else
+            {
+                _maxTurnCount -= 2;
+            }          
             if (_turnCount % 2 != 0) // Каждый не четный шаг стреляет игрок
             {
                 _queueGamers.Remove(_player);

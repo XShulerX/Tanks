@@ -4,7 +4,7 @@ namespace MVC
 {
     internal sealed class GameInitialization
     {
-        public GameInitialization(Controllers controllers, EnemyData enemyData, Player player)
+        public GameInitialization(Controllers controllers, EnemyData enemyData, Player player, UnityEngine.GameObject box)
         {
             var poolModel = new PoolModel();
             var bulletPoolsInitialization = new BulletPoolsInitialization(poolModel);
@@ -19,12 +19,13 @@ namespace MVC
             gamerList.Add(player);
             gamerList.AddRange(enemyInitialization.GetEnemies());
             controllers.Add(enemyInitialization);
-            controllers.Add(new TurnController(gamerList, timerController));
+            var turnController = new TurnController(gamerList, timerController);
+            controllers.Add(turnController);
             controllers.Add(new EnemyFireController(player.transform, enemyInitialization.GetEnemies()));
             controllers.Add(new PlayerFireController(player));
             controllers.Add(new PlayerTargetController(enemyInitialization.GetEnemies(), player));
             controllers.Add(new TakeDamageController(gamerList));
-            controllers.Add(new FireTargetAbilityController(bulletPoolsInitialization.GetBullets, timerController, poolModel));
+            controllers.Add(new FireTargetAbilityController(bulletPoolsInitialization.GetBullets, timerController, poolModel, box, turnController));
         }
     }
 }

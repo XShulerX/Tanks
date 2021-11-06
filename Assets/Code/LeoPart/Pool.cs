@@ -8,7 +8,7 @@ namespace MVC
     {
 
         public List<GameObject> PoolOwner;
-        public bool _autoExpand { get; set; }
+        public bool _autoExpand { get; set; } = true;
         private const int DEFAULT_COUNT_OF_AMMO = 5;
         public void CreatePool()
         {
@@ -36,7 +36,7 @@ namespace MVC
         }
 
 
-        public virtual GameObject GetFreeElement(int numberOfPool)
+        public virtual GameObject GetFreeElement()
         {
             if (HasFreeElement(out var element))
             {
