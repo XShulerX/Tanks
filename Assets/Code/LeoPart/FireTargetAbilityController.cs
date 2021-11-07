@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 namespace MVC
 {
@@ -14,6 +12,7 @@ namespace MVC
         private List<Bullet> _bullets = new List<Bullet>();
         private Player _player;
         private GameObject _box;
+        private GameObject _abilityPanel;
         private int _abilityRandom;
         private TurnController _turnController;
 
@@ -22,16 +21,17 @@ namespace MVC
         private const int WATER = 0;
         private const int TERRA = 2;
 
-        public FireTargetAbilityController(List<BulletPool> bulletPools, TimerController timerController, PoolModel poolModel, GameObject box, TurnController turnController)
+        public FireTargetAbilityController(List<BulletPool> bulletPools, TimerController timerController, PoolModel poolModel, GameObject box, TurnController turnController, GameObject abilityPanel)
         {
             _turnController = turnController;
             _turnController.endGlobalTurn += RandomizeAbility;
-            RandomizeAbility();
             _box = box;
+            _abilityPanel = abilityPanel;
             _poolModel = poolModel;
             _player = GameObject.FindObjectOfType<Player>();
             _bulletPools = bulletPools;
             _timerController = timerController;
+            RandomizeAbility();
         }
 
 
@@ -80,7 +80,9 @@ namespace MVC
             {
                 var bullet = _bulletPools[WATER].GetFreeElement();
                 bullet.transform.position = spawnPosition;
-                _bullets.Add(bullet.GetComponent<Bullet>());
+                var bulletEntity = bullet.GetComponent<Bullet>();
+                bulletEntity.element = Elements.Water;
+                _bullets.Add(bulletEntity);
             }
             var timer = new TimeData(1f);
             timer.OnTimerEndWithBool += EndWaterAbility;
@@ -120,8 +122,10 @@ namespace MVC
                 element.transform.position = _player.GetGun.position;
                 element.transform.rotation = _player.GetGun.rotation;
                 element.GetComponent<Rigidbody>().AddForce(_player.GetGun.forward * 40, ForceMode.Impulse);
-                element.GetComponent<Bullet>().SetContainer(_bulletPools[0].GetContainer);
-                element.GetComponent<Bullet>().InvokeTimer();
+                var bulletEntity = element.GetComponent<Bullet>();
+                bulletEntity.element = Elements.Terra;
+                bulletEntity.SetContainer(_bulletPools[0].GetContainer);
+                bulletEntity.InvokeTimer();
             }
         }
 
@@ -133,7 +137,15 @@ namespace MVC
 
         private void RandomizeAbility()
         {
-            _abilityRandom = UnityEngine.Random.Range(0, 100);
+            _abilityRandom = Random.Range(0, 100);
+            if (_abilityRandom <= 50)
+            {
+                _abilityPanel.GetComponent<Image>().color = Color.blue;
+            }
+            else
+            {
+                _abilityPanel.GetComponent<Image>().color = Color.black;
+            }
         }
     }
 }

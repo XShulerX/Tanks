@@ -5,6 +5,7 @@ namespace MVC
     public class Bullet : MonoBehaviour
     {
         public int Damage;
+        public Elements element = Elements.Fire;
 
         [HideInInspector] public GameObject GetCollisionObject;
 

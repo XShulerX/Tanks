@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MVC
 {
@@ -12,15 +13,19 @@ namespace MVC
         private bool _isTimerOver;
         private IGamer _player;
         private TimerController _timerController;
+        private ElementsController _elementsController;
         private TimeData _timer;
+        private Text _text;
 
         private int _shotedOrDeadEnemies;
         private int _enemiesCount;
-        private int _turnCount = 1;
+        private int _localTurnCount = 1;
+        private int _globalTurnCount = 1;
         private const float DELAY_BEFOR_FIRE = 1f;
 
-        public TurnController(List<IGamer> gamersList, TimerController timerController)
+        public TurnController(List<IGamer> gamersList, TimerController timerController, ElementsController elementsController, Text text)
         {
+            _elementsController = elementsController;
             _queueGamers = new LinkedList<IGamer>(gamersList); // Перешел с очереди на Линкед лист для возможности перестановки
             _timerController = timerController;
             _player = gamersList[0];
@@ -28,6 +33,8 @@ namespace MVC
             {
                 _enemiesCount++;
             }
+            _text = text;
+            _text.text = "Ход 1";
         }
 
         public void Execute(float deltaTime)
@@ -59,17 +66,12 @@ namespace MVC
         private void EndTurn()
         {
             endGlobalTurn.Invoke();
-            _turnCount = 1;
+            _globalTurnCount++;
+            _text.text = "Ход " + _globalTurnCount;
+            _localTurnCount = 1;
             _shotedOrDeadEnemies = 0;
             Debug.Log("EndTurn");
-
-            //for (int i = 0; i < _enemies.Count; i++)
-            //{
-            //    if (!_enemies[i].IsDead)
-            //    {
-            //        _shotableEnemies--;
-            //    } 
-            //}
+            _elementsController.UpdateElements();
         }
 
         //private bool Timer(float seconds, float deltaTime)
@@ -98,7 +100,7 @@ namespace MVC
             
             if (!currentPlayer.IsDead) // Если мертв, передаем ход другому
             {
-                _turnCount++;
+                _localTurnCount++;
             } else if (currentPlayer.IsDead && _shotedOrDeadEnemies == _enemiesCount)
             {
                 EndTurn();
@@ -106,7 +108,7 @@ namespace MVC
 
             _queueGamers.AddLast(currentPlayer);
 
-            if (_turnCount % 2 != 0) // Каждый не четный шаг стреляет игрок
+            if (_localTurnCount % 2 != 0) // Каждый не четный шаг стреляет игрок
             {
                 _queueGamers.Remove(_player);
                 _queueGamers.AddFirst(_player);
