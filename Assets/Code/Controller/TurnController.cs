@@ -9,7 +9,6 @@ namespace MVC
         public Action endGlobalTurn = delegate () { };
 
         private LinkedList<IGamer> _queueGamers;
-        private List<IGamer> _enemies = new List<IGamer>();
         private bool _isTimerOver;
         private IGamer _player;
         private TimerController _timerController;
@@ -100,7 +99,7 @@ namespace MVC
             if (!currentPlayer.IsDead) // Если мертв, передаем ход другому
             {
                 _turnCount++;
-            } else if (currentPlayer.IsDead && _shotedOrDeadEnemies == _enemies.Count)
+            } else if (currentPlayer.IsDead && _shotedOrDeadEnemies == _enemiesCount)
             {
                 EndTurn();
             }
