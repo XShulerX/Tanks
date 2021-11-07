@@ -15,7 +15,8 @@ namespace MVC
         private TimerController _timerController;
         private TimeData _timer;
 
-        private int _shotableEnemies;
+        private int _shotedOrDeadEnemies;
+        private int _enemiesCount;
         private int _turnCount = 1;
         private const float DELAY_BEFOR_FIRE = 1f;
 
@@ -26,7 +27,7 @@ namespace MVC
             _player = gamersList[0];
             for (int i = 1; i < gamersList.Count; i++)
             {
-                _enemies.Add(gamersList[i]);
+                _enemiesCount++;
             }
         }
 
@@ -60,7 +61,7 @@ namespace MVC
         {
             endGlobalTurn.Invoke();
             _turnCount = 1;
-            _shotableEnemies = 0;
+            _shotedOrDeadEnemies = 0;
             Debug.Log("EndTurn");
 
             //for (int i = 0; i < _enemies.Count; i++)
@@ -91,7 +92,7 @@ namespace MVC
             var currentPlayer = _queueGamers.First.Value;
             if(currentPlayer != _player)
             {
-                _shotableEnemies++;
+                _shotedOrDeadEnemies++;
             }
 
             _queueGamers.RemoveFirst();
@@ -99,7 +100,7 @@ namespace MVC
             if (!currentPlayer.IsDead) // Если мертв, передаем ход другому
             {
                 _turnCount++;
-            } else if (currentPlayer.IsDead && _shotableEnemies == _enemies.Count)
+            } else if (currentPlayer.IsDead && _shotedOrDeadEnemies == _enemies.Count)
             {
                 EndTurn();
             }
@@ -112,7 +113,7 @@ namespace MVC
                 _queueGamers.AddFirst(_player);
             }
 
-            if(_shotableEnemies == _enemies.Count)
+            if(_shotedOrDeadEnemies == _enemiesCount)
             {
                 EndTurn();
             }
