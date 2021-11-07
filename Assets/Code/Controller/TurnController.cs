@@ -96,20 +96,6 @@ namespace MVC
             _elementsController.UpdateElements();
         }
 
-        //private bool Timer(float seconds, float deltaTime)
-        //{
-        //    if(_currentTimer < seconds)
-        //    {
-        //        _currentTimer += deltaTime;
-        //        return false;
-        //    }
-        //    else
-        //    {
-        //        _currentTimer = 0f;
-        //        return true;
-        //    }
-        //}
-
         private void PassNext()
         {
             var currentPlayer = _queueGamers.First.Value;
