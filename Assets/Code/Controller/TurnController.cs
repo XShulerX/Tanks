@@ -9,12 +9,13 @@ namespace MVC
         public Action endGlobalTurn = delegate () { };
 
         private LinkedList<IGamer> _queueGamers;
+        private List<IGamer> _enemies = new List<IGamer>();
         private bool _isTimerOver;
         private IGamer _player;
         private TimerController _timerController;
         private TimeData _timer;
-        private int _maxTurnCount;
 
+        private int _shotableEnemies;
         private int _turnCount = 1;
         private const float DELAY_BEFOR_FIRE = 1f;
 
@@ -23,8 +24,10 @@ namespace MVC
             _queueGamers = new LinkedList<IGamer>(gamersList); // Перешел с очереди на Линкед лист для возможности перестановки
             _timerController = timerController;
             _player = gamersList[0];
-            _maxTurnCount = (gamersList.Count - 1) * 2;
-
+            for (int i = 1; i < gamersList.Count; i++)
+            {
+                _enemies.Add(gamersList[i]);
+            }
         }
 
         public void Execute(float deltaTime)
@@ -53,6 +56,22 @@ namespace MVC
             }
         }
 
+        private void EndTurn()
+        {
+            endGlobalTurn.Invoke();
+            _turnCount = 1;
+            _shotableEnemies = 0;
+            Debug.Log("EndTurn");
+
+            //for (int i = 0; i < _enemies.Count; i++)
+            //{
+            //    if (!_enemies[i].IsDead)
+            //    {
+            //        _shotableEnemies--;
+            //    } 
+            //}
+        }
+
         //private bool Timer(float seconds, float deltaTime)
         //{
         //    if(_currentTimer < seconds)
@@ -70,28 +89,34 @@ namespace MVC
         private void PassNext()
         {
             var currentPlayer = _queueGamers.First.Value;
+            if(currentPlayer != _player)
+            {
+                _shotableEnemies++;
+            }
+
             _queueGamers.RemoveFirst();
             
-            if (!currentPlayer.IsDead) // Если мертв, не возвращаем в очередь
+            if (!currentPlayer.IsDead) // Если мертв, передаем ход другому
             {
-                _queueGamers.AddLast(currentPlayer);
                 _turnCount++;
-            } else
+            } else if (currentPlayer.IsDead && _shotableEnemies == _enemies.Count)
             {
-                _maxTurnCount -= 2;
-            }          
+                EndTurn();
+            }
+
+            _queueGamers.AddLast(currentPlayer);
+
             if (_turnCount % 2 != 0) // Каждый не четный шаг стреляет игрок
             {
                 _queueGamers.Remove(_player);
                 _queueGamers.AddFirst(_player);
             }
 
-            if (_turnCount == _maxTurnCount) // Если сделано 6 выстрелов - глобальный ход заверешн
+            if(_shotableEnemies == _enemies.Count)
             {
-                endGlobalTurn.Invoke();
-                _turnCount = 0;
-                Debug.Log("EndTurn");
+                EndTurn();
             }
+
             _queueGamers.First.Value.IsYourTurn = true;
         }
     }
