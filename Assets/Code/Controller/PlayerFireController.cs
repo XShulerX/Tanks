@@ -20,6 +20,7 @@ namespace MVC
 
             if (Input.GetButtonDown(ButtonsManager.FIRE1))
             {
+                if (_player.IsShoted) return;
                 _player.Fire();
                 _player.IsYourTurn = false;
             }

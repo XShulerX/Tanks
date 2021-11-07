@@ -32,6 +32,7 @@ namespace MVC
             for (int i = 1; i < gamersList.Count; i++)
             {
                 _enemiesCount++;
+                gamersList[i].wasKilled += AddDeadEnemy;
             }
             _text = text;
             _text.text = "Õîä 1";
@@ -43,6 +44,7 @@ namespace MVC
             if (currentPlayer.IsDead)
             {
                 currentPlayer.IsYourTurn = false;
+                PassNext();
             }
             if (!currentPlayer.IsYourTurn)
             {
@@ -63,13 +65,33 @@ namespace MVC
             }
         }
 
+        private void AddDeadEnemy(IGamer enemy)
+        {
+            if (!enemy.IsShoted)
+            {
+                _shotedOrDeadEnemies++;
+            }
+        }
+
         private void EndTurn()
         {
             endGlobalTurn.Invoke();
             _globalTurnCount++;
             _text.text = "Õîä " + _globalTurnCount;
             _localTurnCount = 1;
-            _shotedOrDeadEnemies = 0;
+
+            _queueGamers.Remove(_player);
+            _queueGamers.AddFirst(_player);
+
+            foreach (var enemy in _queueGamers)
+            {
+                enemy.IsShoted = false;
+                if (enemy != _player && !enemy.IsDead)
+                {
+                    _shotedOrDeadEnemies--;
+                }
+            }
+            
             Debug.Log("EndTurn");
             _elementsController.UpdateElements();
         }
@@ -91,7 +113,8 @@ namespace MVC
         private void PassNext()
         {
             var currentPlayer = _queueGamers.First.Value;
-            if(currentPlayer != _player)
+
+            if(currentPlayer != _player && !currentPlayer.IsDead)
             {
                 _shotedOrDeadEnemies++;
             }

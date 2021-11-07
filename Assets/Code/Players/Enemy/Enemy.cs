@@ -6,8 +6,8 @@ namespace MVC
 
     public sealed class Enemy : MonoBehaviour, IEnemy, ITakeDamageEnemy
     {
-        public Action wasKilled { get; set; } = delegate () { };
-        
+        public Action<IGamer> wasKilled { get; set; } = delegate (IGamer s) { };
+
         [SerializeField]
         private GameObject _bullet;
         [SerializeField]
@@ -22,6 +22,7 @@ namespace MVC
 
         public bool IsYourTurn { get ; set; }
         public bool IsDead { get; set; }
+        public bool IsShoted { get; set; }
         public Elements TankElement { get; set; }
         public int CurrentHealthPoints {
             get => _currentHealthPoints;
@@ -29,8 +30,9 @@ namespace MVC
             {
                 if (value <= 0)
                 {
+                    if (!IsDead) wasKilled.Invoke(this);
                     IsDead = true;
-                    wasKilled.Invoke();
+                    
                 }
                 _currentHealthPoints = value;
             }

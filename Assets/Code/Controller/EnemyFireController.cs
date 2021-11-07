@@ -21,6 +21,7 @@ namespace MVC
                 if (enemy.IsYourTurn && !enemy.IsDead)
                 {
                     enemy.Fire(_target);
+                    enemy.IsShoted = true;
                     enemy.IsYourTurn = false;
                 }
             }

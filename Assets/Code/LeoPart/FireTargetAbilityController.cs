@@ -15,6 +15,7 @@ namespace MVC
         private GameObject _abilityPanel;
         private int _abilityRandom;
         private TurnController _turnController;
+        private bool _isAbilityUsed;
 
         private const int NUMBER_OF_BULLETS = 2;
         private const float TIME_OF_ACTIVATION_BULLET = 1f;
@@ -39,13 +40,18 @@ namespace MVC
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                if (_abilityRandom <= 50)
+                if (!_isAbilityUsed & _player.IsYourTurn)
                 {
-                    WaterAbility();
-                }
-                else
-                {
-                    TerraAbility();
+                    _player.IsShoted = true;
+                    if (_abilityRandom <= 50)
+                    {
+                        WaterAbility();
+                    }
+                    else
+                    {
+                        TerraAbility();
+                    }
+                    _isAbilityUsed = true;
                 }
             }
 
@@ -96,8 +102,7 @@ namespace MVC
                 _bullets[i].SetContainer(_bulletPools[WATER].GetContainer);
                 _bullets[i].InvokeTimer();
             }
-            Debug.Log("Turn");
-            _player.IsYourTurn = false;
+            EnemyTurn();
         }
 
         private void TerraAbility()
@@ -133,6 +138,8 @@ namespace MVC
         {
             Debug.Log("Turn");
             _player.IsYourTurn = false;
+            _isAbilityUsed = false;
+            _player.IsShoted = false;
         }
 
         private void RandomizeAbility()
