@@ -9,5 +9,7 @@ namespace MVC
         public Elements TankElement { get; set; }
 
         public Transform Turret { get; set; }
+
+        public Transform transform { get; }
     }
 }

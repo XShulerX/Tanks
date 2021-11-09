@@ -46,6 +46,7 @@ namespace MVC
             if (_shots == NUMBER_OF_BULLETS)
             {
                 abilityIsEnded.Invoke();
+                _isOnCooldown = true;
             }
         }
         public override void ReduceCooldown()
@@ -53,6 +54,7 @@ namespace MVC
             _cooldownTurns++;
             if (_cooldownTurns == _cooldown)
             {
+                _shots = 0;
                 _isOnCooldown = false;
                 _cooldownTurns = 0;
             }

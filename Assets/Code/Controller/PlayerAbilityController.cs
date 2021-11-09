@@ -20,11 +20,11 @@ namespace MVC
             _turnController.endGlobalTurn += ReduceAbilitiesCooldown;
             _player = player;
 
-            var waterAbility = new WaterAbility(2, timerController, bulletPools[WATER], box);
+            var waterAbility = new WaterAbility(1, timerController, bulletPools[WATER], _player);
             waterAbility.abilityIsEnded += EnemyTurn;
             _abilities.Add(waterAbility);
 
-            var fireAbility = new FireAbility(1, timerController, bulletPools[FIRE], _player);
+            var fireAbility = new FireAbility(2, timerController, bulletPools[FIRE], box);
             fireAbility.abilityIsEnded += EnemyTurn;
             _abilities.Add(fireAbility);
 
@@ -51,13 +51,13 @@ namespace MVC
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 if (_abilities[WATER].IsOnCooldown) return;
                 UseAbility(_abilities[WATER]);
             }
 
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 if (_abilities[FIRE].IsOnCooldown) return;
                 UseAbility(_abilities[FIRE]);
