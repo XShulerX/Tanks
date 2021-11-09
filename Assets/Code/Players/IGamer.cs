@@ -6,5 +6,7 @@ namespace MVC
     {
         bool IsYourTurn { get; set; }
         public bool IsDead { get; set; }
+        public bool IsShoted { get; set; }
+        Action<IGamer> wasKilled { get; set; }
     }
 }
