@@ -8,8 +8,6 @@ namespace MVC
         public Action<IGamer> wasKilled { get; set; } = delegate (IGamer s) { };
 
         [SerializeField]
-        private GameObject _bullet;
-        [SerializeField]
         private Transform _gun;
         [SerializeField]
         private Transform _turret;
@@ -45,13 +43,6 @@ namespace MVC
             IsYourTurn = true;
             IsDead = false;
             _currentHealthPoints = 100;
-        }
-
-        public void Fire()
-        {
-            var bullet = Instantiate(_bullet, _gun.position, _gun.rotation);
-            bullet.GetComponent<Rigidbody>().AddForce(_gun.forward * 100, ForceMode.Impulse);
-            
         }
 
         public void SwapTarget(Vector3 newTarget)

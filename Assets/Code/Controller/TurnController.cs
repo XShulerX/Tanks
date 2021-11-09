@@ -19,7 +19,6 @@ namespace MVC
 
         private int _shotedOrDeadEnemies;
         private int _enemiesCount;
-        private int _localTurnCount = 1;
         private int _globalTurnCount = 1;
         private const float DELAY_BEFOR_FIRE = 1f;
 
@@ -78,7 +77,6 @@ namespace MVC
             endGlobalTurn.Invoke();
             _globalTurnCount++;
             _text.text = "Ход " + _globalTurnCount;
-            _localTurnCount = 1;
 
             _queueGamers.Remove(_player);
             _queueGamers.AddFirst(_player);
@@ -99,31 +97,15 @@ namespace MVC
         private void PassNext()
         {
             var currentPlayer = _queueGamers.First.Value;
+            _queueGamers.RemoveFirst();
+            _queueGamers.AddLast(currentPlayer);
 
-            if(currentPlayer != _player && !currentPlayer.IsDead)
+            if (currentPlayer != _player && !currentPlayer.IsDead)
             {
                 _shotedOrDeadEnemies++;
             }
 
-            _queueGamers.RemoveFirst();
-            
-            if (!currentPlayer.IsDead) // Если мертв, передаем ход другому
-            {
-                _localTurnCount++;
-            } else if (currentPlayer.IsDead && _shotedOrDeadEnemies == _enemiesCount)
-            {
-                EndTurn();
-            }
-
-            _queueGamers.AddLast(currentPlayer);
-
-            if (_localTurnCount % 2 != 0) // Каждый не четный шаг стреляет игрок
-            {
-                _queueGamers.Remove(_player);
-                _queueGamers.AddFirst(_player);
-            }
-
-            if(_shotedOrDeadEnemies == _enemiesCount)
+            if (_shotedOrDeadEnemies == _enemiesCount)
             {
                 EndTurn();
             }

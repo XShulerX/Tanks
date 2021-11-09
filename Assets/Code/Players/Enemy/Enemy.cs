@@ -31,8 +31,7 @@ namespace MVC
                 if (value <= 0)
                 {
                     if (!IsDead) wasKilled.Invoke(this);
-                    IsDead = true;
-                    
+                    IsDead = true;                   
                 }
                 _currentHealthPoints = value;
             }

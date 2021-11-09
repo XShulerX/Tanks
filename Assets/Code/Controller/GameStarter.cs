@@ -13,15 +13,13 @@ namespace MVC
         private GameObject _box;
         [SerializeField]
         private Text _text;
-        [SerializeField]
-        private GameObject _abilityPanel;
 
         private Controllers _controllers;
 
         private void Start()
         {
             _controllers = new Controllers();
-            new GameInitialization(_controllers, _enemyData, player, _box, _text, _abilityPanel);
+            new GameInitialization(_controllers, _enemyData, player, _box, _text);
             _controllers.Initilazation();
         }
 
