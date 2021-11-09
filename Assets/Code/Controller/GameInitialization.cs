@@ -28,7 +28,7 @@ namespace MVC
             var turnController = new TurnController(gamerList, timerController, elementsController, text);
             controllers.Add(turnController);
 
-            controllers.Add(new PlayerAbilityController(bulletPoolsInitialization.GetBullets, timerController, box, turnController, player));
+            controllers.Add(new PlayerAbilityController(bulletPoolsInitialization.GetBullets, timerController, box, turnController, player, enemyList));
             controllers.Add(new EnemyFireController(player.transform, enemyInitialization.GetEnemies()));
             controllers.Add(new PlayerTargetController(enemyInitialization.GetEnemies(), player));
             controllers.Add(new TakeDamageController(gamerList, elementsController));
