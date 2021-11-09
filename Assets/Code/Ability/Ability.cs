@@ -8,15 +8,13 @@ namespace MVC {
         protected int _cooldown;
         protected bool _isOnCooldown;
         protected int _cooldownTurns;
-        protected TimerController _timerController;
         protected BulletPool _pool;
 
         public bool IsOnCooldown { get => _isOnCooldown; }
 
-        protected Ability(int cooldown, TimerController timerController, BulletPool pool)
+        protected Ability(int cooldown, BulletPool pool)
         {
             _cooldown = cooldown;
-            _timerController = timerController;
             _pool = pool;
         }
 

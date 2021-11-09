@@ -7,31 +7,17 @@ namespace MVC
     public class TerraAbility : Ability
     {
         private Player _player;
-        private int _shots;
         private List<IEnemy> _enemies = new List<IEnemy>();
 
-        private const int NUMBER_OF_BULLETS = 1;
-        private const float TIME_OF_ACTIVATION_BULLET = 1f;
-        public TerraAbility(int cooldown, TimerController timerController, BulletPool pool, Player player, List<IEnemy> enemies) : base(cooldown, timerController, pool)
+        public TerraAbility(int cooldown, BulletPool pool, Player player, List<IEnemy> enemies) : base(cooldown, pool)
         {
-            _enemies.AddRange(enemies);
+            _enemies = enemies;
             _player = player;
             _cooldown = cooldown;
-            _timerController = timerController;
             _pool = pool;
         }
 
         public override void ActivateAbility()
-        {        
-            for (int j = 0; j < NUMBER_OF_BULLETS; j++)
-            {
-                var timer = new TimeData(TIME_OF_ACTIVATION_BULLET + j * 2);
-                timer.OnTimerEndWithBool += TerraShot;
-                _timerController.AddTimer(timer);
-            }
-        }
-
-        public void TerraShot()
         {
             if (_pool.HasFreeElement(out var element))
             {
@@ -43,14 +29,9 @@ namespace MVC
                 bulletEntity.element = Elements.Terra;
                 bulletEntity.SetContainer(_pool.GetContainer);
                 bulletEntity.InvokeTimer();
-                _shots++;
             }
-
-            if (_shots == NUMBER_OF_BULLETS)
-            {
-                abilityIsEnded.Invoke();
-                _isOnCooldown = true;
-            }
+            abilityIsEnded.Invoke();
+            _isOnCooldown = true;
         }
 
         private Transform GetRandomEnemy()
@@ -66,7 +47,6 @@ namespace MVC
             _cooldownTurns++;
             if (_cooldownTurns == _cooldown)
             {
-                _shots = 0;
                 _isOnCooldown = false;
                 _cooldownTurns = 0;
             }

@@ -7,7 +7,6 @@ namespace MVC
     {
         private List<Ability> _abilities = new List<Ability>();
         private Player _player;
-        private List<IEnemy> _enemies = new List<IEnemy>();
         private TurnController _turnController;
         private bool _isAbilityUsed;
 
@@ -20,17 +19,16 @@ namespace MVC
             _turnController = turnController;
             _turnController.endGlobalTurn += ReduceAbilitiesCooldown;
             _player = player;
-            _enemies = enemies;
 
-            var waterAbility = new WaterAbility(1, timerController, bulletPools[WATER], _player);
+            var waterAbility = new WaterAbility(1, bulletPools[WATER], _player);
             waterAbility.abilityIsEnded += EnemyTurn;
             _abilities.Add(waterAbility);
 
-            var fireAbility = new FireAbility(2, timerController, bulletPools[FIRE], box);
+            var fireAbility = new FireAbility(2, bulletPools[FIRE], box, timerController);
             fireAbility.abilityIsEnded += EnemyTurn;
             _abilities.Add(fireAbility);
 
-            var terraAbility = new TerraAbility(2, timerController, bulletPools[TERRA], _player, _enemies);
+            var terraAbility = new TerraAbility(2, bulletPools[TERRA], _player, enemies);
             terraAbility.abilityIsEnded += EnemyTurn;
             _abilities.Add(terraAbility);
         }

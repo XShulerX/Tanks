@@ -4,11 +4,10 @@ namespace MVC {
     public class WaterAbility : Ability
     {
         private Player _player;
-        public WaterAbility(int cooldown, TimerController timerController, BulletPool pool, Player player) : base(cooldown, timerController, pool)
+        public WaterAbility(int cooldown, BulletPool pool, Player player) : base(cooldown, pool)
         {
             _player = player;
             _cooldown = cooldown;
-            _timerController = timerController;
             _pool = pool;
         }
         public override void ActivateAbility()
