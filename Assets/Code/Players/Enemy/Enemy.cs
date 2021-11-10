@@ -71,6 +71,7 @@ namespace MVC
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (IsDead) return;
             OnCollisionEnterChange?.Invoke(collision, this);
         }
 
