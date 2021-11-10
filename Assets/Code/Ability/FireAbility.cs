@@ -9,7 +9,7 @@ namespace MVC
         private GameObject _box;
         private List<Bullet> _bullets = new List<Bullet>();
         private TimerController _timerController;
-        public FireAbility(int cooldown, BulletPool pool, GameObject box, TimerController timerController) : base(cooldown, pool)
+        public FireAbility(int cooldown, BulletPool pool, Elements element, GameObject box, TimerController timerController) : base(cooldown, pool, element)
         {
             _cooldown = cooldown;
             _timerController = timerController;

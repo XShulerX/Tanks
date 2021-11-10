@@ -31,11 +31,20 @@ namespace MVC
             {
                 if(value <= 0)
                 {
-                    if (!IsDead) wasKilled.Invoke(this);
+                    if (!IsDead)
+                    {
+                        wasKilled.Invoke(this);
+                        GameOver();
+                    }
                     IsDead = true;
                 }
                 _currentHealthPoints = value;
             }
+        }
+
+        private void GameOver()
+        {
+            Time.timeScale = 0;
         }
 
         public Player()

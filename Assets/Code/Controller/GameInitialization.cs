@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MVC
 {
     internal sealed class GameInitialization
     {
-        public GameInitialization(Controllers controllers, EnemyData enemyData, Player player, GameObject box, Text text)
+        public GameInitialization(Controllers controllers, EnemyData enemyData, Player player, GameObject box, UIInitializationModel uiModel)
         {
             var enemyFactory = new EnemyFactory(enemyData);
             var enemyInitialization = new EnemyInitialization(enemyFactory);
@@ -25,10 +24,17 @@ namespace MVC
             gamerList.Add(player);
             gamerList.AddRange(enemyInitialization.GetEnemies());
 
-            var turnController = new TurnController(gamerList, timerController, elementsController, text);
+            var turnController = new TurnController(gamerList, timerController, elementsController, uiModel.StepTextField);
             controllers.Add(turnController);
 
-            controllers.Add(new PlayerAbilityController(bulletPoolsInitialization.GetBullets, timerController, box, turnController, player, enemyList));
+            var playerAbilityController = new PlayerAbilityController(bulletPoolsInitialization.GetBullets, timerController, box, turnController, player, enemyList);
+            controllers.Add(playerAbilityController);
+
+            List<IRechargeableAbility> abilities = new List<IRechargeableAbility>();
+            abilities.AddRange(playerAbilityController.Abilities);
+            var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel, abilities));
+            controllers.Add(uiStateController);
+
             controllers.Add(new EnemyFireController(player.transform, enemyInitialization.GetEnemies()));
             controllers.Add(new PlayerTargetController(enemyInitialization.GetEnemies(), player));
             controllers.Add(new TakeDamageController(gamerList, elementsController));

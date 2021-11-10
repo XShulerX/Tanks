@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MVC
 {
@@ -12,14 +11,14 @@ namespace MVC
         [SerializeField]
         private GameObject _box;
         [SerializeField]
-        private Text _text;
+        private UIInitializationModel _uiInitModel;
 
         private Controllers _controllers;
 
         private void Start()
         {
             _controllers = new Controllers();
-            new GameInitialization(_controllers, _enemyData, player, _box, _text);
+            new GameInitialization(_controllers, _enemyData, player, _box, _uiInitModel);
             _controllers.Initilazation();
         }
 

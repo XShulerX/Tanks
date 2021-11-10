@@ -9,7 +9,7 @@ namespace MVC
         private Player _player;
         private List<IEnemy> _enemies = new List<IEnemy>();
 
-        public TerraAbility(int cooldown, BulletPool pool, Player player, List<IEnemy> enemies) : base(cooldown, pool)
+        public TerraAbility(int cooldown, BulletPool pool, Elements element, Player player, List<IEnemy> enemies) : base(cooldown, pool, element)
         {
             _enemies = enemies;
             _player = player;
@@ -50,7 +50,7 @@ namespace MVC
             if(liveEnemies.Count > 0)
             {
                 var playerTarget = Random.Range(0, liveEnemies.Count - 1);
-                enemy = _enemies[playerTarget].transform.position;
+                enemy = liveEnemies[playerTarget].transform.position;
             }
   
             return enemy;

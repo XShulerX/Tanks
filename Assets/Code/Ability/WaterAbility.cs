@@ -4,7 +4,7 @@ namespace MVC {
     public class WaterAbility : Ability
     {
         private Player _player;
-        public WaterAbility(int cooldown, BulletPool pool, Player player) : base(cooldown, pool)
+        public WaterAbility(int cooldown, BulletPool pool, Elements element, Player player) : base(cooldown, pool, element)
         {
             _player = player;
             _cooldown = cooldown;
