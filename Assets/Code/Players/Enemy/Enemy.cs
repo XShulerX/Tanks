@@ -9,6 +9,10 @@ namespace MVC
         public Action<IGamer> wasKilled { get; set; } = delegate (IGamer s) { };
 
         [SerializeField]
+        private GameObject _tankObject;
+        [SerializeField]
+        private GameObject _wrackObject;
+        [SerializeField]
         private GameObject _bullet;
         [SerializeField]
         private Transform _gun;
@@ -72,6 +76,7 @@ namespace MVC
 
         private void OnMouseUp()
         {
+            if (IsDead) return;
             OnMouseUpChange?.Invoke(transform.position);
         }
     }

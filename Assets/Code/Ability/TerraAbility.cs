@@ -21,7 +21,7 @@ namespace MVC
         {
             if (_pool.HasFreeElement(out var element))
             {
-                _player.SwapTarget(GetRandomEnemy().position);
+                _player.SwapTarget(GetRandomEnemy());
                 element.transform.position = _player.GetGun.position;
                 element.transform.rotation = _player.GetGun.rotation;
                 element.GetComponent<Rigidbody>().AddForce(_player.GetGun.forward * 40, ForceMode.Impulse);
@@ -34,11 +34,26 @@ namespace MVC
             _isOnCooldown = true;
         }
 
-        private Transform GetRandomEnemy()
+        private Vector3 GetRandomEnemy()
         {
-            var playerTarget = Random.Range(0, _enemies.Count - 1);
+            List<IEnemy> liveEnemies = new List<IEnemy>();
+            Vector3 enemy = Vector3.forward;
 
-            return _enemies[playerTarget].transform;
+            for (int i = 0; i < _enemies.Count; i++)
+            {
+                if (!_enemies[i].IsDead)
+                {
+                    liveEnemies.Add(_enemies[i]);
+                }
+            }
+
+            if(liveEnemies.Count > 0)
+            {
+                var playerTarget = Random.Range(0, liveEnemies.Count - 1);
+                enemy = _enemies[playerTarget].transform.position;
+            }
+  
+            return enemy;
         }
 
 
