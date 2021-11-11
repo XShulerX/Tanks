@@ -9,7 +9,7 @@ namespace MVC
         public Action<IGamer> wasKilled { get; set; } = delegate (IGamer s) { };
 
         [SerializeField]
-        private GameObject _tankObject;
+        private ParticleSystem _tankObjectExplosion;
         [SerializeField]
         private GameObject _wrackObject;
         [SerializeField]
@@ -34,7 +34,10 @@ namespace MVC
             {
                 if (value <= 0)
                 {
-                    if (!IsDead) wasKilled.Invoke(this);
+                    if (!IsDead)
+                    {
+                        wasKilled.Invoke(this);
+                    }
                     IsDead = true;                   
                 }
                 _currentHealthPoints = value;
@@ -42,6 +45,10 @@ namespace MVC
         }
 
         public Transform Turret { get => _turret; set => _turret = value; }
+        public GameObject GetWrackObject { get => _wrackObject; }
+        public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
+
+        public GameObject GetGameObject { get => this.gameObject; }
 
         private void Start()
         {
