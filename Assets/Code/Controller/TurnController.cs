@@ -21,7 +21,7 @@ namespace MVC
         private int _enemiesCount;
         private int _globalTurnCount = 1;
         private const float DELAY_BEFOR_FIRE = 1f;
-        private const float DELAY_BEFORE_DELETING = 2f;
+
 
         public TurnController(List<IGamer> gamersList, TimerController timerController, ElementsController elementsController, Text text)
         {
@@ -69,30 +69,8 @@ namespace MVC
         {
             if (!enemy.IsShoted)
             {
-                WrackEnemy(enemy);
                 _shotedOrDeadEnemies++;
             }
-        }
-
-        public void WrackEnemy(IGamer enemy)
-        {
-            var transform = enemy.GetGameObject.transform;
-            var explosion = UnityEngine.Object.Instantiate(enemy.GetParticleExplosion.gameObject);
-            explosion.transform.position = transform.position;
-            explosion.GetComponent<ParticleSystem>().Play();
-
-            var timer = new TimeData(DELAY_BEFORE_DELETING, explosion);
-            timer.OnTimerEndWithBool += DeleteGameObject;
-            _timerController.AddTimer(timer);
-
-            enemy.GetGameObject.SetActive(false);
-            var wrack = UnityEngine.Object.Instantiate(enemy.GetWrackObject);
-            wrack.transform.position = transform.position;
-        }
-
-        private void DeleteGameObject(GameObject gameObject)
-        {
-            GameObject.Destroy(gameObject);
         }
 
         private void EndTurn()
