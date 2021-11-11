@@ -25,7 +25,7 @@ namespace MVC
             _timerController.AddTimer(timer);
         }
 
-        private void BoxBlowUp()
+        private void BoxBlowUp(GameObject gameObject)
         {
             var spawnPosition = new Vector3(_box.transform.position.x, _box.transform.position.y + 2f, _box.transform.position.z);
             _box.transform.Translate(Vector3.down * 10);
@@ -44,7 +44,7 @@ namespace MVC
             _timerController.AddTimer(timer);
         }
 
-        private void EndWaterAbility()
+        private void EndWaterAbility(GameObject gameObject)
         {
             for (int i = 0; i < _bullets.Count; i++)
             {

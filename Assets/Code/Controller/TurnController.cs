@@ -22,6 +22,7 @@ namespace MVC
         private int _globalTurnCount = 1;
         private const float DELAY_BEFOR_FIRE = 1f;
 
+
         public TurnController(List<IGamer> gamersList, TimerController timerController, ElementsController elementsController, Text text)
         {
             _elementsController = elementsController;

@@ -42,6 +42,12 @@ namespace MVC
             }
         }
 
+        public GameObject GetWrackObject { get; }
+
+        public GameObject GetGameObject { get; }
+
+        public ParticleSystem GetParticleExplosion { get; }
+
         private void GameOver()
         {
             Time.timeScale = 0;

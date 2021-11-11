@@ -20,7 +20,7 @@ namespace MVC
         public float GetStartTime { get => _startTime; }
         public float GetDeltaTime { get => _deltaTime; }
 
-        public TimeData(float deltaTime)
+        public TimeData(float deltaTime, GameObject gameObject = null): base(gameObject)
         {
             OnTimerEnd += ChangeTimerStatus;
             IsTimerEnd = false;
