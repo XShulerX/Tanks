@@ -8,7 +8,11 @@ namespace MVC
         public Action<IGamer> wasKilled { get; set; } = delegate (IGamer s) { };
 
         [SerializeField]
-        private GameObject _bullet;
+        private ParticleSystem _tankObjectExplosion;
+        [SerializeField]
+        private GameObject _tankObject;
+        [SerializeField]
+        private GameObject _wrackObject;
         [SerializeField]
         private Transform _gun;
         [SerializeField]
@@ -20,7 +24,10 @@ namespace MVC
 
 
         /// <summary>
-            public Transform GetGun { get => _gun; }
+        public Transform GetGun { get => _gun; }
+        public GameObject GetWrackObject { get => _wrackObject; }
+        public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
+        public GameObject GetTankObject { get => _tankObject; }
         /// </summary>
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
@@ -33,11 +40,20 @@ namespace MVC
             {
                 if(value <= 0)
                 {
-                    if (!IsDead) wasKilled.Invoke(this);
+                    if (!IsDead)
+                    {
+                        wasKilled.Invoke(this);
+                        GameOver();
+                    }
                     IsDead = true;
                 }
                 _currentHealthPoints = value;
             }
+        }
+
+        private void GameOver()
+        {
+            Time.timeScale = 0;
         }
 
         public Player()
@@ -45,13 +61,6 @@ namespace MVC
             IsYourTurn = true;
             IsDead = false;
             _currentHealthPoints = 100;
-        }
-
-        public void Fire()
-        {
-            var bullet = Instantiate(_bullet, _gun.position, _gun.rotation);
-            bullet.GetComponent<Rigidbody>().AddForce(_gun.forward * 100, ForceMode.Impulse);
-            
         }
 
         public void SwapTarget(Vector3 newTarget)
