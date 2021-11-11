@@ -8,13 +8,17 @@ namespace MVC
         private EnemyData _enemyData;
         [SerializeField]
         private Player player;
+        [SerializeField]
+        private GameObject _box;
+        [SerializeField]
+        private UIInitializationModel _uiInitModel;
 
         private Controllers _controllers;
 
         private void Start()
         {
             _controllers = new Controllers();
-            new GameInitialization(_controllers, _enemyData, player);
+            new GameInitialization(_controllers, _enemyData, player, _box, _uiInitModel);
             _controllers.Initilazation();
         }
 

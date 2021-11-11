@@ -6,9 +6,11 @@ namespace MVC
     internal sealed class TakeDamageController : IInitialization, ICleanup
     {
         private readonly IEnumerable<ITakeDamage> _players;
+        private ElementsController _elementsController;
 
-        public TakeDamageController(IEnumerable<ITakeDamage> players)
+        public TakeDamageController(IEnumerable<ITakeDamage> players, ElementsController elementsController)
         {
+            _elementsController = elementsController;
             _players = players;
         }
 
@@ -22,8 +24,18 @@ namespace MVC
 
         private void TakeDamage(Collision bullet, ITakeDamage player)
         {
-            var damage = bullet.gameObject.GetComponent<Bullet>().Damage;
-            player.CurrentHealthPoints -= damage; 
+            if (player is ITakeDamageEnemy)
+            {
+                var bulletEntity = bullet.gameObject.GetComponent<Bullet>();
+                var enemy = player as ITakeDamageEnemy;
+                var elementModifer = _elementsController.GetModifer(enemy, bulletEntity.element);
+                enemy.CurrentHealthPoints -= bulletEntity.Damage * elementModifer;
+            }
+            else
+            {
+                var damage = bullet.gameObject.GetComponent<Bullet>().Damage;
+                player.CurrentHealthPoints -= damage;
+            }
         }
 
         public void Cleanup()
