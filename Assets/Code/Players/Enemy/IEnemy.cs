@@ -12,7 +12,5 @@ namespace MVC
         public Transform Turret { get; set; }
 
         public Transform transform { get; }
-
-        public bool IsDead { get; set; }
     }
 }

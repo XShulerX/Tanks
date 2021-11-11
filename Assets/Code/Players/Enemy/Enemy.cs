@@ -11,6 +11,8 @@ namespace MVC
         [SerializeField]
         private ParticleSystem _tankObjectExplosion;
         [SerializeField]
+        private GameObject _tankObject;
+        [SerializeField]
         private GameObject _wrackObject;
         [SerializeField]
         private GameObject _bullet;
@@ -47,8 +49,7 @@ namespace MVC
         public Transform Turret { get => _turret; set => _turret = value; }
         public GameObject GetWrackObject { get => _wrackObject; }
         public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
-
-        public GameObject GetGameObject { get => this.gameObject; }
+        public GameObject GetTankObject { get => _tankObject; }
 
         private void Start()
         {

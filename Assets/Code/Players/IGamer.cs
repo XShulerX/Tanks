@@ -10,7 +10,7 @@ namespace MVC
         public bool IsShoted { get; set; }
         Action<IGamer> wasKilled { get; set; }
 
-        public GameObject GetGameObject { get; }
+        public GameObject GetTankObject { get; }
         public GameObject GetWrackObject { get; }
         public ParticleSystem GetParticleExplosion { get; }
     }

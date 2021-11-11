@@ -24,7 +24,7 @@ namespace MVC
             gamerList.Add(player);
             gamerList.AddRange(enemyInitialization.GetEnemies());
 
-            new DestroyingEnemyEffectsInitialization(gamerList, timerController);
+            new TankDestroyingController(gamerList);
             var turnController = new TurnController(gamerList, timerController, elementsController, uiModel.StepTextField);
             controllers.Add(turnController);
 

@@ -8,19 +8,17 @@ namespace MVC
     public class TimeDataExtension: IDisposable
     {
 
-        public event Action<GameObject> OnTimerEndWithBool = delegate (GameObject gameObject) { };
+        public event Action OnTimerEndWithBool = delegate () { };
 
         private bool _isTimerEnd;
-        private GameObject _gameObject;
 
-        public TimeDataExtension(GameObject gameObject)
+        public TimeDataExtension()
         {
-            _gameObject = gameObject;
             _isTimerEnd = false;
             OnTimerEndWithBool += ChangeTimerStatusExtension;
         }
 
-        private void ChangeTimerStatusExtension(GameObject gameObject)
+        private void ChangeTimerStatusExtension()
         {
             _isTimerEnd = true;
         }
@@ -29,7 +27,7 @@ namespace MVC
         {
             if (!_isTimerEnd)
             {
-                OnTimerEndWithBool.Invoke(_gameObject);
+                OnTimerEndWithBool.Invoke();
             }
             
         }

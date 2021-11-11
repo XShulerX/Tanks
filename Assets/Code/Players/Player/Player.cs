@@ -8,6 +8,12 @@ namespace MVC
         public Action<IGamer> wasKilled { get; set; } = delegate (IGamer s) { };
 
         [SerializeField]
+        private ParticleSystem _tankObjectExplosion;
+        [SerializeField]
+        private GameObject _tankObject;
+        [SerializeField]
+        private GameObject _wrackObject;
+        [SerializeField]
         private Transform _gun;
         [SerializeField]
         private Transform _turret;
@@ -18,7 +24,10 @@ namespace MVC
 
 
         /// <summary>
-            public Transform GetGun { get => _gun; }
+        public Transform GetGun { get => _gun; }
+        public GameObject GetWrackObject { get => _wrackObject; }
+        public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
+        public GameObject GetTankObject { get => _tankObject; }
         /// </summary>
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
@@ -41,12 +50,6 @@ namespace MVC
                 _currentHealthPoints = value;
             }
         }
-
-        public GameObject GetWrackObject { get; }
-
-        public GameObject GetGameObject { get; }
-
-        public ParticleSystem GetParticleExplosion { get; }
 
         private void GameOver()
         {

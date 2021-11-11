@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
@@ -20,7 +18,7 @@ namespace MVC
         public float GetStartTime { get => _startTime; }
         public float GetDeltaTime { get => _deltaTime; }
 
-        public TimeData(float deltaTime, GameObject gameObject = null): base(gameObject)
+        public TimeData(float deltaTime)
         {
             OnTimerEnd += ChangeTimerStatus;
             IsTimerEnd = false;

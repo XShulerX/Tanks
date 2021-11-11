@@ -25,7 +25,7 @@ namespace MVC
             _timerController.AddTimer(timer);
         }
 
-        private void BoxBlowUp(GameObject gameObject)
+        private void BoxBlowUp()
         {
             var spawnPosition = new Vector3(_box.transform.position.x, _box.transform.position.y + 2f, _box.transform.position.z);
             _box.transform.Translate(Vector3.down * 10);
@@ -36,15 +36,15 @@ namespace MVC
                 bullet.transform.position = spawnPosition;
                 bullet.transform.rotation = Random.rotation;
                 var bulletEntity = bullet.GetComponent<Bullet>();
-                bulletEntity.element = Elements.Water;
+                bulletEntity.element = Elements.Fire;
                 _bullets.Add(bulletEntity);
             }
             var timer = new TimeData(1f);
-            timer.OnTimerEndWithBool += EndWaterAbility;
+            timer.OnTimerEndWithBool += EndFireAbility;
             _timerController.AddTimer(timer);
         }
 
-        private void EndWaterAbility(GameObject gameObject)
+        private void EndFireAbility()
         {
             for (int i = 0; i < _bullets.Count; i++)
             {
