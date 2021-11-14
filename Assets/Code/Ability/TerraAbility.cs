@@ -6,30 +6,26 @@ namespace MVC
 {
     public class TerraAbility : Ability
     {
-        private Player _player;
-        private List<IEnemy> _enemies = new List<IEnemy>();
+        public Player player;
+        public List<IEnemy> enemies = new List<IEnemy>();
 
-        public TerraAbility(int cooldown, BulletPool pool, Elements element, Player player, List<IEnemy> enemies) : base(cooldown, pool, element)
+        public TerraAbility(BulletPool pool, AbilityModel abilityModel) : base(pool, abilityModel)
         {
-            _enemies = enemies;
-            _player = player;
-            _cooldown = cooldown;
-            _pool = pool;
         }
 
         public override void ActivateAbility()
         {
-            if (_pool.HasFreeElement(out var element))
-            {
-                _player.SwapTarget(GetRandomEnemy());
-                element.transform.position = _player.GetGun.position;
-                element.transform.rotation = _player.GetGun.rotation;
-                element.GetComponent<Rigidbody>().AddForce(_player.GetGun.forward * 40, ForceMode.Impulse);
-                var bulletEntity = element.GetComponent<Bullet>();
-                bulletEntity.element = Elements.Terra;
-                bulletEntity.SetContainer(_pool.GetContainer);
-                bulletEntity.InvokeTimer();
-            }
+            var element = _pool.GetFreeElement();
+            player.SwapTarget(GetRandomEnemy());
+            element.transform.position = player.GetGun.position;
+            element.transform.rotation = player.GetGun.rotation;
+            element.GetComponent<MeshRenderer>().material = _material;
+            element.GetComponent<Rigidbody>().AddForce(player.GetGun.forward * 40, ForceMode.Impulse);
+            var bulletEntity = element.GetComponent<Bullet>();
+            bulletEntity.element = Elements.Terra;
+            bulletEntity.SetContainer(_pool.GetContainer);
+            bulletEntity.InvokeTimer();
+
             abilityIsEnded.Invoke();
             _isOnCooldown = true;
         }
@@ -39,11 +35,11 @@ namespace MVC
             List<IEnemy> liveEnemies = new List<IEnemy>();
             Vector3 enemy = Vector3.forward;
 
-            for (int i = 0; i < _enemies.Count; i++)
+            for (int i = 0; i < enemies.Count; i++)
             {
-                if (!_enemies[i].IsDead)
+                if (!enemies[i].IsDead)
                 {
-                    liveEnemies.Add(_enemies[i]);
+                    liveEnemies.Add(enemies[i]);
                 }
             }
 

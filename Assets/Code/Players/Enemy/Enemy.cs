@@ -15,13 +15,12 @@ namespace MVC
         [SerializeField]
         private GameObject _wrackObject;
         [SerializeField]
-        private GameObject _bullet;
-        [SerializeField]
         private Transform _gun;
         [SerializeField]
         private Transform _turret;
         [SerializeField]
         private int _currentHealthPoints;
+        private BulletPool _bulletPool;
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public event Action<Vector3> OnMouseUpChange;
@@ -50,6 +49,7 @@ namespace MVC
         public GameObject GetWrackObject { get => _wrackObject; }
         public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
         public GameObject GetTankObject { get => _tankObject; }
+        public Material Material { get; set; }
 
         private void Start()
         {
@@ -58,7 +58,7 @@ namespace MVC
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
-            var turretMaterial = TankElement switch
+            Material = TankElement switch
             {
                 Elements.Fire => Resources.Load("ElementMaterials/Fire") as Material,
                 Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
@@ -66,14 +66,27 @@ namespace MVC
             };
 
             var materials = _turret.GetComponent<MeshRenderer>().materials;
-            materials[0] = turretMaterial;
+            materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
+        }
+
+        public Enemy SetPool(BulletPool pool)
+        {
+            _bulletPool = pool;
+            return this;
         }
 
         public void Fire(Transform target)
         {
             _turret.LookAt(new Vector3(target.position.x, _turret.position.y, target.position.z));
-            var bullet = Instantiate(_bullet, _gun.position, _gun.rotation);
+            var bullet = _bulletPool.GetFreeElement();
+            bullet.transform.position = _gun.position;
+            bullet.transform.rotation = _gun.rotation;
+            bullet.GetComponent<MeshRenderer>().material = Material;
+            var bulletEntety = bullet.GetComponent<Bullet>();
+            bulletEntety.SetContainer(_bulletPool.GetContainer);
+            bulletEntety.InvokeTimer();
+            bulletEntety.element = TankElement;
             bullet.GetComponent<Rigidbody>().AddForce(_gun.forward * 100, ForceMode.Impulse);
         }
 

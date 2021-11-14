@@ -5,16 +5,17 @@ namespace MVC
 {
     internal sealed class GameInitialization
     {
-        public GameInitialization(Controllers controllers, EnemyData enemyData, Player player, GameObject box, UIInitializationModel uiModel)
+        public GameInitialization(Controllers controllers, EnemyData enemyData, Player player, GameObject box, UIInitializationModel uiModel, AbilitiesData abilitiesData)
         {
-            var enemyFactory = new EnemyFactory(enemyData);
+            var poolModel = new PoolModel();
+            var bulletPoolsInitialization = new BulletPoolsInitialization(poolModel);
+
+            var enemyFactory = new EnemyFactory(enemyData, bulletPoolsInitialization.GetBullets);
             var enemyInitialization = new EnemyInitialization(enemyFactory);
             controllers.Add(enemyInitialization);
             var enemyList = new List<IEnemy>();
             enemyList.AddRange(enemyInitialization.GetEnemies());
 
-            var poolModel = new PoolModel();
-            var bulletPoolsInitialization = new BulletPoolsInitialization(poolModel);
             var elementsController = new ElementsController(enemyList);
 
             var timerController = new TimerController();
@@ -24,11 +25,12 @@ namespace MVC
             gamerList.Add(player);
             gamerList.AddRange(enemyInitialization.GetEnemies());
 
-            new TankDestroyingController(gamerList);
+            new TankDestroyingController(gamerList, timerController);
             var turnController = new TurnController(gamerList, timerController, elementsController, uiModel.StepTextField);
             controllers.Add(turnController);
 
-            var playerAbilityController = new PlayerAbilityController(bulletPoolsInitialization.GetBullets, timerController, box, turnController, player, enemyList);
+            var abilityFactory = new AbilityFactory(timerController, player, box, enemyList);
+            var playerAbilityController = new PlayerAbilityController(bulletPoolsInitialization.GetBullets, turnController, player, abilityFactory, abilitiesData);
             controllers.Add(playerAbilityController);
 
             List<IRechargeableAbility> abilities = new List<IRechargeableAbility>();

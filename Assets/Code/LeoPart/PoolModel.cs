@@ -9,16 +9,16 @@ namespace MVC
 {
     public class PoolModel
     {
-        private List<GameObject> _prefabs;
+        private GameObject _prefab;
         private Transform _container;
 
-        public List<GameObject> GetPrefabs { get => _prefabs; }
+        public GameObject GetPrefab { get => _prefab; }
         public Transform GetContainer { get => _container; }
 
         public PoolModel()
         {
+            _prefab = Resources.Load<GameObject>("Bullet");
             _container = GameObject.FindObjectOfType<GameStarter>().transform;
-            _prefabs = Resources.Load<BulletPoolInfo>("BulletPoolInfo").GetBulletPrefabs;
         }
 
 
