@@ -6,42 +6,41 @@ namespace MVC
 {
     public class FireAbility : Ability
     {
-        private GameObject _box;
+        public GameObject box;
+        public TimerController timerController;
+
         private List<Bullet> _bullets = new List<Bullet>();
-        private TimerController _timerController;
-        public FireAbility(int cooldown, BulletPool pool, Elements element, GameObject box, TimerController timerController) : base(cooldown, pool, element)
+
+        public FireAbility(BulletPool pool, AbilityModel abilityModel) : base(pool, abilityModel)
         {
-            _cooldown = cooldown;
-            _timerController = timerController;
-            _pool = pool;
-            _box = box;
         }
 
         public override void ActivateAbility()
         {
-            _box.transform.Translate(Vector3.up * 10);
+            box.transform.Translate(Vector3.up * 10);
             var timer = new TimeData(1f);
-            timer.OnTimerEndWithBool += BoxBlowUp;
-            _timerController.AddTimer(timer);
+            timer.TimerEnd += BoxBlowUp;
+            timerController.AddTimer(timer);
         }
 
         private void BoxBlowUp()
         {
-            var spawnPosition = new Vector3(_box.transform.position.x, _box.transform.position.y + 2f, _box.transform.position.z);
-            _box.transform.Translate(Vector3.down * 10);
+            var spawnPosition = new Vector3(box.transform.position.x, box.transform.position.y + 2f, box.transform.position.z);
+            box.transform.Translate(Vector3.down * 10);
 
             for (int i = 0; i < 50; i++)
             {
                 var bullet = _pool.GetFreeElement();
                 bullet.transform.position = spawnPosition;
                 bullet.transform.rotation = Random.rotation;
+                bullet.GetComponent<MeshRenderer>().material = _material;
                 var bulletEntity = bullet.GetComponent<Bullet>();
                 bulletEntity.element = Elements.Fire;
                 _bullets.Add(bulletEntity);
             }
             var timer = new TimeData(1f);
-            timer.OnTimerEndWithBool += EndFireAbility;
-            _timerController.AddTimer(timer);
+            timer.TimerEnd += EndFireAbility;
+            timerController.AddTimer(timer);
         }
 
         private void EndFireAbility()

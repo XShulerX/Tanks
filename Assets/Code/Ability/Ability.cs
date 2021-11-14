@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace MVC {
     public abstract class Ability: IRechargeableAbility
@@ -9,16 +10,21 @@ namespace MVC {
         protected bool _isOnCooldown;
         protected int _cooldownTurns;
         protected BulletPool _pool;
-        private Elements _elementType;
+        protected Elements _elementType;
+        protected Material _material;
+        private KeyCode _key;
 
         public bool IsOnCooldown { get => _isOnCooldown; }
         public Elements ElementType { get => _elementType; }
+        public KeyCode Key { get => _key; }
 
-        protected Ability(int cooldown, BulletPool pool, Elements element)
+        protected Ability(BulletPool pool, AbilityModel abilityModel)
         {
-            _cooldown = cooldown;
+            _cooldown = abilityModel.Cooldown;
             _pool = pool;
-            _elementType = element;
+            _elementType = abilityModel.Element;
+            _material = abilityModel.Material;
+            _key = abilityModel.Key;
         }
 
         public abstract void ActivateAbility();

@@ -8,7 +8,7 @@ namespace MVC
     {
         private List<TimeData> _timers = new List<TimeData>();
 
-        private const float REQUIRED_FOR_DELETING_TIMER_TIME = 60f;
+        private const float REQUIRED_FOR_DELETING_TIMER_TIME = 20f;
 
 
         public void AddTimer(TimeData timeData)
@@ -26,14 +26,14 @@ namespace MVC
         {
             for (int i = 0; i < _timers.Count; i++)
             {
-                if ((Time.time - _timers[i].GetStartTime) >= _timers[i].GetDeltaTime)
+                if ((Time.time - _timers[i].GetStartTime) >= _timers[i].GetDeltaTime && !_timers[i].IsTimerEndStatus)
                 {
                     _timers[i].InvokeTimerEnd();
-                    _timers[i].InvokeTimerEndWithBool();
-                    if ((Time.time - _timers[i].GetStartTime) >= REQUIRED_FOR_DELETING_TIMER_TIME)
-                    {
-                        RemoveTimeData(_timers[i]);
-                    }
+                }
+
+                if ((Time.time - _timers[i].GetStartTime) >= REQUIRED_FOR_DELETING_TIMER_TIME)
+                {
+                    RemoveTimeData(_timers[i]);
                 }
             }
         }

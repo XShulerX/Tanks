@@ -58,6 +58,7 @@ namespace MVC
                     if (_elements[j].element == _enemies[i].TankElement)
                     {
                         var turretMaterial = _elements[j].elementMaterial;
+                        _enemies[i].Material = turretMaterial;
                         var materials = _enemies[i].Turret.GetComponent<MeshRenderer>().materials;
                         materials[0] = turretMaterial;
                         _enemies[i].Turret.GetComponent<MeshRenderer>().materials = materials;

@@ -12,5 +12,9 @@ namespace MVC
         public Transform Turret { get; set; }
 
         public Transform transform { get; }
+
+        public Enemy SetPool(BulletPool pool);
+
+        public Material Material { get; set; }
     }
 }

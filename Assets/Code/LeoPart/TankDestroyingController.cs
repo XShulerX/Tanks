@@ -6,9 +6,10 @@ namespace MVC
 {
     public class TankDestroyingController
     {
-
-        public TankDestroyingController(List<IGamer> gamersList)
+        private TimerController _timerController;
+        public TankDestroyingController(List<IGamer> gamersList, TimerController timerController)
         {
+            _timerController = timerController;
             for(int i =0; i< gamersList.Count; i++)
             {
                 gamersList[i].wasKilled += DestroyTank;
@@ -18,7 +19,10 @@ namespace MVC
         private void DestroyTank(IGamer gamer)
         {
             gamer.GetParticleExplosion.Play();
-            ShowWrackedObject(gamer);
+            var timer = new TimeData(0.3f,gamer);
+            timer.TimerEndWithGamer += ShowWrackedObject;
+            _timerController.AddTimer(timer);
+
         }
 
         private void ShowWrackedObject(IGamer gamer)

@@ -9,7 +9,7 @@ namespace MVC
 
         public List<GameObject> PoolOwner;
         public bool _autoExpand { get; set; } = true;
-        private const int DEFAULT_COUNT_OF_AMMO = 5;
+        private const int DEFAULT_COUNT_OF_AMMO = 15;
         public void CreatePool()
         {
             PoolOwner = new List<GameObject>();

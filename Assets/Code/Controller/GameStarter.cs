@@ -7,6 +7,8 @@ namespace MVC
         [SerializeField]
         private EnemyData _enemyData;
         [SerializeField]
+        private AbilitiesData _abilitiesData;
+        [SerializeField]
         private Player player;
         [SerializeField]
         private GameObject _box;
@@ -18,7 +20,7 @@ namespace MVC
         private void Start()
         {
             _controllers = new Controllers();
-            new GameInitialization(_controllers, _enemyData, player, _box, _uiInitModel);
+            new GameInitialization(_controllers, _enemyData, player, _box, _uiInitModel, _abilitiesData);
             _controllers.Initilazation();
         }
 
