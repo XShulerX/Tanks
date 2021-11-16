@@ -10,7 +10,12 @@ namespace MVC
         [HideInInspector] public GameObject GetCollisionObject;
 
         private Transform _container;
+        private Rigidbody _rigidbody;
 
+        private void Awake()
+        {
+            _rigidbody = GetComponent<Rigidbody>();
+        }
 
         public void OnCollisionEnter(Collision collision)
         {
@@ -31,6 +36,8 @@ namespace MVC
         public void TimeToGoBackInPool()
         {
             transform.position = _container.transform.position;
+            transform.rotation = _container.transform.rotation;
+            _rigidbody.Sleep();
             gameObject.SetActive(false);
         }
     }

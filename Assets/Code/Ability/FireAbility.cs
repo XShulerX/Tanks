@@ -18,8 +18,8 @@ namespace MVC
         public override void ActivateAbility()
         {
             box.transform.Translate(Vector3.up * 10);
-            var timer = new TimeData(1f, timerController);
-            timer.TimerEnd += BoxBlowUp;
+            var timer = new TimerData(1f, timerController);
+            timer.TimerIsOver += BoxBlowUp;
         }
 
         private void BoxBlowUp()
@@ -37,8 +37,8 @@ namespace MVC
                 bulletEntity.element = Elements.Fire;
                 _bullets.Add(bulletEntity);
             }
-            var timer = new TimeData(1f, timerController);
-            timer.TimerEnd += EndFireAbility;
+            var timer = new TimerData(1f, timerController);
+            timer.TimerIsOver += EndFireAbility;
         }
 
         private void EndFireAbility()

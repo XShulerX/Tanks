@@ -33,9 +33,8 @@ namespace MVC
             var playerAbilityController = new PlayerAbilityController(bulletPoolsInitialization.GetBullets, turnController, player, abilityFactory, abilitiesData);
             controllers.Add(playerAbilityController);
 
-            List<IRechargeableAbility> abilities = new List<IRechargeableAbility>();
-            abilities.AddRange(playerAbilityController.Abilities);
-            var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel, abilities));
+            var uiAdapter = new UIAdapter(playerAbilityController.Abilities);
+            var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel, uiAdapter.GetAbilities()));
             controllers.Add(uiStateController);
 
             controllers.Add(new EnemyFireController(player.transform, enemyInitialization.GetEnemies()));

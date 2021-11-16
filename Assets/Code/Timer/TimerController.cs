@@ -6,17 +6,17 @@ namespace MVC
 {
     public class TimerController : IExecute
     {
-        private List<TimeData> _timers = new List<TimeData>();
+        private List<TimerData> _timers = new List<TimerData>();
 
         private const float REQUIRED_FOR_DELETING_TIMER_TIME = 20f;
 
 
-        public void AddTimer(TimeData timeData)
+        public void AddTimer(TimerData timeData)
         {
             _timers.Add(timeData);
         }
 
-        public void RemoveTimeData(TimeData timeData)
+        public void RemoveTimeData(TimerData timeData)
         { 
             _timers.Remove(timeData);
             

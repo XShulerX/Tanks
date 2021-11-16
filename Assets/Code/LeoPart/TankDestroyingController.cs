@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace MVC
 {
@@ -19,8 +17,11 @@ namespace MVC
         private void DestroyTank(IGamer gamer)
         {
             gamer.GetParticleExplosion.Play();
-            var timer = new TimeData(0.3f, gamer, _timerController);
-            timer.TimerEndWithGamer += ShowWrackedObject;
+            var timer = new TimerWhithParameters<IGamer>(new TimerData(0.3f, _timerController), gamer);
+            timer.TimerIsOver += ShowWrackedObject;
+
+            //var timer = new TimerData(0.3f, gamer, _timerController);
+            //timer.TimerEndWithGamer += ShowWrackedObject;
 
         }
 
