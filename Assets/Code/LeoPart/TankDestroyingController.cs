@@ -19,9 +19,8 @@ namespace MVC
         private void DestroyTank(IGamer gamer)
         {
             gamer.GetParticleExplosion.Play();
-            var timer = new TimeData(0.3f,gamer);
+            var timer = new TimeData(0.3f, gamer, _timerController);
             timer.TimerEndWithGamer += ShowWrackedObject;
-            _timerController.AddTimer(timer);
 
         }
 

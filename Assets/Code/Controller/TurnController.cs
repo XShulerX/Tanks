@@ -50,8 +50,7 @@ namespace MVC
             {
                 if (_timer is null)
                 {
-                    _timer = new TimeData(DELAY_BEFOR_FIRE);
-                    _timerController.AddTimer(_timer);
+                    _timer = new TimeData(DELAY_BEFOR_FIRE, _timerController);
                 }
 
                 _isTimerOver = _timer.IsTimerEndStatus;
