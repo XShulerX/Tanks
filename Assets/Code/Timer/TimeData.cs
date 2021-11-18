@@ -20,21 +20,25 @@ namespace MVC
         public float GetStartTime { get => _startTime; }
         public float GetDeltaTime { get => _deltaTime; }
 
-        public TimeData(float deltaTime)
+        public TimeData(float deltaTime, TimerController timerController)
         {
             TimerEnd += ChangeTimerStatus;
             IsTimerEnd = false;
             _startTime = Time.time;
             _deltaTime = deltaTime;
+
+            timerController.AddTimer(this);
         }
 
-        public TimeData(float deltaTime, IGamer gamer)
+        public TimeData(float deltaTime, IGamer gamer, TimerController timerController)
         {
             TimerEnd += ChangeTimerStatus;
             IsTimerEnd = false;
             _startTime = Time.time;
             _deltaTime = deltaTime;
             _gamer = gamer;
+
+            timerController.AddTimer(this);
         }
 
         private void ChangeTimerStatus()

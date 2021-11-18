@@ -9,6 +9,8 @@ namespace MVC
     {
         public Action endGlobalTurn = delegate () { };
 
+        private UnitStorage _unitStorage;
+
         private LinkedList<IGamer> _queueGamers;
         private bool _isTimerOver;
         private IGamer _player;
@@ -20,26 +22,54 @@ namespace MVC
         private int _shotedOrDeadEnemies;
         private int _enemiesCount;
         private int _globalTurnCount = 1;
+        private bool _isControllerInReset;
+
         private const float DELAY_BEFOR_FIRE = 1f;
 
 
-        public TurnController(List<IGamer> gamersList, TimerController timerController, ElementsController elementsController, Text text)
+        public TurnController(UnitStorage unitStorage, TimerController timerController, ElementsController elementsController, Text text)
         {
+            _unitStorage = unitStorage;
+
             _elementsController = elementsController;
-            _queueGamers = new LinkedList<IGamer>(gamersList); // Перешел с очереди на Линкед лист для возможности перестановки
+            _queueGamers = new LinkedList<IGamer>(unitStorage.gamers); // Перешел с очереди на Линкед лист для возможности перестановки
             _timerController = timerController;
-            _player = gamersList[0];
-            for (int i = 1; i < gamersList.Count; i++)
+            _player = unitStorage.gamers[0];
+            for (int i = 1; i < unitStorage.gamers.Count; i++)
             {
                 _enemiesCount++;
-                gamersList[i].wasKilled += AddDeadEnemy;
+                unitStorage.gamers[i].wasKilled += AddDeadEnemy;
             }
             _text = text;
             _text.text = "Ход 1";
         }
 
+        public void ResetTurns()
+        {
+            _isControllerInReset = true; //todo - убрать проверку после создания GameResetController, апдейты будут останавливаться там.
+            _enemiesCount = 0;
+            _globalTurnCount = 0;
+            _shotedOrDeadEnemies = 0;
+
+            _queueGamers.Clear();
+            for (int i = 0; i < _unitStorage.gamers.Count; i++)
+            {
+                _queueGamers.AddLast(_unitStorage.gamers[i]);
+            }
+
+            _player = _unitStorage.gamers[0];
+            for (int i = 1; i < _unitStorage.gamers.Count; i++)
+            {
+                _enemiesCount++;
+                _unitStorage.gamers[i].wasKilled += AddDeadEnemy;
+            }
+            _isControllerInReset = false;
+        }
+
         public void Execute(float deltaTime)
         {
+            if (_isControllerInReset) return;
+
             var currentPlayer = _queueGamers.First.Value;
             if (currentPlayer.IsDead)
             {
@@ -50,8 +80,7 @@ namespace MVC
             {
                 if (_timer is null)
                 {
-                    _timer = new TimeData(DELAY_BEFOR_FIRE);
-                    _timerController.AddTimer(_timer);
+                    _timer = new TimeData(DELAY_BEFOR_FIRE, _timerController);
                 }
 
                 _isTimerOver = _timer.IsTimerEndStatus;

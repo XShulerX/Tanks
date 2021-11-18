@@ -9,28 +9,28 @@ namespace MVC
         {
             var poolModel = new PoolModel();
             var bulletPoolsInitialization = new BulletPoolsInitialization(poolModel);
+            var bulletPool = bulletPoolsInitialization.GetBullets;
 
-            var enemyFactory = new EnemyFactory(enemyData, bulletPoolsInitialization.GetBullets);
-            var enemyInitialization = new EnemyInitialization(enemyFactory);
-            controllers.Add(enemyInitialization);
-            var enemyList = new List<IEnemy>();
-            enemyList.AddRange(enemyInitialization.GetEnemies());
+            var unitController = new UnitController(enemyData, player, bulletPool, out UnitStorage unitStorage);
 
-            var elementsController = new ElementsController(enemyList);
+            var elementsController = new ElementsController(unitStorage);
 
             var timerController = new TimerController();
             controllers.Add(timerController);
 
-            List<IGamer> gamerList = new List<IGamer>();
-            gamerList.Add(player);
-            gamerList.AddRange(enemyInitialization.GetEnemies());
 
-            new TankDestroyingController(gamerList, timerController);
-            var turnController = new TurnController(gamerList, timerController, elementsController, uiModel.StepTextField);
+            new TankDestroyingController(unitStorage, timerController);
+            var turnController = new TurnController(unitStorage, timerController, elementsController, uiModel.StepTextField);
             controllers.Add(turnController);
 
-            var abilityFactory = new AbilityFactory(timerController, player, box, enemyList);
-            var playerAbilityController = new PlayerAbilityController(bulletPoolsInitialization.GetBullets, turnController, player, abilityFactory, abilitiesData);
+            //todo - сделать и проверить GameResetController(unitStorage, unitController, bulletPool, elementsController) останавливающий все апдейты в игре и
+            //выполняющий ресет контроллера шагов, возвращающий все пули в пул
+            //и обновляющий врагов и игрока в зависимости от условий.
+
+            var gameResetController = new GameResetManager(unitController, bulletPool, elementsController, controllers, turnController);
+
+            var abilityFactory = new AbilityFactory(timerController, box, unitStorage);
+            var playerAbilityController = new PlayerAbilityController(bulletPool, turnController, unitStorage.player, abilityFactory, abilitiesData);
             controllers.Add(playerAbilityController);
 
             List<IRechargeableAbility> abilities = new List<IRechargeableAbility>();
@@ -38,9 +38,9 @@ namespace MVC
             var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel, abilities));
             controllers.Add(uiStateController);
 
-            controllers.Add(new EnemyFireController(player.transform, enemyInitialization.GetEnemies()));
-            controllers.Add(new PlayerTargetController(enemyInitialization.GetEnemies(), player));
-            controllers.Add(new TakeDamageController(gamerList, elementsController));
+            controllers.Add(new EnemyFireController(unitStorage));
+            controllers.Add(new PlayerTargetController(unitStorage));
+            controllers.Add(new TakeDamageController(unitStorage, elementsController));
 
         }
     }

@@ -7,21 +7,20 @@ namespace MVC
     public class TankDestroyingController
     {
         private TimerController _timerController;
-        public TankDestroyingController(List<IGamer> gamersList, TimerController timerController)
+        public TankDestroyingController(UnitStorage unitStorage, TimerController timerController)
         {
             _timerController = timerController;
-            for(int i =0; i< gamersList.Count; i++)
+            for(int i =0; i< unitStorage.gamers.Count; i++)
             {
-                gamersList[i].wasKilled += DestroyTank;
+                unitStorage.gamers[i].wasKilled += DestroyTank;
             }
         }
 
         private void DestroyTank(IGamer gamer)
         {
             gamer.GetParticleExplosion.Play();
-            var timer = new TimeData(0.3f,gamer);
+            var timer = new TimeData(0.3f, gamer, _timerController);
             timer.TimerEndWithGamer += ShowWrackedObject;
-            _timerController.AddTimer(timer);
 
         }
 

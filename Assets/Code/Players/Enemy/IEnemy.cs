@@ -14,6 +14,7 @@ namespace MVC
         public Transform transform { get; }
 
         public Enemy SetPool(BulletPool pool);
+        public void SetDamageModifer(float modifer);
 
         public Material Material { get; set; }
     }

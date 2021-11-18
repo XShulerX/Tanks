@@ -1,22 +1,19 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MVC
 {
     internal sealed class PlayerTargetController : IInitialization, ICleanup
     {
-        private readonly IEnumerable<IPlayerTarget> _enemyTargets;
-        private readonly Player _player;
+        private UnitStorage _unitStorage;
 
-        public PlayerTargetController(IEnumerable<IPlayerTarget> enemyTargets, Player player)
+        public PlayerTargetController(UnitStorage unitStorage)
         {
-            _player = player;
-            _enemyTargets = enemyTargets;
+            _unitStorage = unitStorage;
         }
 
         public void Initilazation()
         {
-            foreach(var enemyTarget in _enemyTargets)
+            foreach(var enemyTarget in _unitStorage.enemies)
             {
                 enemyTarget.OnMouseUpChange += MouseOnEnemy;
             }
@@ -24,7 +21,7 @@ namespace MVC
 
         public void Cleanup()
         {
-            foreach (var enemyTarget in _enemyTargets)
+            foreach (var enemyTarget in _unitStorage.enemies)
             {
                 enemyTarget.OnMouseUpChange -= MouseOnEnemy;
             }
@@ -32,7 +29,7 @@ namespace MVC
 
         private void MouseOnEnemy(Vector3 enemyPosition)
         {
-            _player.SwapTarget(enemyPosition);
+            _unitStorage.player.SwapTarget(enemyPosition);
         }
     }
 }
