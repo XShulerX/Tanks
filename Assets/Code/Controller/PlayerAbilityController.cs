@@ -10,7 +10,7 @@ namespace MVC
         private Player _player;
         private TurnController _turnController;
         private bool _isAbilityUsed;
-        private InputController _inputImplementation;
+        private InputKeyAbilityController _inputImplementation;
 
         public Dictionary<int, Ability> Abilities => _abilities;
 
@@ -30,7 +30,7 @@ namespace MVC
             }
 
             var inputAdapter = new InputAdapter(abilities);
-            _inputImplementation = new InputController(inputAdapter.GetMatching());
+            _inputImplementation = new InputKeyAbilityController(inputAdapter.GetMatching());
             _inputImplementation.AbilityKeyIsPressed += UseAbility;
         }
 

@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace MVC
 {
-    public class InputController
+    public class InputKeyAbilityController
     {
         public event Action<int> AbilityKeyIsPressed = delegate (int id) {};
 
         private readonly Dictionary<int,KeyCode> _inputMatching;
 
-        public InputController(Dictionary<int, KeyCode> inputMatching)
+        public InputKeyAbilityController(Dictionary<int, KeyCode> inputMatching)
         {
             _inputMatching = inputMatching;
         }
