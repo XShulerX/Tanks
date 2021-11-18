@@ -29,6 +29,19 @@ namespace MVC
             return createObject;
         }
 
+        public void ReturnAndResetAllBullets()
+        {
+            for (int i = 0; i < PoolOwner.Count; i++)
+            {
+                var bullet = PoolOwner[i].GetComponent<Bullet>();
+                bullet.Damage = Bullet.DEFAULT_DAMAGE;
+                PoolOwner[i].GetComponent<Rigidbody>().Sleep();
+                PoolOwner[i].transform.position = _container.transform.position;
+                PoolOwner[i].transform.rotation = _container.transform.rotation;
+                PoolOwner[i].gameObject.SetActive(false);
+            }
+        }
+
     }
 }
 

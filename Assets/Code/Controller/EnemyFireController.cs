@@ -6,12 +6,10 @@ namespace MVC
     internal sealed class EnemyFireController : IExecute
     {
         private UnitStorage _unitStorage;
-        private readonly Transform _target;
 
-        public EnemyFireController(Transform target, UnitStorage unitStorage)
+        public EnemyFireController(UnitStorage unitStorage)
         {
             _unitStorage = unitStorage;
-            _target = target;
         }
 
         public void Execute(float deltaTime)
@@ -20,7 +18,7 @@ namespace MVC
             {
                 if (enemy.IsYourTurn && !enemy.IsDead)
                 {
-                    enemy.Fire(_target);
+                    enemy.Fire(_unitStorage.player.transform);
                     enemy.IsShoted = true;
                     enemy.IsYourTurn = false;
                 }

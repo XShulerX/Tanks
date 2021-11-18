@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MVC
@@ -8,14 +7,12 @@ namespace MVC
     {
         private UnitStorage _unitStorage;
         private TimerController _timerControllerl;
-        private Player _player;
         private GameObject _box;
 
-        public AbilityFactory(TimerController timerControllerl, Player player, GameObject box, UnitStorage unitStorage)
+        public AbilityFactory(TimerController timerControllerl, GameObject box, UnitStorage unitStorage)
         {
             _unitStorage = unitStorage;
             _timerControllerl = timerControllerl;
-            _player = player;
             _box = box;
         }
 
@@ -24,8 +21,8 @@ namespace MVC
             Ability ability = abilityModel.Element switch
             {
                 Elements.Fire => new FireAbility(pool, abilityModel).SetBox(_box).SetTimerController(_timerControllerl),
-                Elements.Water => new WaterAbility(pool, abilityModel).SetPlayer(_player),
-                Elements.Terra => new TerraAbility(pool, abilityModel).SetPlayer(_player).SetEnemies(_unitStorage),
+                Elements.Water => new WaterAbility(pool, abilityModel).SetPlayer(_unitStorage.player),
+                Elements.Terra => new TerraAbility(pool, abilityModel).SetPlayer(_unitStorage.player).SetEnemies(_unitStorage),
                 _ => throw new Exception ("Неизвестный элемент")
             };
 

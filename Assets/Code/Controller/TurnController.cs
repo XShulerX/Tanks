@@ -30,7 +30,6 @@ namespace MVC
         public TurnController(UnitStorage unitStorage, TimerController timerController, ElementsController elementsController, Text text)
         {
             _unitStorage = unitStorage;
-            _unitStorage.gamersListUpdated += ResetTurns;
 
             _elementsController = elementsController;
             _queueGamers = new LinkedList<IGamer>(unitStorage.gamers); // Перешел с очереди на Линкед лист для возможности перестановки

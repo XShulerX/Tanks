@@ -5,8 +5,6 @@ namespace MVC
 {
     public class UnitStorage
     {
-        public Action gamersListUpdated = delegate () { };
-
         public readonly List<IEnemy> enemies;
         public readonly List<IGamer> gamers;
         public Player player;

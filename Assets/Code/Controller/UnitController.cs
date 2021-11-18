@@ -38,7 +38,6 @@ namespace MVC
                 _unitStorage.enemies[i].IsDead = false;
                 _unitStorage.enemies[i].IsShoted = false;
                 _unitStorage.enemies[i].IsYourTurn = false;
-                PlayersWasReset();
             }
         }
 
@@ -50,15 +49,9 @@ namespace MVC
             _unitStorage.player.IsDead = false;
             _unitStorage.player.IsShoted = false;
             _unitStorage.player.IsYourTurn = true;
-            PlayersWasReset();
         }
 
-        private void PlayersWasReset()
-        {
-            _unitStorage.gamersListUpdated.Invoke();
-        }
-
-        private void IncreaseForceModifer()
+        public void IncreaseForceModifer()
         {
             _forceModifer += 0.1f;
         }

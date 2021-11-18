@@ -2,12 +2,15 @@ using System.Collections.Generic;
 
 namespace MVC
 {
-    internal sealed class Controllers : ICleanup, IExecute, IInitialization, IPhysicsExecute
+    public sealed class Controllers : ICleanup, IExecute, IInitialization, IPhysicsExecute
     {
         private readonly List<ICleanup> _cleanupControllers;
         private readonly List<IExecute> _executeControllers;
         private readonly List<IInitialization> _initializeControllers;
         private readonly List<IPhysicsExecute> _physicsExecuteControllers;
+
+        private GameResetManager _resetController;
+        private bool _isReset;
 
         internal Controllers()
         {
@@ -17,7 +20,7 @@ namespace MVC
             _physicsExecuteControllers = new List<IPhysicsExecute>();
         }
 
-        internal Controllers Add(IController controller)
+        public Controllers Add(IController controller)
         {
             if (controller is ICleanup cleanupController)
             {
@@ -48,10 +51,12 @@ namespace MVC
             {
                 _cleanupControllers[index].Cleanup();
             }
+            _resetController.sceneResetState -= ChangeResetState;
         }
 
         public void Execute(float deltaTime)
         {
+            if (_isReset) return;
             for (var index = 0; index < _executeControllers.Count; ++index)
             {
                 _executeControllers[index].Execute(deltaTime);
@@ -68,10 +73,22 @@ namespace MVC
 
         public void PhysicsExecute()
         {
+            if (_isReset) return;
             for (var index = 0; index < _physicsExecuteControllers.Count; ++index)
             {
                 _physicsExecuteControllers[index].PhysicsExecute();
             }
+        }
+
+        public void SignOnResetController(GameResetManager resetController)
+        {
+            _resetController = resetController;
+            _resetController.sceneResetState += ChangeResetState;
+        }
+
+        private void ChangeResetState(bool isReset)
+        {
+            isReset = _isReset;
         }
     }
 }
