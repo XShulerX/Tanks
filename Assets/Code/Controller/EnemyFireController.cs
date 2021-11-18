@@ -4,19 +4,19 @@ using UnityEngine;
 namespace MVC
 {
     internal sealed class EnemyFireController : IExecute
-    { 
-        private IEnumerable<IEnemy> _enemies;
+    {
+        private UnitStorage _unitStorage;
         private readonly Transform _target;
 
-        public EnemyFireController(Transform target, IEnumerable<IEnemy> enemies)
+        public EnemyFireController(Transform target, UnitStorage unitStorage)
         {
-            _enemies = enemies;
+            _unitStorage = unitStorage;
             _target = target;
         }
 
         public void Execute(float deltaTime)
         {
-            foreach(var enemy in _enemies)
+            foreach(var enemy in _unitStorage.enemies)
             {
                 if (enemy.IsYourTurn && !enemy.IsDead)
                 {

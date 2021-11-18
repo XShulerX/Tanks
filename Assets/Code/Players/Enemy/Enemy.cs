@@ -19,8 +19,9 @@ namespace MVC
         [SerializeField]
         private Transform _turret;
         [SerializeField]
-        private int _currentHealthPoints;
+        private float _currentHealthPoints;
         private BulletPool _bulletPool;
+        private float _damageModifer = 1;
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public event Action<Vector3> OnMouseUpChange;
@@ -29,7 +30,7 @@ namespace MVC
         public bool IsDead { get; set; }
         public bool IsShoted { get; set; }
         public Elements TankElement { get; set; }
-        public int CurrentHealthPoints {
+        public float CurrentHealthPoints {
             get => _currentHealthPoints;
             set
             {
@@ -84,10 +85,16 @@ namespace MVC
             bullet.transform.rotation = _gun.rotation;
             bullet.GetComponent<MeshRenderer>().material = Material;
             var bulletEntety = bullet.GetComponent<Bullet>();
+            bulletEntety.Damage *= _damageModifer;
             bulletEntety.SetContainer(_bulletPool.GetContainer);
             bulletEntety.InvokeTimer();
             bulletEntety.element = TankElement;
             bullet.GetComponent<Rigidbody>().AddForce(_gun.forward * 100, ForceMode.Impulse);
+        }
+
+        public void SetDamageModifer(float modifer)
+        {
+            _damageModifer = modifer;
         }
 
         private void OnCollisionEnter(Collision collision)

@@ -19,7 +19,7 @@ namespace MVC
         private Transform _turret;
 
         private Vector3 _target;
-        private int _currentHealthPoints;
+        private float _currentHealthPoints;
 
 
 
@@ -34,7 +34,7 @@ namespace MVC
         public bool IsYourTurn { get ; set; }
         public bool IsDead { get; set; }
         public bool IsShoted { get; set; }
-        public int CurrentHealthPoints {
+        public float CurrentHealthPoints {
             get => _currentHealthPoints;
             set
             {

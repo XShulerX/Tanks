@@ -29,9 +29,9 @@ namespace MVC
             return ability;
         }
 
-        public static TerraAbility SetEnemies(this TerraAbility ability, List<IEnemy> enemies)
+        public static TerraAbility SetEnemies(this TerraAbility ability, UnitStorage unitStorage)
         {
-            ability.enemies = enemies;
+            ability.unitStorage = unitStorage;
             return ability;
         }
     }

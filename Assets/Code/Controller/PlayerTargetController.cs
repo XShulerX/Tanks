@@ -5,18 +5,18 @@ namespace MVC
 {
     internal sealed class PlayerTargetController : IInitialization, ICleanup
     {
-        private readonly IEnumerable<IPlayerTarget> _enemyTargets;
+        private UnitStorage _unitStorage;
         private readonly Player _player;
 
-        public PlayerTargetController(IEnumerable<IPlayerTarget> enemyTargets, Player player)
+        public PlayerTargetController(UnitStorage unitStorage, Player player)
         {
             _player = player;
-            _enemyTargets = enemyTargets;
+            _unitStorage = unitStorage;
         }
 
         public void Initilazation()
         {
-            foreach(var enemyTarget in _enemyTargets)
+            foreach(var enemyTarget in _unitStorage.enemies)
             {
                 enemyTarget.OnMouseUpChange += MouseOnEnemy;
             }
@@ -24,7 +24,7 @@ namespace MVC
 
         public void Cleanup()
         {
-            foreach (var enemyTarget in _enemyTargets)
+            foreach (var enemyTarget in _unitStorage.enemies)
             {
                 enemyTarget.OnMouseUpChange -= MouseOnEnemy;
             }

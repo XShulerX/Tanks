@@ -7,11 +7,11 @@ namespace MVC
     public class ElementsController
     {
         private List<Element> _elements;
-        private List<IEnemy> _enemies = new List<IEnemy>();
+        private UnitStorage _unitStorage;  
 
-        public ElementsController(List<IEnemy> enemies)
+        public ElementsController(UnitStorage unitStorage)
         {
-            _enemies = enemies;
+            _unitStorage = unitStorage;
 
             _elements = new List<Element>()
             {
@@ -50,18 +50,18 @@ namespace MVC
         public void UpdateElements()
         {
             var elements = Enum.GetValues(typeof(Elements));
-            for (int i = 0; i < _enemies.Count; i++)
+            for (int i = 0; i < _unitStorage.enemies.Count; i++)
             {
-                _enemies[i].TankElement = (Elements)UnityEngine.Random.Range(0, elements.Length);
+                _unitStorage.enemies[i].TankElement = (Elements)UnityEngine.Random.Range(0, elements.Length);
                 for (int j = 0; j < _elements.Count; j++)
                 {
-                    if (_elements[j].element == _enemies[i].TankElement)
+                    if (_elements[j].element == _unitStorage.enemies[i].TankElement)
                     {
                         var turretMaterial = _elements[j].elementMaterial;
-                        _enemies[i].Material = turretMaterial;
-                        var materials = _enemies[i].Turret.GetComponent<MeshRenderer>().materials;
+                        _unitStorage.enemies[i].Material = turretMaterial;
+                        var materials = _unitStorage.enemies[i].Turret.GetComponent<MeshRenderer>().materials;
                         materials[0] = turretMaterial;
-                        _enemies[i].Turret.GetComponent<MeshRenderer>().materials = materials;
+                        _unitStorage.enemies[i].Turret.GetComponent<MeshRenderer>().materials = materials;
                     }
                 }
             }      

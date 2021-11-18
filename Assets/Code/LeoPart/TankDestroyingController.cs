@@ -7,12 +7,12 @@ namespace MVC
     public class TankDestroyingController
     {
         private TimerController _timerController;
-        public TankDestroyingController(List<IGamer> gamersList, TimerController timerController)
+        public TankDestroyingController(UnitStorage unitStorage, TimerController timerController)
         {
             _timerController = timerController;
-            for(int i =0; i< gamersList.Count; i++)
+            for(int i =0; i< unitStorage.gamers.Count; i++)
             {
-                gamersList[i].wasKilled += DestroyTank;
+                unitStorage.gamers[i].wasKilled += DestroyTank;
             }
         }
 

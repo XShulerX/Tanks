@@ -7,7 +7,7 @@ namespace MVC
     public class TerraAbility : Ability
     {
         public Player player;
-        public List<IEnemy> enemies = new List<IEnemy>();
+        public UnitStorage unitStorage;
 
         public TerraAbility(BulletPool pool, AbilityModel abilityModel) : base(pool, abilityModel)
         {
@@ -35,11 +35,11 @@ namespace MVC
             List<IEnemy> liveEnemies = new List<IEnemy>();
             Vector3 enemy = Vector3.forward;
 
-            for (int i = 0; i < enemies.Count; i++)
+            for (int i = 0; i < unitStorage.enemies.Count; i++)
             {
-                if (!enemies[i].IsDead)
+                if (!unitStorage.enemies[i].IsDead)
                 {
-                    liveEnemies.Add(enemies[i]);
+                    liveEnemies.Add(unitStorage.enemies[i]);
                 }
             }
 
