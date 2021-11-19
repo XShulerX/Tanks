@@ -16,7 +16,7 @@ namespace MVC
         private IGamer _player;
         private TimerController _timerController;
         private ElementsController _elementsController;
-        private TimeData _timer;
+        private TimerData _timer;
         private Text _text;
 
         private int _shotedOrDeadEnemies;
@@ -80,7 +80,7 @@ namespace MVC
             {
                 if (_timer is null)
                 {
-                    _timer = new TimeData(DELAY_BEFOR_FIRE, _timerController);
+                    _timer = new TimerData(DELAY_BEFOR_FIRE, _timerController);
                 }
 
                 _isTimerOver = _timer.IsTimerEndStatus;
