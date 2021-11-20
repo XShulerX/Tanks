@@ -4,7 +4,7 @@ using System;
 
 namespace MVC
 {
-    [SerializeField]
+    [Serializable]
     public struct WinPanelModel
     {
         [SerializeField] private GameObject _panel;

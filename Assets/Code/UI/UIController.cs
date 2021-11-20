@@ -6,12 +6,13 @@ namespace MVC
     {
         private List<IExecute> _uiExecuteControllerlsList = new List<IExecute>();
 
-        public UIController(UIInitializationModel uiModel, List<IRechargeableAbility> abilities, UnitStorage unitStorage)
+        public UIController(UIInitializationModel uiModel, Dictionary<int, Ability> abilities, UnitStorage unitStorage, GameResetManager gameResetManager)
         {
-            var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel, abilities));
+            var uiAdapter = new UIAdapter(abilities);
+            var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel.GamePanelModel, uiAdapter.GetAbilities()));
             _uiExecuteControllerlsList.Add(uiStateController);
 
-            var uiLostPanelController = new UILostPanelController(unitStorage.player);
+            var uiLostPanelController = new UILostPanelController(uiModel.LostPanelModel, gameResetManager);
         }
 
         public void Execute(float deltaTime)

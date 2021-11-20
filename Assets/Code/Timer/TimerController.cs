@@ -37,6 +37,14 @@ namespace MVC
                 }
             }
         }
+
+        public void Reset()
+        {
+            for (int i = 0; i < _timers.Count; i++)
+            {
+                RemoveTimeData(_timers[i]);
+            }
+        }
     }
 }
 

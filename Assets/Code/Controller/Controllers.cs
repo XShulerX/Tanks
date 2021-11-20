@@ -88,7 +88,7 @@ namespace MVC
 
         private void ChangeResetState(bool isReset)
         {
-            isReset = _isReset;
+            _isReset = isReset;
         }
     }
 }

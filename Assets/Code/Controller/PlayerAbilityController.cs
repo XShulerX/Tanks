@@ -6,7 +6,7 @@ namespace MVC
 {
     public class PlayerAbilityController : IExecute
     {
-        private readonly Dictionary<int, Ability> _abilities = new Dictionary<int, Ability>();
+        private Dictionary<int, Ability> _abilities = new Dictionary<int, Ability>();
         private Player _player;
         private TurnController _turnController;
         private bool _isAbilityUsed;
@@ -68,6 +68,14 @@ namespace MVC
             _player.IsYourTurn = false;
             _isAbilityUsed = false;
             _player.IsShoted = false;
+        }
+
+        public void ResetAbilities()
+        {
+            foreach (var ability in _abilities)
+            {
+                ability.Value.ResetAbility();
+            }
         }
     }
 }

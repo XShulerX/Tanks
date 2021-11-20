@@ -29,5 +29,11 @@ namespace MVC {
 
         public abstract void ActivateAbility();
         public abstract void ReduceCooldown();
+
+        public void ResetAbility()
+        {
+            _isOnCooldown = false;
+            _cooldownTurns = 0;
+        }
     }
 }

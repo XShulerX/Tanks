@@ -43,7 +43,6 @@ namespace MVC
                     if (!IsDead)
                     {
                         wasKilled.Invoke(this);
-                        GameOver();
                     }
                     IsDead = true;
                 }
@@ -51,16 +50,22 @@ namespace MVC
             }
         }
 
-        private void GameOver()
+        internal void Reset(float maxHP)
         {
-            Time.timeScale = 0;
+            CurrentHealthPoints = maxHP;
+            GetWrackObject.SetActive(false);
+            GetTankObject.SetActive(true);
+            IsDead = false;
+            IsShoted = false;
+            IsYourTurn = true;
+            _turret.rotation = _turret.parent.rotation;
         }
 
         public Player()
         {
             IsYourTurn = true;
             IsDead = false;
-            _currentHealthPoints = 100;
+            _currentHealthPoints = 20;
         }
 
         public void SwapTarget(Vector3 newTarget)

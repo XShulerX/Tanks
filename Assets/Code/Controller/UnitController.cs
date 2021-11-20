@@ -31,24 +31,13 @@ namespace MVC
         {
             for (int i = 0; i < _unitStorage.enemies.Count; i++)
             {
-                _unitStorage.enemies[i].CurrentHealthPoints = ENEMY_START_HP * _forceModifer;
-                _unitStorage.enemies[i].SetDamageModifer(_forceModifer);
-                _unitStorage.enemies[i].GetWrackObject.SetActive(false);
-                _unitStorage.enemies[i].GetTankObject.SetActive(true);
-                _unitStorage.enemies[i].IsDead = false;
-                _unitStorage.enemies[i].IsShoted = false;
-                _unitStorage.enemies[i].IsYourTurn = false;
+                _unitStorage.enemies[i].Reset(_forceModifer, ENEMY_START_HP);
             }
         }
 
         public void ResetPlayer()
         {
-            _unitStorage.player.CurrentHealthPoints = PLAYER_MAX_HP;
-            _unitStorage.player.GetWrackObject.SetActive(false);
-            _unitStorage.player.GetTankObject.SetActive(true);
-            _unitStorage.player.IsDead = false;
-            _unitStorage.player.IsShoted = false;
-            _unitStorage.player.IsYourTurn = true;
+            _unitStorage.player.Reset(PLAYER_MAX_HP);
         }
 
         public void IncreaseForceModifer()

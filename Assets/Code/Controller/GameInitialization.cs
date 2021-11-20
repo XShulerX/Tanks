@@ -18,28 +18,27 @@ namespace MVC
             var timerController = new TimerController();
             controllers.Add(timerController);
 
-
-            new TankDestroyingController(unitStorage, timerController);
-            var turnController = new TurnController(unitStorage, timerController, elementsController, uiModel.StepTextField);
+            var turnController = new TurnController(unitStorage, timerController, elementsController, uiModel.GamePanelModel.StepTextField);
             controllers.Add(turnController);
 
             //todo - сделать и проверить GameResetController(unitStorage, unitController, bulletPool, elementsController) останавливающий все апдейты в игре и
             //выполняющий ресет контроллера шагов, возвращающий все пули в пул
             //и обновляющий врагов и игрока в зависимости от условий.
 
-            var gameResetController = new GameResetManager(unitController, bulletPool, elementsController, controllers, turnController);
-
             var abilityFactory = new AbilityFactory(timerController, box, unitStorage);
             var playerAbilityController = new PlayerAbilityController(bulletPool, turnController, unitStorage.player, abilityFactory, abilitiesData);
             controllers.Add(playerAbilityController);
 
-            var uiAdapter = new UIAdapter(playerAbilityController.Abilities);
-            var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel, uiAdapter.GetAbilities()));
-            controllers.Add(uiStateController);
+            var gameResetManager = new GameResetManager(unitController, bulletPool, elementsController, controllers, turnController, unitStorage, playerAbilityController);
+
+            var uiController = new UIController(uiModel, playerAbilityController.Abilities, unitStorage, gameResetManager);
+            controllers.Add(uiController);
 
             controllers.Add(new EnemyFireController(unitStorage));
             controllers.Add(new PlayerTargetController(unitStorage));
             controllers.Add(new TakeDamageController(unitStorage, elementsController));
+
+            new TankDestroyingController(unitStorage, timerController, gameResetManager);
 
         }
     }

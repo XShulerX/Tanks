@@ -46,7 +46,6 @@ namespace MVC
 
         public void ResetTurns()
         {
-            _isControllerInReset = true; //todo - убрать проверку после создания GameResetController, апдейты будут останавливаться там.
             _enemiesCount = 0;
             _globalTurnCount = 0;
             _shotedOrDeadEnemies = 0;
@@ -63,12 +62,11 @@ namespace MVC
                 _enemiesCount++;
                 _unitStorage.gamers[i].wasKilled += AddDeadEnemy;
             }
-            _isControllerInReset = false;
         }
 
         public void Execute(float deltaTime)
         {
-            if (_isControllerInReset) return;
+            if (_player.IsDead) return;
 
             var currentPlayer = _queueGamers.First.Value;
             if (currentPlayer.IsDead)
