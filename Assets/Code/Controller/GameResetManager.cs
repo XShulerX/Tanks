@@ -5,60 +5,69 @@ namespace MVC
     public class GameResetManager
     {
         public event Action<bool> sceneResetState = delegate (bool b) { };
+        public event Action gameOver = delegate () { };
+        public event Action<int> lostGame = delegate (int t) { };
+        public event Action<int> winGame = delegate (int t) { };
 
         private UnitController _unitController;
-        private BulletPool _bulletPool;
-        private ElementsController _elementsController;
-        private TurnController _turnController;
-        private int _attemptsCount;
+        private Controllers _controllers;
+        private int _attemptsCount = 1;
+        private int _stageCount;
+        private bool _isAttemptOver; //todo - придумать более изящную проверку на наличие уже вызванного
+                                     //окна и завершения попытки, либо уточнить у Евгения как лучше сделать
 
         private const int MAX_ATTEMPTS_COUNT = 3;
 
-        public GameResetManager(UnitController unitController, BulletPool bulletPool, ElementsController elementsController, Controllers controllers, TurnController turnController)
+        public GameResetManager(UnitController unitController, Controllers controllers)
         {
+            _controllers = controllers;
             _unitController = unitController;
-            _bulletPool = bulletPool;
-            _elementsController = elementsController;
-            _turnController = turnController;
-            controllers.SignOnResetController(this);
+            _controllers.SignOnResetController(this);
         }
 
         public void PlayerLost()
         {
+            if (_isAttemptOver) return;
+            else _isAttemptOver = true;
+
             if (_attemptsCount == MAX_ATTEMPTS_COUNT)
             {
                 GameOver();
             }
             else
             {
-                _attemptsCount++;
-                sceneResetState.Invoke(true);
-                ResetScene();
-                sceneResetState.Invoke(false);
+                RestartLostGame();
             }
 
         }
 
+        private void RestartLostGame()
+        {
+            _attemptsCount++;
+            lostGame.Invoke(1 + MAX_ATTEMPTS_COUNT - _attemptsCount);
+        }
+
         public void PlayerWin()
         {
+            if (_isAttemptOver) return;
+            else _isAttemptOver = true;
+
+            _stageCount++;
             _unitController.IncreaseForceModifer();
-            sceneResetState.Invoke(true);
-            ResetScene();
-            sceneResetState.Invoke(false);
+            winGame.Invoke(_stageCount);
         }
 
         public void ResetScene()
         {
-            _unitController.ResetPlayer();
-            _unitController.ResetEnemies();
-            _turnController.ResetTurns();
-            _elementsController.UpdateElements();
-            _bulletPool.ReturnAndResetAllBullets();
+            sceneResetState.Invoke(true);
+            _controllers.Reset();
+            sceneResetState.Invoke(false);
+            _isAttemptOver = false;
         }
 
         private void GameOver()
         {
-            throw new NotImplementedException();
+            gameOver.Invoke();
         }
     }
 }

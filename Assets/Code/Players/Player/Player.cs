@@ -17,11 +17,12 @@ namespace MVC
         private Transform _gun;
         [SerializeField]
         private Transform _turret;
-
-        private Vector3 _target;
+        [SerializeField]
+        private float maxHP;
+        [SerializeField]
         private float _currentHealthPoints;
 
-
+        private Vector3 _target;
 
         /// <summary>
         public Transform GetGun { get => _gun; }
@@ -43,7 +44,6 @@ namespace MVC
                     if (!IsDead)
                     {
                         wasKilled.Invoke(this);
-                        GameOver();
                     }
                     IsDead = true;
                 }
@@ -51,16 +51,26 @@ namespace MVC
             }
         }
 
-        private void GameOver()
+        private void Start()
         {
-            Time.timeScale = 0;
+            _currentHealthPoints = maxHP;
+        }
+
+        public void Reset()
+        {
+            CurrentHealthPoints = maxHP;
+            GetWrackObject.SetActive(false);
+            GetTankObject.SetActive(true);
+            IsDead = false;
+            IsShoted = false;
+            IsYourTurn = true;
+            _turret.rotation = _turret.parent.rotation;
         }
 
         public Player()
         {
             IsYourTurn = true;
             IsDead = false;
-            _currentHealthPoints = 100;
         }
 
         public void SwapTarget(Vector3 newTarget)

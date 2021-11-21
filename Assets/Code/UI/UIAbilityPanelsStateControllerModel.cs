@@ -19,13 +19,13 @@ namespace MVC
         public Color WaterColor => _waterColor;
         public Color TerraColor => _terraColor;
 
-        public UIAbilityPanelsStateControllerModel(UIInitializationModel uiInitializationModel, List<IRechargeableAbility> abilityList)
+        public UIAbilityPanelsStateControllerModel(GamePanelModel model, List<IRechargeableAbility> abilityList)
         {
             _abilitiesPanelMatching = new Dictionary<Elements, GameObject>
             {
-                [Elements.Water] = uiInitializationModel.WaterPanel,
-                [Elements.Fire] = uiInitializationModel.FirePanel,
-                [Elements.Terra] = uiInitializationModel.TerraPanel
+                [Elements.Water] = model.WaterPanel,
+                [Elements.Fire] = model.FirePanel,
+                [Elements.Terra] = model.TerraPanel
             };
             _abilities = new List<IRechargeableAbility>();
             _abilities.AddRange(abilityList);

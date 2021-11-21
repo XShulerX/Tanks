@@ -7,6 +7,7 @@ namespace MVC
         private readonly List<ICleanup> _cleanupControllers;
         private readonly List<IExecute> _executeControllers;
         private readonly List<IInitialization> _initializeControllers;
+        private readonly List<IResetable> _resetebleControllers;
         private readonly List<IPhysicsExecute> _physicsExecuteControllers;
 
         private GameResetManager _resetController;
@@ -17,6 +18,7 @@ namespace MVC
             _cleanupControllers = new List<ICleanup>();
             _executeControllers = new List<IExecute>();
             _initializeControllers = new List<IInitialization>();
+            _resetebleControllers = new List<IResetable>();
             _physicsExecuteControllers = new List<IPhysicsExecute>();
         }
 
@@ -35,6 +37,11 @@ namespace MVC
             if (controller is IInitialization initializationController)
             {
                 _initializeControllers.Add(initializationController);
+            }
+
+            if (controller is IResetable resetebleController)
+            {
+                _resetebleControllers.Add(resetebleController);
             }
 
             if (controller is IPhysicsExecute physicsExecuteController)
@@ -71,6 +78,14 @@ namespace MVC
             }
         }
 
+        public void Reset()
+        {
+            for (var index = 0; index < _resetebleControllers.Count; ++index)
+            {
+                _resetebleControllers[index].Reset();
+            }
+        }
+
         public void PhysicsExecute()
         {
             if (_isReset) return;
@@ -88,7 +103,7 @@ namespace MVC
 
         private void ChangeResetState(bool isReset)
         {
-            isReset = _isReset;
+            _isReset = isReset;
         }
     }
 }

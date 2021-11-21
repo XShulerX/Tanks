@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MVC
 {
-    public class ElementsController
+    public class ElementsController: IResetable
     {
         private List<Element> _elements;
         private UnitStorage _unitStorage;  
@@ -79,6 +79,11 @@ namespace MVC
                 }
             }
             return modifer;
+        }
+
+        public void Reset()
+        {
+            UpdateElements();
         }
     }
 }

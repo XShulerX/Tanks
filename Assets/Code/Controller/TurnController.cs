@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MVC
 {
-    public sealed class TurnController : IExecute
+    public sealed class TurnController : IExecute, IResetable
     {
         public Action endGlobalTurn = delegate () { };
 
@@ -16,13 +16,12 @@ namespace MVC
         private IGamer _player;
         private TimerController _timerController;
         private ElementsController _elementsController;
-        private TimeData _timer;
+        private TimerData _timer;
         private Text _text;
 
         private int _shotedOrDeadEnemies;
         private int _enemiesCount;
         private int _globalTurnCount = 1;
-        private bool _isControllerInReset;
 
         private const float DELAY_BEFOR_FIRE = 1f;
 
@@ -44,31 +43,29 @@ namespace MVC
             _text.text = "Ход 1";
         }
 
-        public void ResetTurns()
+        public void Reset()
         {
-            _isControllerInReset = true; //todo - убрать проверку после создания GameResetController, апдейты будут останавливаться там.
             _enemiesCount = 0;
-            _globalTurnCount = 0;
+            _globalTurnCount = 1;
+            _text.text = "Ход 1";
             _shotedOrDeadEnemies = 0;
+            _timer = null;
 
             _queueGamers.Clear();
             for (int i = 0; i < _unitStorage.gamers.Count; i++)
             {
                 _queueGamers.AddLast(_unitStorage.gamers[i]);
+                if (_unitStorage.gamers[i] is Enemy)
+                {
+                    _enemiesCount++;
+                }
             }
-
             _player = _unitStorage.gamers[0];
-            for (int i = 1; i < _unitStorage.gamers.Count; i++)
-            {
-                _enemiesCount++;
-                _unitStorage.gamers[i].wasKilled += AddDeadEnemy;
-            }
-            _isControllerInReset = false;
         }
 
         public void Execute(float deltaTime)
         {
-            if (_isControllerInReset) return;
+            if (_player.IsDead) return;
 
             var currentPlayer = _queueGamers.First.Value;
             if (currentPlayer.IsDead)
@@ -80,7 +77,7 @@ namespace MVC
             {
                 if (_timer is null)
                 {
-                    _timer = new TimeData(DELAY_BEFOR_FIRE, _timerController);
+                    _timer = new TimerData(DELAY_BEFOR_FIRE, _timerController);
                 }
 
                 _isTimerOver = _timer.IsTimerEndStatus;
@@ -106,7 +103,7 @@ namespace MVC
         {
             endGlobalTurn.Invoke();
             _globalTurnCount++;
-            _text.text = "Ход " + _globalTurnCount;
+            _text.text = String.Concat("Ход ", _globalTurnCount);
 
             _queueGamers.Remove(_player);
             _queueGamers.AddFirst(_player);

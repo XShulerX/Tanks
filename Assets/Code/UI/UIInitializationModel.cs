@@ -1,20 +1,19 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MVC
 {
     [Serializable]
     public struct UIInitializationModel
     {
-        [SerializeField] private Text _stepTextField;
-        [SerializeField] private GameObject _firePanel;
-        [SerializeField] private GameObject _waterPanel;
-        [SerializeField] private GameObject _terraPanel;
+        [SerializeField] private GamePanelModel _gamePanelModel;
+        [SerializeField] private LostPanelModel _lostPanelModel;
+        [SerializeField] private WinPanelModel _winPanelModel;
+        [SerializeField] private GameOverPanelModel _GameOverPanelModel;
 
-        public Text StepTextField { get => _stepTextField; }
-        public GameObject FirePanel { get => _firePanel; }
-        public GameObject WaterPanel { get => _waterPanel; }
-        public GameObject TerraPanel { get => _terraPanel; }
+        public GamePanelModel GamePanelModel { get => _gamePanelModel; }
+        public LostPanelModel LostPanelModel { get => _lostPanelModel; }
+        public WinPanelModel WinPanelModel { get => _winPanelModel; }
+        public GameOverPanelModel GameOverPanelModel { get => _GameOverPanelModel; }
     }
 }
