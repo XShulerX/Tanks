@@ -12,14 +12,15 @@ namespace MVC
         {
             _player = player;
             _enemyTargets = enemyTargets;
+            foreach (var enemyTarget in _enemyTargets)
+            {
+                enemyTarget.OnMouseUpChange += MouseOnEnemy;
+            }
         }
 
         public void Initilazation()
         {
-            foreach(var enemyTarget in _enemyTargets)
-            {
-                enemyTarget.OnMouseUpChange += MouseOnEnemy;
-            }
+
         }
 
         public void Cleanup()

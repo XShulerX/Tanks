@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MVC
 {
-    class BulletPoolsInitialization
+    public class BulletPoolsInitialization
     {
 
         private BulletPool _bullets;

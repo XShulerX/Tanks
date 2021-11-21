@@ -11,36 +11,13 @@ namespace MVC
             var bulletPoolsInitialization = new BulletPoolsInitialization(poolModel);
 
             var enemyFactory = new EnemyFactory(enemyData, bulletPoolsInitialization.GetBullets);
-            var enemyInitialization = new EnemyInitialization(enemyFactory);
-            controllers.Add(enemyInitialization);
-            var enemyList = new List<IEnemy>();
-            enemyList.AddRange(enemyInitialization.GetEnemies());
-
-            var elementsController = new ElementsController(enemyList);
 
             var timerController = new TimerController();
             controllers.Add(timerController);
 
-            List<IGamer> gamerList = new List<IGamer>();
-            gamerList.Add(player);
-            gamerList.AddRange(enemyInitialization.GetEnemies());
-
-            new TankDestroyingController(gamerList, timerController);
-            var turnController = new TurnController(gamerList, timerController, elementsController, uiModel.StepTextField);
-            controllers.Add(turnController);
-
-            var abilityFactory = new AbilityFactory(timerController, player, box, enemyList);
-            var playerAbilityController = new PlayerAbilityController(bulletPoolsInitialization.GetBullets, turnController, player, abilityFactory, abilitiesData);
-            controllers.Add(playerAbilityController);
-
-            List<IRechargeableAbility> abilities = new List<IRechargeableAbility>();
-            abilities.AddRange(playerAbilityController.Abilities);
-            var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel, abilities));
-            controllers.Add(uiStateController);
-
-            controllers.Add(new EnemyFireController(player.transform, enemyInitialization.GetEnemies()));
-            controllers.Add(new PlayerTargetController(enemyInitialization.GetEnemies(), player));
-            controllers.Add(new TakeDamageController(gamerList, elementsController));
+            
+            var levelController = new LevelController(controllers, timerController, uiModel.StepTextField, enemyFactory, player, box, bulletPoolsInitialization, uiModel, abilitiesData);
+            controllers.Add(levelController);
 
         }
     }

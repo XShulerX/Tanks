@@ -7,6 +7,7 @@ namespace MVC
         public int Damage;
         public Elements element = Elements.Fire;
 
+
         [HideInInspector] public GameObject GetCollisionObject;
 
         private Transform _container;

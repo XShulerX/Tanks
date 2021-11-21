@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MVC
 {
@@ -17,10 +18,14 @@ namespace MVC
         private Transform _gun;
         [SerializeField]
         private Transform _turret;
+        [SerializeField]
+        private Slider _sliderHP;
 
         private Vector3 _target;
         private int _currentHealthPoints;
 
+        private int _damageMultiplierDefault = 1;
+        private int _damageMultiplier = 1;
 
 
         /// <summary>
@@ -28,6 +33,10 @@ namespace MVC
         public GameObject GetWrackObject { get => _wrackObject; }
         public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
         public GameObject GetTankObject { get => _tankObject; }
+        public int DemageMultiplierDefault { get => _damageMultiplierDefault; }
+        public int DamageMultiplier { get => _damageMultiplier; set => _damageMultiplier = value; }
+        public Slider GetSlider { get => _sliderHP; }
+        public int MaxHealthPlayerPoints { get => 100; }
         /// </summary>
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
@@ -53,7 +62,9 @@ namespace MVC
 
         private void GameOver()
         {
-            Time.timeScale = 0;
+            Debug.Log("Lose");
+            //Time.timeScale = 0;
+
         }
 
         public Player()
@@ -72,6 +83,7 @@ namespace MVC
         private void OnCollisionEnter(Collision collision)
         {
             OnCollisionEnterChange?.Invoke(collision, this);
+            _sliderHP.value = (float)_currentHealthPoints / (float)MaxHealthPlayerPoints;
         }
     }
 }

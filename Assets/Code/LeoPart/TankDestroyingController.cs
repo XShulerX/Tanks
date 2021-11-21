@@ -26,8 +26,12 @@ namespace MVC
 
         private void ShowWrackedObject(IGamer gamer)
         {
-            gamer.GetTankObject.SetActive(false);
-            gamer.GetWrackObject.SetActive(true);
+            if(gamer.GetTankObject != null)
+            {
+                gamer.GetTankObject.SetActive(false);
+                gamer.GetWrackObject.SetActive(true);
+            }
+            
         }
     }
 }

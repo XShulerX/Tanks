@@ -12,14 +12,15 @@ namespace MVC
         {
             _elementsController = elementsController;
             _players = players;
+            foreach (var player in _players)
+            {
+                player.OnCollisionEnterChange += TakeDamage;
+            }
         }
 
         public void Initilazation()
         {
-            foreach(var player in _players)
-            {
-                player.OnCollisionEnterChange += TakeDamage;
-            }
+
         }
 
         private void TakeDamage(Collision bullet, ITakeDamage player)
@@ -31,10 +32,12 @@ namespace MVC
                 var elementModifer = _elementsController.GetModifer(enemy, bulletEntity.element);
                 enemy.CurrentHealthPoints -= bulletEntity.Damage * elementModifer;
             }
-            else
+            else if(player is ITakeDamagePlayer)
             {
+                var damageModifier = player as ITakeDamagePlayer;
                 var damage = bullet.gameObject.GetComponent<Bullet>().Damage;
-                player.CurrentHealthPoints -= damage;
+                player.CurrentHealthPoints -= damage * damageModifier.DamageMultiplier;
+                Debug.Log(damage * damageModifier.DamageMultiplier);
             }
         }
 

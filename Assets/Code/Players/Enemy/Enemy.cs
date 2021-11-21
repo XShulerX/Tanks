@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MVC
 {
@@ -21,6 +22,17 @@ namespace MVC
         [SerializeField]
         private int _currentHealthPoints;
         private BulletPool _bulletPool;
+
+        [SerializeField]
+        private int _currentHealthPointsDefault;
+        [SerializeField]
+        private Slider _sliderHP;
+
+        private int _maxEnemyHPOnLevel = 5;
+
+        public Slider GetSlider { get => _sliderHP; }
+        public int MaxHealthEnemyPoints { get=> _maxEnemyHPOnLevel; set=> _maxEnemyHPOnLevel = value; }
+        public int GetDefaultEnemyHP { get => _currentHealthPointsDefault; }
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public event Action<Vector3> OnMouseUpChange;
@@ -70,6 +82,7 @@ namespace MVC
             _turret.GetComponent<MeshRenderer>().materials = materials;
         }
 
+
         public Enemy SetPool(BulletPool pool)
         {
             _bulletPool = pool;
@@ -94,6 +107,7 @@ namespace MVC
         {
             if (IsDead) return;
             OnCollisionEnterChange?.Invoke(collision, this);
+            _sliderHP.value = (float)_currentHealthPoints / (float)_maxEnemyHPOnLevel;
         }
 
         private void OnMouseUp()

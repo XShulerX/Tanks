@@ -22,6 +22,9 @@ namespace MVC
         private int _globalTurnCount = 1;
         private const float DELAY_BEFOR_FIRE = 1f;
 
+        public bool IsAllEnemiesDead = false;
+
+       public int GetDeadEnemies { get => _shotedOrDeadEnemies; }
 
         public TurnController(List<IGamer> gamersList, TimerController timerController, ElementsController elementsController, Text text)
         {
@@ -88,21 +91,30 @@ namespace MVC
                 {
                     _shotedOrDeadEnemies--;
                 }
+                
             }
-            
+
+            if (_shotedOrDeadEnemies == _enemiesCount)
+            {
+                IsAllEnemiesDead = true;
+            }
+
+
             Debug.Log("EndTurn");
             _elementsController.UpdateElements();
         }
 
         private void PassNext()
         {
+            
             var currentPlayer = _queueGamers.First.Value;
             _queueGamers.RemoveFirst();
             _queueGamers.AddLast(currentPlayer);
-
+            Debug.Log(currentPlayer.IsDead);
             if (currentPlayer != _player && !currentPlayer.IsDead)
             {
                 _shotedOrDeadEnemies++;
+                
             }
 
             if (_shotedOrDeadEnemies == _enemiesCount)

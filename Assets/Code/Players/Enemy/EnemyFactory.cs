@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MVC
 {
-    internal sealed class EnemyFactory : IEnemyFactory
+    public sealed class EnemyFactory : IEnemyFactory
     {
         private readonly EnemyData _data;
         private BulletPool _bulletPool;
