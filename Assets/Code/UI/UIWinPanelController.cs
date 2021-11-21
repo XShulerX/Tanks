@@ -3,20 +3,18 @@ using UnityEngine;
 
 namespace MVC
 {
-    public class UILostPanelController
+    internal class UIWinPanelController
     {
-        private LostPanelModel _model;
+        private WinPanelModel _model;
         private GameResetManager _resetManager;
 
-        
-
-        public UILostPanelController(LostPanelModel lostPanelModel, GameResetManager gameResetManager)
+        public UIWinPanelController(WinPanelModel winPanelModel, GameResetManager gameResetManager)
         {
-            _model = lostPanelModel;
+            _model = winPanelModel;
             _resetManager = gameResetManager;
-            _resetManager.lostGame += ShowPanel;
+            _resetManager.winGame += ShowPanel;
 
-            _model.RestartButton.onClick.AddListener(Restart);
+            _model.NextButton.onClick.AddListener(Restart);
             _model.ExitButton.onClick.AddListener(Exit);
         }
 
@@ -31,9 +29,9 @@ namespace MVC
             _model.Panel.SetActive(false);
         }
 
-        private void ShowPanel(int attemptsCount)
+        private void ShowPanel(int stageCount)
         {
-            _model.AttemptsCountText.text = String.Concat("Попыток осталось: ", attemptsCount);
+            _model.StagesCount.text = String.Concat("Уровней пройдено: ", stageCount);
             _model.Panel.SetActive(true);
         }
     }

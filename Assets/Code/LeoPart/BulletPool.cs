@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
 namespace MVC
 {
-    public class BulletPool: Pool
+    public class BulletPool: Pool, IResetable
     {
         private GameObject _prefab;
         private Transform _container;
@@ -29,7 +27,7 @@ namespace MVC
             return createObject;
         }
 
-        public void ReturnAndResetAllBullets()
+        public void Reset()
         {
             for (int i = 0; i < PoolOwner.Count; i++)
             {

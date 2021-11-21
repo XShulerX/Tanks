@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,14 +34,6 @@ namespace MVC
                 {
                     RemoveTimeData(_timers[i]);
                 }
-            }
-        }
-
-        public void Reset()
-        {
-            for (int i = 0; i < _timers.Count; i++)
-            {
-                RemoveTimeData(_timers[i]);
             }
         }
     }

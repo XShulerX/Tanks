@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MVC
 {
-    public class PlayerAbilityController : IExecute
+    public class PlayerAbilityController : IExecute, IResetable
     {
         private Dictionary<int, Ability> _abilities = new Dictionary<int, Ability>();
         private Player _player;
@@ -70,7 +70,7 @@ namespace MVC
             _player.IsShoted = false;
         }
 
-        public void ResetAbilities()
+        public void Reset()
         {
             foreach (var ability in _abilities)
             {

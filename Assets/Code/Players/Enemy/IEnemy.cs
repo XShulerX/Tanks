@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace MVC
@@ -12,6 +11,6 @@ namespace MVC
         public Enemy SetPool(BulletPool pool);
         public void SetDamageModifer(float modifer);
         public Material Material { get; set; }
-        public void Reset(float _forceModifer, float startHP);
+        public void Reset(float forceModifer);
     }
 }

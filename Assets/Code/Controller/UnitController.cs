@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace MVC
 {
-    public class UnitController
+    public class UnitController: IResetable
     {
         private UnitStorage _unitStorage;
 
         private float _forceModifer = 1;
-
-        private const float PLAYER_MAX_HP = 100;
-        private const float ENEMY_START_HP = 50;
 
         public UnitController(EnemyData enemyData, Player player, BulletPool bulletPool, out UnitStorage unitStorage)
         {
@@ -27,17 +23,23 @@ namespace MVC
             _unitStorage = unitStorage;
         }
 
-        public void ResetEnemies()
+        private void ResetEnemies()
         {
             for (int i = 0; i < _unitStorage.enemies.Count; i++)
             {
-                _unitStorage.enemies[i].Reset(_forceModifer, ENEMY_START_HP);
+                _unitStorage.enemies[i].Reset(_forceModifer);
             }
         }
 
-        public void ResetPlayer()
+        private void ResetPlayer()
         {
-            _unitStorage.player.Reset(PLAYER_MAX_HP);
+            _unitStorage.player.Reset();
+        }
+
+        public void Reset()
+        {
+            ResetEnemies();
+            ResetPlayer();
         }
 
         public void IncreaseForceModifer()

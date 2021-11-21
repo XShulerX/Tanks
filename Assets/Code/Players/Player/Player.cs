@@ -17,11 +17,12 @@ namespace MVC
         private Transform _gun;
         [SerializeField]
         private Transform _turret;
-
-        private Vector3 _target;
+        [SerializeField]
+        private float maxHP;
+        [SerializeField]
         private float _currentHealthPoints;
 
-
+        private Vector3 _target;
 
         /// <summary>
         public Transform GetGun { get => _gun; }
@@ -50,7 +51,12 @@ namespace MVC
             }
         }
 
-        internal void Reset(float maxHP)
+        private void Start()
+        {
+            _currentHealthPoints = maxHP;
+        }
+
+        public void Reset()
         {
             CurrentHealthPoints = maxHP;
             GetWrackObject.SetActive(false);
@@ -65,7 +71,6 @@ namespace MVC
         {
             IsYourTurn = true;
             IsDead = false;
-            _currentHealthPoints = 20;
         }
 
         public void SwapTarget(Vector3 newTarget)

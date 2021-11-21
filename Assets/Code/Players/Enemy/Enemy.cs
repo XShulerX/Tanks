@@ -19,9 +19,13 @@ namespace MVC
         [SerializeField]
         private Transform _turret;
         [SerializeField]
+        private float maxHP;
+        [SerializeField]
         private float _currentHealthPoints;
+
         private BulletPool _bulletPool;
         private float _damageModifer = 1;
+
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public event Action<Vector3> OnMouseUpChange;
@@ -56,6 +60,7 @@ namespace MVC
         {
             IsDead = false;
             IsYourTurn = false;
+            _currentHealthPoints = maxHP;
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
@@ -111,9 +116,10 @@ namespace MVC
             OnMouseUpChange?.Invoke(transform.position);
         }
 
-        public void Reset(float forceModifer, float startHP)
+        public void Reset(float forceModifer)
         {
-            CurrentHealthPoints = startHP * forceModifer;
+            maxHP *= forceModifer;
+            CurrentHealthPoints = maxHP;
             SetDamageModifer(forceModifer);
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);

@@ -15,7 +15,7 @@ namespace MVC {
             element.GetComponent<MeshRenderer>().material = _material;
             element.GetComponent<Rigidbody>().AddForce(player.GetGun.forward * 40, ForceMode.Impulse);
             var bulletEntity = element.GetComponent<Bullet>();
-            bulletEntity.element = Elements.Terra;
+            bulletEntity.element = Elements.Water;
             bulletEntity.SetContainer(_pool.GetContainer);
             bulletEntity.InvokeTimer();
 

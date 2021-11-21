@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MVC
 {
-    public sealed class TurnController : IExecute
+    public sealed class TurnController : IExecute, IResetable
     {
         public Action endGlobalTurn = delegate () { };
 
@@ -22,7 +22,6 @@ namespace MVC
         private int _shotedOrDeadEnemies;
         private int _enemiesCount;
         private int _globalTurnCount = 1;
-        private bool _isControllerInReset;
 
         private const float DELAY_BEFOR_FIRE = 1f;
 
@@ -44,24 +43,24 @@ namespace MVC
             _text.text = "’Ó‰ 1";
         }
 
-        public void ResetTurns()
+        public void Reset()
         {
             _enemiesCount = 0;
-            _globalTurnCount = 0;
+            _globalTurnCount = 1;
+            _text.text = "’Ó‰ 1";
             _shotedOrDeadEnemies = 0;
+            _timer = null;
 
             _queueGamers.Clear();
             for (int i = 0; i < _unitStorage.gamers.Count; i++)
             {
                 _queueGamers.AddLast(_unitStorage.gamers[i]);
+                if (_unitStorage.gamers[i] is Enemy)
+                {
+                    _enemiesCount++;
+                }
             }
-
             _player = _unitStorage.gamers[0];
-            for (int i = 1; i < _unitStorage.gamers.Count; i++)
-            {
-                _enemiesCount++;
-                _unitStorage.gamers[i].wasKilled += AddDeadEnemy;
-            }
         }
 
         public void Execute(float deltaTime)
@@ -104,7 +103,7 @@ namespace MVC
         {
             endGlobalTurn.Invoke();
             _globalTurnCount++;
-            _text.text = "’Ó‰ " + _globalTurnCount;
+            _text.text = String.Concat("’Ó‰ ", _globalTurnCount);
 
             _queueGamers.Remove(_player);
             _queueGamers.AddFirst(_player);
