@@ -2,12 +2,12 @@ using System.Collections.Generic;
 
 namespace MVC
 {
-    internal sealed class Controllers : ICleanup, IExecute, IInitialization, IPhysicsExecute
+    public sealed class Controllers : ICleanup, IExecute, IInitialization, IPhysicsExecute
     {
-        private readonly List<ICleanup> _cleanupControllers;
-        private readonly List<IExecute> _executeControllers;
-        private readonly List<IInitialization> _initializeControllers;
-        private readonly List<IPhysicsExecute> _physicsExecuteControllers;
+        public List<ICleanup> _cleanupControllers;
+        public List<IExecute> _executeControllers;
+        public List<IInitialization> _initializeControllers;
+        public List<IPhysicsExecute> _physicsExecuteControllers;
 
         internal Controllers()
         {

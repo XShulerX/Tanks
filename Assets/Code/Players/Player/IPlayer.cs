@@ -1,6 +1,6 @@
 namespace MVC
 {
-    public interface IPlayer : IGamer
+    public interface IPlayer : IGamer, ITakeDamagePlayer
     {
 
     }
