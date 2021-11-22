@@ -25,6 +25,7 @@ namespace MVC
         private Vector3 _target;
 
         /// <summary>
+        public Transform Turret { get => _turret; set => _turret = value; }
         public Transform GetGun { get => _gun; }
         public GameObject GetWrackObject { get => _wrackObject; }
         public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
@@ -35,6 +36,8 @@ namespace MVC
         public bool IsYourTurn { get ; set; }
         public bool IsDead { get; set; }
         public bool IsShoted { get; set; }
+        public Elements TankElement { get; set; }
+        public Material Material { get; set; }
         public float CurrentHealthPoints {
             get => _currentHealthPoints;
             set
@@ -54,6 +57,19 @@ namespace MVC
         private void Start()
         {
             _currentHealthPoints = maxHP;
+
+            var elements = Enum.GetValues(typeof(Elements));
+            TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
+            Material = TankElement switch
+            {
+                Elements.Fire => Resources.Load("ElementMaterials/Fire") as Material,
+                Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
+                Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
+            };
+
+            var materials = _turret.GetComponent<MeshRenderer>().materials;
+            materials[0] = Material;
+            _turret.GetComponent<MeshRenderer>().materials = materials;
         }
 
         public void Reset()

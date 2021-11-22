@@ -9,6 +9,8 @@ namespace MVC
         public bool IsDead { get; set; }
         public bool IsShoted { get; set; }
         Action<IGamer> wasKilled { get; set; }
+        public Material Material { get; set; }
+        public Transform Turret { get; set; }
 
         public GameObject GetTankObject { get; }
         public GameObject GetWrackObject { get; }

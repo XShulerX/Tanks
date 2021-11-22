@@ -12,7 +12,7 @@ namespace MVC
             var bulletPool = bulletPoolsInitialization.GetBullets;
             controllers.Add(bulletPool);
 
-            var unitController = new UnitController(enemyData, player, bulletPool, out UnitStorage unitStorage);
+            var unitController = new UnitCrateAndResetController(enemyData, player, bulletPool, out UnitStorage unitStorage);
             controllers.Add(unitController);
 
             var gameResetManager = new GameResetManager(unitController, controllers);
