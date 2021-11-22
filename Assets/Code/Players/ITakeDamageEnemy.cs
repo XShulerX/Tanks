@@ -6,6 +6,5 @@ namespace MVC
 {
     public interface ITakeDamageEnemy : ITakeDamage
     {
-        public Elements TankElement { get; set; }
     }
 }

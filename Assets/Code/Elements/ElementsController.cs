@@ -50,29 +50,29 @@ namespace MVC
         public void UpdateElements()
         {
             var elements = Enum.GetValues(typeof(Elements));
-            for (int i = 0; i < _unitStorage.enemies.Count; i++)
+            for (int i = 0; i < _unitStorage.gamers.Count; i++)
             {
-                _unitStorage.enemies[i].TankElement = (Elements)UnityEngine.Random.Range(0, elements.Length);
+                _unitStorage.gamers[i].TankElement = (Elements)UnityEngine.Random.Range(0, elements.Length);
                 for (int j = 0; j < _elements.Count; j++)
                 {
-                    if (_elements[j].element == _unitStorage.enemies[i].TankElement)
+                    if (_elements[j].element == _unitStorage.gamers[i].TankElement)
                     {
                         var turretMaterial = _elements[j].elementMaterial;
-                        _unitStorage.enemies[i].Material = turretMaterial;
-                        var materials = _unitStorage.enemies[i].Turret.GetComponent<MeshRenderer>().materials;
+                        _unitStorage.gamers[i].Material = turretMaterial;
+                        var materials = _unitStorage.gamers[i].Turret.GetComponent<MeshRenderer>().materials;
                         materials[0] = turretMaterial;
-                        _unitStorage.enemies[i].Turret.GetComponent<MeshRenderer>().materials = materials;
+                        _unitStorage.gamers[i].Turret.GetComponent<MeshRenderer>().materials = materials;
                     }
                 }
             }      
         }
 
-        public int GetModifer(ITakeDamageEnemy enemy, Elements element)
+        public int GetModifer(ITakeDamage target, Elements element)
         {
             int modifer = 1;
             for (int i = 0; i < _elements.Count; i++)
             {
-                if(_elements[i].element == enemy.TankElement)
+                if(_elements[i].element == target.TankElement)
                 {
                     _elements[i].elementModifers.TryGetValue(element, out modifer);
                     break;

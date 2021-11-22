@@ -9,7 +9,7 @@ namespace MVC
         public event Action<int> lostGame = delegate (int t) { };
         public event Action<int> winGame = delegate (int t) { };
 
-        private UnitController _unitController;
+        private UnitCrateAndResetController _unitController;
         private Controllers _controllers;
         private int _attemptsCount = 1;
         private int _stageCount;
@@ -18,7 +18,7 @@ namespace MVC
 
         private const int MAX_ATTEMPTS_COUNT = 3;
 
-        public GameResetManager(UnitController unitController, Controllers controllers)
+        public GameResetManager(UnitCrateAndResetController unitController, Controllers controllers)
         {
             _controllers = controllers;
             _unitController = unitController;

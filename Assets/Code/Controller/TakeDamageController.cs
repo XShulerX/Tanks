@@ -25,17 +25,8 @@ namespace MVC
         private void TakeDamage(Collision bullet, ITakeDamage player)
         {
             var bulletEntity = bullet.gameObject.GetComponent<Bullet>();
-
-            if (player is ITakeDamageEnemy)
-            {
-                var enemy = player as ITakeDamageEnemy;
-                var elementModifer = _elementsController.GetModifer(enemy, bulletEntity.element);
-                enemy.CurrentHealthPoints -= bulletEntity.Damage * elementModifer;
-            }
-            else
-            {
-                player.CurrentHealthPoints -= bulletEntity.Damage;
-            }
+            var elementModifer = _elementsController.GetModifer(player, bulletEntity.element);
+            player.CurrentHealthPoints -= bulletEntity.Damage * elementModifer;
         }
 
         public void Cleanup()

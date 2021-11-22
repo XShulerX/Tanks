@@ -2,13 +2,13 @@
 
 namespace MVC
 {
-    public class UnitController: IResetable
+    public class UnitCrateAndResetController: IResetable
     {
         private UnitStorage _unitStorage;
 
         private float _forceModifer = 1;
 
-        public UnitController(EnemyData enemyData, Player player, BulletPool bulletPool, out UnitStorage unitStorage)
+        public UnitCrateAndResetController(EnemyData enemyData, Player player, BulletPool bulletPool, out UnitStorage unitStorage)
         {
             var enemyFactory = new EnemyFactory(enemyData, bulletPool);
             var enemyInitialization = new EnemyInitialization(enemyFactory);
