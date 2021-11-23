@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MVC
 {
@@ -21,6 +22,8 @@ namespace MVC
         private float maxHP;
         [SerializeField]
         private float _currentHealthPoints;
+        [SerializeField]
+        private Slider _sliderHP;
 
         private Vector3 _target;
 
@@ -57,6 +60,7 @@ namespace MVC
         private void Start()
         {
             _currentHealthPoints = maxHP;
+            _sliderHP.value = _currentHealthPoints / maxHP;
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
@@ -75,6 +79,7 @@ namespace MVC
         public void Reset()
         {
             CurrentHealthPoints = maxHP;
+            _sliderHP.value = _currentHealthPoints / maxHP;
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);
             IsDead = false;
@@ -98,6 +103,7 @@ namespace MVC
         private void OnCollisionEnter(Collision collision)
         {
             OnCollisionEnterChange?.Invoke(collision, this);
+            _sliderHP.value = _currentHealthPoints / maxHP;
         }
     }
 }
