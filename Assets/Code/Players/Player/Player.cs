@@ -8,6 +8,8 @@ namespace MVC
     {
         public Action<IGamer> wasKilled { get; set; } = delegate (IGamer s) { };
 
+        
+
         [SerializeField]
         private ParticleSystem _tankObjectExplosion;
         [SerializeField]
@@ -25,6 +27,8 @@ namespace MVC
         [SerializeField]
         private Slider _sliderHP;
 
+        
+
         private Vector3 _target;
 
         /// <summary>
@@ -41,6 +45,8 @@ namespace MVC
         public bool IsShoted { get; set; }
         public Elements TankElement { get; set; }
         public Material Material { get; set; }
+        public Image GamerIconElement { get; private set; }
+
         public float CurrentHealthPoints {
             get => _currentHealthPoints;
             set
@@ -59,6 +65,7 @@ namespace MVC
 
         private void Start()
         {
+            GamerIconElement = GetComponentInChildren<Image>();
             _currentHealthPoints = maxHP;
             _sliderHP.value = _currentHealthPoints / maxHP;
 
@@ -74,6 +81,7 @@ namespace MVC
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
+            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
         }
 
         public void Reset()
