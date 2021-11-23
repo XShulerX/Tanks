@@ -2,7 +2,7 @@
 
 namespace MVC
 {
-    public class GameResetManager
+    public class GameResetOrEndManager
     {
         public event Action<bool> sceneResetState = delegate (bool b) { };
         public event Action gameOver = delegate () { };
@@ -18,7 +18,11 @@ namespace MVC
 
         private const int MAX_ATTEMPTS_COUNT = 3;
 
-        public GameResetManager(UnitCrateAndResetController unitController, Controllers controllers)
+        public int AttemptsCount { get => _attemptsCount; }
+        public int StageCount { get => _stageCount; }
+        public UnitCrateAndResetController UnitController { get => _unitController; }
+
+        public GameResetOrEndManager(UnitCrateAndResetController unitController, Controllers controllers)
         {
             _controllers = controllers;
             _unitController = unitController;

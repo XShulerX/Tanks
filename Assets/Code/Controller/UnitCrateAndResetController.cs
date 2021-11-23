@@ -8,6 +8,9 @@ namespace MVC
 
         private float _forceModifer = 1;
 
+        public UnitStorage UnitStorage { get => _unitStorage; }
+        public float ForceModifer { get => _forceModifer; }
+
         public UnitCrateAndResetController(EnemyData enemyData, Player player, BulletPool bulletPool, out UnitStorage unitStorage)
         {
             var enemyFactory = new EnemyFactory(enemyData, bulletPool);
@@ -25,9 +28,9 @@ namespace MVC
 
         private void ResetEnemies()
         {
-            for (int i = 0; i < _unitStorage.enemies.Count; i++)
+            for (int i = 0; i < _unitStorage.Enemies.Count; i++)
             {
-                _unitStorage.enemies[i].Reset(_forceModifer);
+                _unitStorage.Enemies[i].Reset(_forceModifer);
             }
         }
 

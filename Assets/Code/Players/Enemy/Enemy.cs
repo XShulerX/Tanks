@@ -27,8 +27,8 @@ namespace MVC
         private Slider _sliderEnemyHP;
 
         private BulletPool _bulletPool;
-        private float _damageModifer = 1;
-
+        private float _forceModifer = 1;
+        private int _id;
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public event Action<Vector3> OnMouseUpChange;
@@ -59,10 +59,11 @@ namespace MVC
         public GameObject GetTankObject { get => _tankObject; }
         public Material Material { get; set; }
         public Image GamerIconElement { get; private set; }
+        public int Id { get => _id; }
+        public float ForceModifer { get => _forceModifer; }
 
-        private void Start()
+        private void Awake()
         {
-            GamerIconElement = GetComponentInChildren<Image>();
             IsDead = false;
             IsYourTurn = false;
             _currentHealthPoints = maxHP;
@@ -76,6 +77,11 @@ namespace MVC
                 Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
                 Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
             };
+        }
+
+        private void Start()
+        {
+            GamerIconElement = GetComponentInChildren<Image>();
 
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
@@ -89,6 +95,12 @@ namespace MVC
             return this;
         }
 
+        public Enemy SetID(int id)
+        {
+            _id = id;
+            return this;
+        }
+
         public void Fire(Transform target)
         {
             if (target.GetComponent<Player>().IsDead) return;
@@ -99,7 +111,7 @@ namespace MVC
             bullet.transform.rotation = _gun.rotation;
             bullet.GetComponent<MeshRenderer>().material = Material;
             var bulletEntety = bullet.GetComponent<Bullet>();
-            bulletEntety.Damage *= _damageModifer;
+            bulletEntety.Damage *= _forceModifer;
             bulletEntety.SetContainer(_bulletPool.GetContainer);
             bulletEntety.InvokeTimer();
             bulletEntety.element = TankElement;
@@ -108,7 +120,7 @@ namespace MVC
 
         public void SetDamageModifer(float modifer)
         {
-            _damageModifer = modifer;
+            _forceModifer = modifer;
         }
 
         private void OnCollisionEnter(Collision collision)

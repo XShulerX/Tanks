@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,8 +27,6 @@ namespace MVC
         private float _currentHealthPoints;
         [SerializeField]
         private Slider _sliderHP;
-
-        
 
         private Vector3 _target;
 
@@ -63,9 +62,14 @@ namespace MVC
             }
         }
 
-        private void Start()
+        public Player()
         {
-            GamerIconElement = GetComponentInChildren<Image>();
+            IsYourTurn = true;
+            IsDead = false;
+        }
+
+        private void Awake()
+        {
             _currentHealthPoints = maxHP;
             _sliderHP.value = _currentHealthPoints / maxHP;
 
@@ -77,6 +81,11 @@ namespace MVC
                 Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
                 Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
             };
+        }
+
+        private void Start()
+        {
+            GamerIconElement = GetComponentInChildren<Image>();
 
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
@@ -94,12 +103,6 @@ namespace MVC
             IsShoted = false;
             IsYourTurn = true;
             _turret.rotation = _turret.parent.rotation;
-        }
-
-        public Player()
-        {
-            IsYourTurn = true;
-            IsDead = false;
         }
 
         public void SwapTarget(Vector3 newTarget)

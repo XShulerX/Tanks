@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace MVC
 {
     public class UnitStorage
     {
-        public readonly List<IEnemy> enemies;
-        public readonly List<IGamer> gamers;
+        private List<IEnemy> _enemies;
+        private List<IGamer> _gamers;
         public Player player;
+
+        public List<IEnemy> Enemies { get => _enemies; }
+        public List<IGamer> Gamers { get => _gamers; }
 
         public UnitStorage(List<IEnemy> enemiesList, List<IGamer> gamerList, Player player)
         {
-            enemies = new List<IEnemy>(enemiesList);
-            gamers = new List<IGamer>(gamerList);
+            _enemies = new List<IEnemy>(enemiesList);
+            _gamers = new List<IGamer>(gamerList);
             this.player = player;
         }
     }

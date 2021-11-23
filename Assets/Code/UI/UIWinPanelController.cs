@@ -6,9 +6,9 @@ namespace MVC
     internal class UIWinPanelController
     {
         private WinPanelModel _model;
-        private GameResetManager _resetManager;
+        private GameResetOrEndManager _resetManager;
 
-        public UIWinPanelController(WinPanelModel winPanelModel, GameResetManager gameResetManager)
+        public UIWinPanelController(WinPanelModel winPanelModel, GameResetOrEndManager gameResetManager)
         {
             _model = winPanelModel;
             _resetManager = gameResetManager;

@@ -17,6 +17,7 @@ namespace MVC {
         public bool IsOnCooldown { get => _isOnCooldown; }
         public Elements ElementType { get => _elementType; }
         public KeyCode Key { get => _key; }
+        public int CooldownTurns { get => _cooldownTurns; }
 
         protected Ability(BulletPool pool, AbilityModel abilityModel)
         {

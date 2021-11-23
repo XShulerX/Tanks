@@ -17,7 +17,7 @@ namespace MVC
         private TimerController _timerController;
         private ElementsController _elementsController;
         private TimerData _timer;
-        private Text _text;
+        private Text _turnCountText;
 
         private int _shotedOrDeadEnemies;
         private int _enemiesCount;
@@ -25,42 +25,43 @@ namespace MVC
 
         private const float DELAY_BEFOR_FIRE = 1f;
 
+        public int GlobalTurnCount { get => _globalTurnCount; }
 
-        public TurnController(UnitStorage unitStorage, TimerController timerController, ElementsController elementsController, Text text)
+        public TurnController(UnitStorage unitStorage, TimerController timerController, ElementsController elementsController, Text uiTurnCountText)
         {
             _unitStorage = unitStorage;
 
             _elementsController = elementsController;
-            _queueGamers = new LinkedList<IGamer>(unitStorage.gamers); // Перешел с очереди на Линкед лист для возможности перестановки
+            _queueGamers = new LinkedList<IGamer>(unitStorage.Gamers); // Перешел с очереди на Линкед лист для возможности перестановки
             _timerController = timerController;
-            _player = unitStorage.gamers[0];
-            for (int i = 1; i < unitStorage.gamers.Count; i++)
+            _player = unitStorage.Gamers[0];
+            for (int i = 1; i < unitStorage.Gamers.Count; i++)
             {
                 _enemiesCount++;
-                unitStorage.gamers[i].wasKilled += AddDeadEnemy;
+                unitStorage.Gamers[i].wasKilled += AddDeadEnemy;
             }
-            _text = text;
-            _text.text = "Ход 1";
+            _turnCountText = uiTurnCountText;
+            _turnCountText.text = "Ход 1";
         }
 
         public void Reset()
         {
             _enemiesCount = 0;
             _globalTurnCount = 1;
-            _text.text = "Ход 1";
+            _turnCountText.text = "Ход 1";
             _shotedOrDeadEnemies = 0;
             _timer = null;
 
             _queueGamers.Clear();
-            for (int i = 0; i < _unitStorage.gamers.Count; i++)
+            for (int i = 0; i < _unitStorage.Gamers.Count; i++)
             {
-                _queueGamers.AddLast(_unitStorage.gamers[i]);
-                if (_unitStorage.gamers[i] is Enemy)
+                _queueGamers.AddLast(_unitStorage.Gamers[i]);
+                if (_unitStorage.Gamers[i] is Enemy)
                 {
                     _enemiesCount++;
                 }
             }
-            _player = _unitStorage.gamers[0];
+            _player = _unitStorage.Gamers[0];
         }
 
         public void Execute(float deltaTime)
@@ -101,24 +102,23 @@ namespace MVC
 
         private void EndTurn()
         {
-            endGlobalTurn.Invoke();
             _globalTurnCount++;
-            _text.text = String.Concat("Ход ", _globalTurnCount);
+            _turnCountText.text = String.Concat("Ход ", _globalTurnCount);
 
             _queueGamers.Remove(_player);
             _queueGamers.AddFirst(_player);
+            _elementsController.UpdateElements();
 
-            foreach (var enemy in _queueGamers)
+            foreach (var gamer in _queueGamers)
             {
-                enemy.IsShoted = false;
-                if (enemy != _player && !enemy.IsDead)
+                gamer.IsShoted = false;
+                if (gamer != _player && !gamer.IsDead)
                 {
                     _shotedOrDeadEnemies--;
                 }
             }
-            
+            endGlobalTurn.Invoke();
             Debug.Log("EndTurn");
-            _elementsController.UpdateElements();
         }
 
         private void PassNext()

@@ -5,9 +5,9 @@ namespace MVC
     internal class UIGameOverController
     {
         private GameOverPanelModel _model;
-        private GameResetManager _resetManager;
+        private GameResetOrEndManager _resetManager;
 
-        public UIGameOverController(GameOverPanelModel gameOverPanelModel, GameResetManager gameResetManager)
+        public UIGameOverController(GameOverPanelModel gameOverPanelModel, GameResetOrEndManager gameResetManager)
         {
             _model = gameOverPanelModel;
             _resetManager = gameResetManager;

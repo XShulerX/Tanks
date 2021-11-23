@@ -6,11 +6,11 @@ namespace MVC
     public class UILostPanelController
     {
         private LostPanelModel _model;
-        private GameResetManager _resetManager;
+        private GameResetOrEndManager _resetManager;
 
         
 
-        public UILostPanelController(LostPanelModel lostPanelModel, GameResetManager gameResetManager)
+        public UILostPanelController(LostPanelModel lostPanelModel, GameResetOrEndManager gameResetManager)
         {
             _model = lostPanelModel;
             _resetManager = gameResetManager;
