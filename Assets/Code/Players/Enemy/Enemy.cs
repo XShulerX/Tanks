@@ -58,9 +58,11 @@ namespace MVC
         public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
         public GameObject GetTankObject { get => _tankObject; }
         public Material Material { get; set; }
+        public Image GamerIconElement { get; private set; }
 
         private void Start()
         {
+            GamerIconElement = GetComponentInChildren<Image>();
             IsDead = false;
             IsYourTurn = false;
             _currentHealthPoints = maxHP;
@@ -78,6 +80,7 @@ namespace MVC
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
+            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
         }
 
         public Enemy SetPool(BulletPool pool)
