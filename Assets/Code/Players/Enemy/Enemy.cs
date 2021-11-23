@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MVC
 {
@@ -22,6 +23,8 @@ namespace MVC
         private float maxHP;
         [SerializeField]
         private float _currentHealthPoints;
+        [SerializeField]
+        private Slider _sliderEnemyHP;
 
         private BulletPool _bulletPool;
         private float _damageModifer = 1;
@@ -55,12 +58,15 @@ namespace MVC
         public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
         public GameObject GetTankObject { get => _tankObject; }
         public Material Material { get; set; }
+        public Image GamerIconElement { get; private set; }
 
         private void Start()
         {
+            GamerIconElement = GetComponentInChildren<Image>();
             IsDead = false;
             IsYourTurn = false;
             _currentHealthPoints = maxHP;
+            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
@@ -74,6 +80,7 @@ namespace MVC
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
+            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
         }
 
         public Enemy SetPool(BulletPool pool)
@@ -108,6 +115,7 @@ namespace MVC
         {
             if (IsDead) return;
             OnCollisionEnterChange?.Invoke(collision, this);
+            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
         }
 
         private void OnMouseUp()
@@ -120,6 +128,7 @@ namespace MVC
         {
             maxHP *= forceModifer;
             CurrentHealthPoints = maxHP;
+            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
             SetDamageModifer(forceModifer);
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);

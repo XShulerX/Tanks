@@ -59,9 +59,11 @@ namespace MVC
                     {
                         var turretMaterial = _elements[j].elementMaterial;
                         _unitStorage.gamers[i].Material = turretMaterial;
+                        _unitStorage.gamers[i].GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(_unitStorage.gamers[i].Material);
                         var materials = _unitStorage.gamers[i].Turret.GetComponent<MeshRenderer>().materials;
                         materials[0] = turretMaterial;
                         _unitStorage.gamers[i].Turret.GetComponent<MeshRenderer>().materials = materials;
+
                     }
                 }
             }      
