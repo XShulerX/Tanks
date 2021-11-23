@@ -35,11 +35,11 @@ namespace MVC
             List<IEnemy> liveEnemies = new List<IEnemy>();
             Vector3 enemy = Vector3.forward;
 
-            for (int i = 0; i < unitStorage.Enemies.Count; i++)
+            for (int i = 0; i < unitStorage.enemies.Count; i++)
             {
-                if (!unitStorage.Enemies[i].IsDead)
+                if (!unitStorage.enemies[i].IsDead)
                 {
-                    liveEnemies.Add(unitStorage.Enemies[i]);
+                    liveEnemies.Add(unitStorage.enemies[i]);
                 }
             }
 

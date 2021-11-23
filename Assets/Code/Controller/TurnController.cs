@@ -31,13 +31,13 @@ namespace MVC
             _unitStorage = unitStorage;
 
             _elementsController = elementsController;
-            _queueGamers = new LinkedList<IGamer>(unitStorage.Gamers); // Перешел с очереди на Линкед лист для возможности перестановки
+            _queueGamers = new LinkedList<IGamer>(unitStorage.gamers); // Перешел с очереди на Линкед лист для возможности перестановки
             _timerController = timerController;
-            _player = unitStorage.Gamers[0];
-            for (int i = 1; i < unitStorage.Gamers.Count; i++)
+            _player = unitStorage.gamers[0];
+            for (int i = 1; i < unitStorage.gamers.Count; i++)
             {
                 _enemiesCount++;
-                unitStorage.Gamers[i].wasKilled += AddDeadEnemy;
+                unitStorage.gamers[i].wasKilled += AddDeadEnemy;
             }
             _text = text;
             _text.text = "Ход 1";
@@ -52,15 +52,15 @@ namespace MVC
             _timer = null;
 
             _queueGamers.Clear();
-            for (int i = 0; i < _unitStorage.Gamers.Count; i++)
+            for (int i = 0; i < _unitStorage.gamers.Count; i++)
             {
-                _queueGamers.AddLast(_unitStorage.Gamers[i]);
-                if (_unitStorage.Gamers[i] is Enemy)
+                _queueGamers.AddLast(_unitStorage.gamers[i]);
+                if (_unitStorage.gamers[i] is Enemy)
                 {
                     _enemiesCount++;
                 }
             }
-            _player = _unitStorage.Gamers[0];
+            _player = _unitStorage.gamers[0];
         }
 
         public void Execute(float deltaTime)

@@ -15,9 +15,9 @@ namespace MVC
             _unitStorage = unitStorage;
             _resetManager = gameResetManager;
             _timerController = timerController;
-            for(int i =0; i < _unitStorage.Gamers.Count; i++)
+            for(int i =0; i < _unitStorage.gamers.Count; i++)
             {
-                _unitStorage.Gamers[i].wasKilled += DestroyTank;
+                _unitStorage.gamers[i].wasKilled += DestroyTank;
             }
 
             playerTankWasDestroed += _resetManager.PlayerLost;
@@ -41,7 +41,7 @@ namespace MVC
                 playerTankWasDestroed.Invoke();
             } else
             {
-                var enemies = _unitStorage.Enemies;
+                var enemies = _unitStorage.enemies;
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     if(!enemies[i].IsDead)

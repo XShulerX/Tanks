@@ -50,18 +50,18 @@ namespace MVC
         public void UpdateElements()
         {
             var elements = Enum.GetValues(typeof(Elements));
-            for (int i = 0; i < _unitStorage.Gamers.Count; i++)
+            for (int i = 0; i < _unitStorage.gamers.Count; i++)
             {
-                _unitStorage.Gamers[i].TankElement = (Elements)UnityEngine.Random.Range(0, elements.Length);
+                _unitStorage.gamers[i].TankElement = (Elements)UnityEngine.Random.Range(0, elements.Length);
                 for (int j = 0; j < _elements.Count; j++)
                 {
-                    if (_elements[j].element == _unitStorage.Gamers[i].TankElement)
+                    if (_elements[j].element == _unitStorage.gamers[i].TankElement)
                     {
                         var turretMaterial = _elements[j].elementMaterial;
-                        _unitStorage.Gamers[i].Material = turretMaterial;
-                        var materials = _unitStorage.Gamers[i].Turret.GetComponent<MeshRenderer>().materials;
+                        _unitStorage.gamers[i].Material = turretMaterial;
+                        var materials = _unitStorage.gamers[i].Turret.GetComponent<MeshRenderer>().materials;
                         materials[0] = turretMaterial;
-                        _unitStorage.Gamers[i].Turret.GetComponent<MeshRenderer>().materials = materials;
+                        _unitStorage.gamers[i].Turret.GetComponent<MeshRenderer>().materials = materials;
                     }
                 }
             }      
