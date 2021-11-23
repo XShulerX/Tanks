@@ -12,20 +12,22 @@ namespace MVC
         {
             var enemyFactory = new EnemyFactory(enemyData, bulletPool);
             var enemyInitialization = new EnemyInitialization(enemyFactory);
+            var enemies = new List<IEnemy>();
+            enemies.AddRange(enemyInitialization.GetEnemies());
 
             var gamerList = new List<IGamer>();
             gamerList.Add(player);
-            gamerList.AddRange(enemyInitialization.GetEnemies());
+            gamerList.AddRange(enemies);
 
-            unitStorage = new UnitStorage(enemyInitialization.GetEnemies(), gamerList, player);
+            unitStorage = new UnitStorage(enemies, gamerList, player);
             _unitStorage = unitStorage;
         }
 
         private void ResetEnemies()
         {
-            for (int i = 0; i < _unitStorage.Enemies.Count; i++)
+            for (int i = 0; i < _unitStorage.enemies.Count; i++)
             {
-                _unitStorage.Enemies[i].Reset(_forceModifer);
+                _unitStorage.enemies[i].Reset(_forceModifer);
             }
         }
 

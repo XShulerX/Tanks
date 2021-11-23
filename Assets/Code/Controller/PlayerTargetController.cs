@@ -13,7 +13,7 @@ namespace MVC
 
         public void Initilazation()
         {
-            foreach(var enemyTarget in _unitStorage.Enemies)
+            foreach(var enemyTarget in _unitStorage.enemies)
             {
                 enemyTarget.OnMouseUpChange += MouseOnEnemy;
             }
@@ -21,7 +21,7 @@ namespace MVC
 
         public void Cleanup()
         {
-            foreach (var enemyTarget in _unitStorage.Enemies)
+            foreach (var enemyTarget in _unitStorage.enemies)
             {
                 enemyTarget.OnMouseUpChange -= MouseOnEnemy;
             }
