@@ -44,6 +44,11 @@ namespace MVC
             _turnCountText.text = "’Ó‰ 1";
         }
 
+        public void UpdateCountText()
+        {
+            _turnCountText.text = String.Concat("’Ó‰ ", _globalTurnCount);
+        }
+
         public void Reset()
         {
             _enemiesCount = 0;

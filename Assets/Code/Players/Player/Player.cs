@@ -116,5 +116,9 @@ namespace MVC
             OnCollisionEnterChange?.Invoke(collision, this);
             _sliderHP.value = _currentHealthPoints / maxHP;
         }
+        public void UpdateHelthView()
+        {
+            _sliderHP.value = _currentHealthPoints / maxHP;
+        }
     }
 }
