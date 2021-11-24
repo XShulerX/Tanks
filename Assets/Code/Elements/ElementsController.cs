@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace MVC
 {
-    public class ElementsController: IResetable
+    public class ElementsController : IResetable
     {
         private List<Element> _elements;
-        private UnitStorage _unitStorage;  
+        private UnitStorage _unitStorage;
 
         public ElementsController(UnitStorage unitStorage)
         {
@@ -66,7 +66,7 @@ namespace MVC
 
                     }
                 }
-            }      
+            }
         }
 
         public int GetModifer(ITakeDamage target, Elements element)
@@ -74,7 +74,7 @@ namespace MVC
             int modifer = 1;
             for (int i = 0; i < _elements.Count; i++)
             {
-                if(_elements[i].element == target.TankElement)
+                if (_elements[i].element == target.TankElement)
                 {
                     _elements[i].elementModifers.TryGetValue(element, out modifer);
                     break;

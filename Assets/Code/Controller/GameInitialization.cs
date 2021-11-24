@@ -43,7 +43,7 @@ namespace MVC
 
             new TankDestroyingController(unitStorage, timerController, gameResetManager);
             var momentoSaver = new MementosSaver(unitStorage, gameResetManager, turnController, playerAbilityController);
-            new SaveDataController(inputController, momentoSaver);
+            new SaveDataController(inputController, momentoSaver, unitStorage, gameResetManager, turnController, playerAbilityController);
         }
     }
 }

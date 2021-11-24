@@ -75,18 +75,18 @@ namespace MVC
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
+            GamerIconElement = GetComponentInChildren<Image>();
+            UpdateTurretMaterialFromLoad();
+        }
+
+        public void UpdateTurretMaterialFromLoad()
+        {
             Material = TankElement switch
             {
                 Elements.Fire => Resources.Load("ElementMaterials/Fire") as Material,
                 Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
                 Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
             };
-        }
-
-        private void Start()
-        {
-            GamerIconElement = GetComponentInChildren<Image>();
-
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
@@ -114,6 +114,10 @@ namespace MVC
         private void OnCollisionEnter(Collision collision)
         {
             OnCollisionEnterChange?.Invoke(collision, this);
+            _sliderHP.value = _currentHealthPoints / maxHP;
+        }
+        public void UpdateHelthView()
+        {
             _sliderHP.value = _currentHealthPoints / maxHP;
         }
     }

@@ -67,22 +67,23 @@ namespace MVC
             IsDead = false;
             IsYourTurn = false;
             _currentHealthPoints = maxHP;
-            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
+            UpdateHelthView();
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
+            GamerIconElement = GetComponentInChildren<Image>();
+
+            UpdateTurretMaterialFromLoad();
+        }
+
+        public void UpdateTurretMaterialFromLoad()
+        {
             Material = TankElement switch
             {
                 Elements.Fire => Resources.Load("ElementMaterials/Fire") as Material,
                 Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
                 Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
             };
-        }
-
-        private void Start()
-        {
-            GamerIconElement = GetComponentInChildren<Image>();
-
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
@@ -99,6 +100,11 @@ namespace MVC
         {
             _id = id;
             return this;
+        }
+
+        public void UpdateHelthView()
+        {
+            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
         }
 
         public void Fire(Transform target)
@@ -127,7 +133,7 @@ namespace MVC
         {
             if (IsDead) return;
             OnCollisionEnterChange?.Invoke(collision, this);
-            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
+            UpdateHelthView();
         }
 
         private void OnMouseUp()
@@ -140,7 +146,7 @@ namespace MVC
         {
             maxHP *= forceModifer;
             CurrentHealthPoints = maxHP;
-            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
+            UpdateHelthView();
             SetDamageModifer(forceModifer);
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);
