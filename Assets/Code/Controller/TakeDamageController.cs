@@ -5,16 +5,18 @@ namespace MVC
 {
     internal sealed class TakeDamageController : IInitialization, ICleanup
     {
-        private readonly IEnumerable<ITakeDamage> _players;
+        private UnitStorage _unitStorage;
+        private ElementsController _elementsController;
 
-        public TakeDamageController(IEnumerable<ITakeDamage> players)
+        public TakeDamageController(UnitStorage unitStorage, ElementsController elementsController)
         {
-            _players = players;
+            _elementsController = elementsController;
+            _unitStorage = unitStorage;
         }
 
         public void Initilazation()
         {
-            foreach(var player in _players)
+            foreach(var player in _unitStorage.Gamers)
             {
                 player.OnCollisionEnterChange += TakeDamage;
             }
@@ -22,13 +24,14 @@ namespace MVC
 
         private void TakeDamage(Collision bullet, ITakeDamage player)
         {
-            var damage = bullet.gameObject.GetComponent<Bullet>().Damage;
-            player.CurrentHealthPoints -= damage; 
+            var bulletEntity = bullet.gameObject.GetComponent<Bullet>();
+            var elementModifer = _elementsController.GetModifer(player, bulletEntity.element);
+            player.CurrentHealthPoints -= bulletEntity.Damage * elementModifer;
         }
 
         public void Cleanup()
         {
-            foreach (var player in _players)
+            foreach (var player in _unitStorage.Gamers)
             {
                 player.OnCollisionEnterChange -= TakeDamage;
             }

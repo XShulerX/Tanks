@@ -10,6 +10,7 @@ namespace MVC
         [Serializable]
         private struct EnemyInfo
         {
+            public int enemyID;
             public Vector3 Position;
             public Vector3 Rotation;
             public Enemy EnemyPrefab;
@@ -18,10 +19,11 @@ namespace MVC
         [SerializeField]
         private List<EnemyInfo> _enemies;
 
-        public (Enemy[], Vector3[], Vector3[]) GetEnemies()
+        public (Enemy[], int[], Vector3[], Vector3[]) GetEnemies()
         {
-            var (enemies, enemyPosition, enemyRotation) =
+            var (enemies, enemiesID, enemyPosition, enemyRotation) =
                 (new Enemy[_enemies.Count],
+                new int[_enemies.Count],
                 new Vector3[_enemies.Count],
                 new Vector3[_enemies.Count]);
             for(var i = 0; i < _enemies.Count; i++)
@@ -32,10 +34,11 @@ namespace MVC
                     throw new InvalidOperationException("Enemy prefab not found");
                 }
                 enemies[i] = enemy.EnemyPrefab;
+                enemiesID[i] = enemy.enemyID;
                 enemyPosition[i] = enemy.Position;
                 enemyRotation[i] = enemy.Rotation;
             }
-            return (enemies, enemyPosition, enemyRotation);
+            return (enemies, enemiesID, enemyPosition, enemyRotation);
         }
     }
 }
