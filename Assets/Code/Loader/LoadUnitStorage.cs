@@ -19,7 +19,8 @@ namespace MVC
             foreach (var enemy in _unitStorage.Enemies)
             {
                 enemy.TankElement = savedData.enemiesMementos[enemy.Id].element;
-                enemy.CurrentHealthPoints = savedData.enemiesMementos[enemy.Id].hp;
+                enemy.CurrentHealthPoints = savedData.enemiesMementos[enemy.Id].curentHP;
+                enemy.MaxHP = savedData.enemiesMementos[enemy.Id].maxHP;
                 enemy.UpdateHelthView();
                 enemy.UpdateTurretMaterialFromLoad();
             }

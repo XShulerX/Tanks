@@ -39,7 +39,7 @@ namespace MVC
             var enemiesMementos = new List<EnemyMementoData>(); 
             foreach (var enemy in _unitStorage.Enemies)
             {
-                enemiesMementos.Add(new EnemyMementoData(enemy.Id, enemy.CurrentHealthPoints, enemy.TankElement));
+                enemiesMementos.Add(new EnemyMementoData(enemy.Id, enemy.MaxHP, enemy.CurrentHealthPoints, enemy.TankElement));
             }
             var playerMemento = new PlayerMementoData(_unitStorage.player.CurrentHealthPoints, _unitStorage.player.TankElement);
             var turnCount = _turnController.GlobalTurnCount;

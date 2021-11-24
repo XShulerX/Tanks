@@ -11,7 +11,7 @@ namespace MVC
         public List<IEnemy> Enemies { get => _enemies; }
         public List<IGamer> Gamers { get => _gamers; }
 
-        public UnitStorage(List<IEnemy> enemiesList, List<IGamer> gamerList, Player player)
+        public UnitStorage(IEnumerable<IEnemy> enemiesList, List<IGamer> gamerList, Player player)
         {
             _enemies = new List<IEnemy>(enemiesList);
             _gamers = new List<IGamer>(gamerList);

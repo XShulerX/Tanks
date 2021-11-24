@@ -61,6 +61,7 @@ namespace MVC
         public Image GamerIconElement { get; private set; }
         public int Id { get => _id; }
         public float ForceModifer { get => _forceModifer; }
+        public float MaxHP { get => maxHP; set => maxHP = value; }
 
         private void Awake()
         {
@@ -142,12 +143,16 @@ namespace MVC
             OnMouseUpChange?.Invoke(transform.position);
         }
 
-        public void Reset(float forceModifer)
+        public void IncreaceForce(float forceModifier)
         {
-            maxHP *= forceModifer;
+            maxHP *= forceModifier;
+            SetDamageModifer(forceModifier);
+        }
+
+        public void Reset()
+        {
             CurrentHealthPoints = maxHP;
             UpdateHelthView();
-            SetDamageModifer(forceModifer);
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);
             IsDead = false;
