@@ -54,8 +54,8 @@ namespace MVC
 
             var savedData = _data.Load(file); // это готовый GameMemento
 
-            LoadFromJson(savedData);
             _gameResetOrEndManager.ResetScene();
+            LoadFromJson(savedData);
 
 
 
