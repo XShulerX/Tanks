@@ -25,7 +25,7 @@ namespace MVC
 
         private const float DELAY_BEFOR_FIRE = 1f;
 
-        public int GlobalTurnCount { get => _globalTurnCount; }
+        public int GlobalTurnCount { get => _globalTurnCount; set => _globalTurnCount = value; }
 
         public TurnController(UnitStorage unitStorage, TimerController timerController, ElementsController elementsController, Text uiTurnCountText)
         {

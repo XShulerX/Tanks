@@ -14,10 +14,10 @@ namespace MVC {
         protected Material _material;
         private KeyCode _key;
 
-        public bool IsOnCooldown { get => _isOnCooldown; }
+        public bool IsOnCooldown { get => _isOnCooldown; set => _isOnCooldown = value; }
         public Elements ElementType { get => _elementType; }
         public KeyCode Key { get => _key; }
-        public int CooldownTurns { get => _cooldownTurns; }
+        public int CooldownTurns { get => _cooldownTurns; set => _cooldownTurns = value; }
 
         protected Ability(BulletPool pool, AbilityModel abilityModel)
         {

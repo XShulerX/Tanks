@@ -9,7 +9,7 @@ namespace MVC
         private float _forceModifer = 1;
 
         public UnitStorage UnitStorage { get => _unitStorage; }
-        public float ForceModifer { get => _forceModifer; }
+        public float ForceModifer { get => _forceModifer; set => _forceModifer = value; }
 
         public UnitCrateAndResetController(EnemyData enemyData, Player player, BulletPool bulletPool, out UnitStorage unitStorage)
         {
