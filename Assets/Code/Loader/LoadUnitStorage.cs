@@ -18,15 +18,16 @@ namespace MVC
         {
             foreach (var enemy in _unitStorage.Enemies)
             {
-                Debug.Log(enemy.Id);
                 enemy.TankElement = savedData.enemiesMementos[enemy.Id].element;
                 enemy.CurrentHealthPoints = savedData.enemiesMementos[enemy.Id].hp;
                 enemy.UpdateHelthView();
+                enemy.UpdateTurretMaterialFromLoad();
             }
 
             _unitStorage.player.CurrentHealthPoints = savedData.playerMemento.hp;
             _unitStorage.player.TankElement = savedData.playerMemento.element;
             _unitStorage.player.UpdateHelthView();
+            _unitStorage.player.UpdateTurretMaterialFromLoad();
 
             Succeeded = true;
             return Succeeded;

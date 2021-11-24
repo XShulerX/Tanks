@@ -12,5 +12,6 @@ namespace MVC
         public int Id { get; }
         public float ForceModifer { get; }
         public void UpdateHelthView();
+        public void UpdateTurretMaterialFromLoad();
     }
 }

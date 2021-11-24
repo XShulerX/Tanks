@@ -22,6 +22,8 @@ namespace MVC
                 _playerAbilityController.Abilities[i].IsOnCooldown = savedData.abilitiesMemento[i].isOnCooldown;
                 _playerAbilityController.Abilities[i].CooldownTurns = savedData.abilitiesMemento[i].cooldownTurns;
             }
+
+
             Succeeded = true;
             return Succeeded;
         }

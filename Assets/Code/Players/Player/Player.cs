@@ -86,7 +86,19 @@ namespace MVC
         private void Start()
         {
             GamerIconElement = GetComponentInChildren<Image>();
+            UpdateTurretMaterialFromLoad();
+            
+            
+        }
 
+        public void UpdateTurretMaterialFromLoad()
+        {
+            Material = TankElement switch
+            {
+                Elements.Fire => Resources.Load("ElementMaterials/Fire") as Material,
+                Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
+                Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
+            };
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
