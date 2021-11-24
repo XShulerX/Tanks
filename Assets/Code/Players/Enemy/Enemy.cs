@@ -71,20 +71,9 @@ namespace MVC
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
-            Material = TankElement switch
-            {
-                Elements.Fire => Resources.Load("ElementMaterials/Fire") as Material,
-                Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
-                Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
-            };
-        }
-
-        private void Start()
-        {
             GamerIconElement = GetComponentInChildren<Image>();
 
             UpdateTurretMaterialFromLoad();
-            
         }
 
         public void UpdateTurretMaterialFromLoad()
