@@ -7,6 +7,7 @@ namespace MVC
     public sealed class SaveAndLoadGameDataManager
     {
         private MementosSaver _mementoSaver;
+        private LoadCommandManager _commandManager;
 
         private readonly IData<GameMemento> _data;
 
@@ -14,9 +15,10 @@ namespace MVC
         private const string _fileName = "data.bat";
         private readonly string _path;
 
-        public SaveAndLoadGameDataManager(MementosSaver mementosSaver)
+        public SaveAndLoadGameDataManager(MementosSaver mementosSaver, LoadCommandManager loadCommandManager)
         {
             _mementoSaver = mementosSaver;
+            _commandManager = loadCommandManager;
             _data = new JsonData<GameMemento>();
             _path = Path.Combine(Application.dataPath, _folderName);
         }
@@ -42,12 +44,8 @@ namespace MVC
                 throw new DataException($"File {file} not found");
             }
 
-            var savedData= _data.Load(file); // это готовый GameMemento
-
-            // вот тут надо обновить данные для всех участников загрузки
-            // можно прям тут, можно передать его кому то, для загрузки.
-            // если прямо тут, то тебе в этот класс надо будет передать: 
-            //UnitStorage, GameResetOrEndManager, TurnController, PlayerAbilityController для их обновления
+            var savedData= _data.Load(file);
+            _commandManager.Load(savedData);
         }
     }
 }

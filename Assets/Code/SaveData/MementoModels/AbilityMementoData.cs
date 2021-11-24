@@ -3,7 +3,7 @@
 namespace MVC
 {
     [Serializable]
-    public class AbilityMementoData: IMomentoData
+    public class AbilityMementoData: IMementoData
     {
         public int id;
         public bool isOnCooldown;

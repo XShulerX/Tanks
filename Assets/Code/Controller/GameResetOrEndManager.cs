@@ -2,7 +2,7 @@
 
 namespace MVC
 {
-    public class GameResetOrEndManager
+    public class GameResetOrEndManager: ILoadeble
     {
         public event Action<bool> sceneResetState = delegate (bool b) { };
         public event Action gameOver = delegate () { };
@@ -72,6 +72,16 @@ namespace MVC
         private void GameOver()
         {
             gameOver.Invoke();
+        }
+
+        void ILoadeble.Load<T>(T mementoData)
+        {
+            var stageMemento = mementoData as StageMementoData;
+
+            ResetScene();
+            _attemptsCount = stageMemento.attemptsCount;
+            _unitController.SetForceModifier(stageMemento.forceModifer);
+            _stageCount = stageMemento.stageCount;
         }
     }
 }

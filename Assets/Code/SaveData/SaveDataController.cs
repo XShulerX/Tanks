@@ -8,10 +8,10 @@ namespace MVC
     {
         private InputController _inputController;
         private SaveAndLoadGameDataManager _manager;
-        public SaveDataController(InputController inputController, MementosSaver mementosSaver)
+        public SaveDataController(InputController inputController, MementosSaver mementosSaver, LoadCommandManager loadComandManager)
         {
             _inputController = inputController;
-            _manager = new SaveAndLoadGameDataManager(mementosSaver);
+            _manager = new SaveAndLoadGameDataManager(mementosSaver, loadComandManager);
 
             SignOnEvents();
         }

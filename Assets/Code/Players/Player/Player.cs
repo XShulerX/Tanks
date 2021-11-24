@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +28,9 @@ namespace MVC
         private Slider _sliderHP;
 
         private Vector3 _target;
+        private Material _fire;
+        private Material _terra;
+        private Material _water;
 
         /// <summary>
         public Transform Turret { get => _turret; set => _turret = value; }
@@ -70,27 +72,38 @@ namespace MVC
 
         private void Awake()
         {
+            _fire = Resources.Load("ElementMaterials/Fire") as Material;
+            _terra = Resources.Load("ElementMaterials/Terra") as Material;
+            _water = Resources.Load("ElementMaterials/Water") as Material;
+            
             _currentHealthPoints = maxHP;
             _sliderHP.value = _currentHealthPoints / maxHP;
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
-            Material = TankElement switch
-            {
-                Elements.Fire => Resources.Load("ElementMaterials/Fire") as Material,
-                Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
-                Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
-            };
+            SetTurretMaterial();
+
+            GamerIconElement = GetComponentInChildren<Image>();
+            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
         }
 
-        private void Start()
+        private void SetTurretMaterial()
         {
-            GamerIconElement = GetComponentInChildren<Image>();
+            Material = TankElement switch
+            {
+                Elements.Fire => _fire,
+                Elements.Terra => _terra,
+                Elements.Water => _water,
+            };
 
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
-            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
+        }
+
+        public void UpdateHelthView()
+        {
+            _sliderHP.value = _currentHealthPoints / maxHP;
         }
 
         public void Reset()
@@ -115,6 +128,16 @@ namespace MVC
         {
             OnCollisionEnterChange?.Invoke(collision, this);
             _sliderHP.value = _currentHealthPoints / maxHP;
+        }
+
+        void ILoadeble.Load<T>(T mementoData)
+        {
+            var playerMemento = mementoData as PlayerMementoData;
+
+            CurrentHealthPoints = playerMemento.hp;
+            TankElement = playerMemento.element;
+            UpdateHelthView();
+            SetTurretMaterial();
         }
     }
 }

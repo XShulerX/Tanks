@@ -20,7 +20,7 @@ namespace MVC
         [SerializeField]
         private Transform _turret;
         [SerializeField]
-        private float maxHP;
+        private float _maxHP;
         [SerializeField]
         private float _currentHealthPoints;
         [SerializeField]
@@ -29,6 +29,9 @@ namespace MVC
         private BulletPool _bulletPool;
         private float _forceModifer = 1;
         private int _id;
+        private Material _fire;
+        private Material _terra;
+        private Material _water;
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public event Action<Vector3> OnMouseUpChange;
@@ -61,32 +64,44 @@ namespace MVC
         public Image GamerIconElement { get; private set; }
         public int Id { get => _id; }
         public float ForceModifer { get => _forceModifer; }
+        public float MaxHP { get => _maxHP; }
 
         private void Awake()
         {
             IsDead = false;
             IsYourTurn = false;
-            _currentHealthPoints = maxHP;
-            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
+            _currentHealthPoints = _maxHP;
+            _sliderEnemyHP.value = _currentHealthPoints / _maxHP;
+
+            _fire = Resources.Load("ElementMaterials/Fire") as Material;
+            _terra = Resources.Load("ElementMaterials/Terra") as Material;
+            _water = Resources.Load("ElementMaterials/Water") as Material;
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
-            Material = TankElement switch
-            {
-                Elements.Fire => Resources.Load("ElementMaterials/Fire") as Material,
-                Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
-                Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
-            };
+            SetTurretMaterial();
+
+            GamerIconElement = GetComponentInChildren<Image>();
+            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
         }
 
-        private void Start()
+        private void SetTurretMaterial()
         {
-            GamerIconElement = GetComponentInChildren<Image>();
+            Material = TankElement switch
+            {
+                Elements.Fire => _fire,
+                Elements.Terra => _terra,
+                Elements.Water => _water,
+            };
 
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
-            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
+        }
+
+        public void UpdateHelthView()
+        {
+            _sliderEnemyHP.value = _currentHealthPoints / _maxHP;
         }
 
         public Enemy SetPool(BulletPool pool)
@@ -127,7 +142,7 @@ namespace MVC
         {
             if (IsDead) return;
             OnCollisionEnterChange?.Invoke(collision, this);
-            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
+            _sliderEnemyHP.value = _currentHealthPoints / _maxHP;
         }
 
         private void OnMouseUp()
@@ -138,9 +153,9 @@ namespace MVC
 
         public void Reset(float forceModifer)
         {
-            maxHP *= forceModifer;
-            CurrentHealthPoints = maxHP;
-            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
+            _maxHP *= forceModifer;
+            CurrentHealthPoints = _maxHP;
+            _sliderEnemyHP.value = _currentHealthPoints / _maxHP;
             SetDamageModifer(forceModifer);
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);
@@ -148,6 +163,17 @@ namespace MVC
             IsShoted = false;
             IsYourTurn = false;
             _turret.rotation = _turret.parent.rotation;
+        }
+
+        void ILoadeble.Load<T>(T mementoData)
+        {
+            var enemyMemento = mementoData as EnemyMementoData;
+
+            TankElement = enemyMemento.element;
+            CurrentHealthPoints = enemyMemento.hp;
+            _maxHP = enemyMemento.maxHP;
+            UpdateHelthView();
+            SetTurretMaterial();
         }
     }
 }

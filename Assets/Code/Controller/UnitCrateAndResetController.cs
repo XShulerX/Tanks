@@ -49,5 +49,10 @@ namespace MVC
         {
             _forceModifer += 0.1f;
         }
+
+        public void SetForceModifier(float modifier)
+        {
+            _forceModifer = modifier;
+        }
     }
 }

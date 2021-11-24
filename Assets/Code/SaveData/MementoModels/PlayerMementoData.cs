@@ -3,7 +3,7 @@
 namespace MVC
 {
     [Serializable]
-    public class PlayerMementoData : IMomentoData
+    public class PlayerMementoData : IMementoData
     {
         public float hp;
         public Elements element;

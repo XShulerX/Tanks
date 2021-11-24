@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace MVC
 {
-    public interface IGamer : ITakeDamage
+    public interface IGamer : ITakeDamage, ILoadeble
     {
         bool IsYourTurn { get; set; }
         public bool IsDead { get; set; }

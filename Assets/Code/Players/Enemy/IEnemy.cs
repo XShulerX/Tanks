@@ -10,6 +10,6 @@ namespace MVC
         public void SetDamageModifer(float modifer);
         public void Reset(float forceModifer);
         public int Id { get; }
-        public float ForceModifer { get; }
+        public float MaxHP { get; }
     }
 }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 namespace MVC {
-    public abstract class Ability: IRechargeableAbility
+    public abstract class Ability: IRechargeableAbility, ILoadeble
     {
         public Action abilityIsEnded = delegate () { };
         
@@ -35,6 +35,14 @@ namespace MVC {
         {
             _isOnCooldown = false;
             _cooldownTurns = 0;
+        }
+
+        void ILoadeble.Load<T>(T mementoData)
+        {
+            var abilityMemento = mementoData as AbilityMementoData;
+
+            _isOnCooldown = abilityMemento.isOnCooldown;
+            _cooldownTurns = abilityMemento.cooldownTurns;
         }
     }
 }

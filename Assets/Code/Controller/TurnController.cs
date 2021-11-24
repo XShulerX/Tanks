@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MVC
 {
-    public sealed class TurnController : IExecute, IResetable
+    public sealed class TurnController : IExecute, IResetable, ILoadeble
     {
         public Action endGlobalTurn = delegate () { };
 
@@ -19,13 +19,14 @@ namespace MVC
         private TimerData _timer;
         private Text _turnCountText;
 
-        private int _shotedOrDeadEnemies;
+        private int _shootedOrDeadEnemies;
         private int _enemiesCount;
         private int _globalTurnCount = 1;
 
         private const float DELAY_BEFOR_FIRE = 1f;
 
         public int GlobalTurnCount { get => _globalTurnCount; }
+        public int ShootedOrDeadEnemies { get => _shootedOrDeadEnemies; }
 
         public TurnController(UnitStorage unitStorage, TimerController timerController, ElementsController elementsController, Text uiTurnCountText)
         {
@@ -49,7 +50,7 @@ namespace MVC
             _enemiesCount = 0;
             _globalTurnCount = 1;
             _turnCountText.text = "’Ó‰ 1";
-            _shotedOrDeadEnemies = 0;
+            _shootedOrDeadEnemies = 0;
             _timer = null;
 
             _queueGamers.Clear();
@@ -96,7 +97,7 @@ namespace MVC
         {
             if (!enemy.IsShoted)
             {
-                _shotedOrDeadEnemies++;
+                _shootedOrDeadEnemies++;
             }
         }
 
@@ -114,7 +115,7 @@ namespace MVC
                 gamer.IsShoted = false;
                 if (gamer != _player && !gamer.IsDead)
                 {
-                    _shotedOrDeadEnemies--;
+                    _shootedOrDeadEnemies--;
                 }
             }
             endGlobalTurn.Invoke();
@@ -129,15 +130,23 @@ namespace MVC
 
             if (currentPlayer != _player && !currentPlayer.IsDead)
             {
-                _shotedOrDeadEnemies++;
+                _shootedOrDeadEnemies++;
             }
 
-            if (_shotedOrDeadEnemies == _enemiesCount)
+            if (_shootedOrDeadEnemies == _enemiesCount)
             {
                 EndTurn();
             }
 
             _queueGamers.First.Value.IsYourTurn = true;
+        }
+
+        void ILoadeble.Load<T>(T mementoData)
+        {
+            var turnMemento = mementoData as TurnMementoData;
+
+            _globalTurnCount = turnMemento.turnCount;
+            _turnCountText.text = String.Concat("’Ó‰ ", _globalTurnCount);
         }
     }
 }

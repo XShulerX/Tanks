@@ -39,13 +39,11 @@ namespace MVC
             var enemiesMementos = new List<EnemyMementoData>(); 
             foreach (var enemy in _unitStorage.Enemies)
             {
-                enemiesMementos.Add(new EnemyMementoData(enemy.Id, enemy.CurrentHealthPoints, enemy.TankElement));
+                enemiesMementos.Add(new EnemyMementoData(enemy.Id, enemy.CurrentHealthPoints, enemy.MaxHP, enemy.TankElement));
             }
             var playerMemento = new PlayerMementoData(_unitStorage.player.CurrentHealthPoints, _unitStorage.player.TankElement);
-            var turnCount = _turnController.GlobalTurnCount;
-            var stageCount = _gameResetManager.StageCount;
-            var attemptsCount = _gameResetManager.AttemptsCount;
-            var forceModifier = _gameResetManager.UnitController.ForceModifer;
+            var turnMemento = new TurnMementoData(_turnController.GlobalTurnCount);
+            var stageMemento = new StageMementoData(_gameResetManager.AttemptsCount, _gameResetManager.UnitController.ForceModifer, _gameResetManager.StageCount);
             var abilitiesMemento = new List<AbilityMementoData>();
             foreach(var ability in _playerAbilityController.Abilities)
             {
@@ -61,10 +59,8 @@ namespace MVC
                 enemiesMementos,
                 playerMemento,
                 abilitiesMemento,
-                turnCount,
-                stageCount,
-                attemptsCount,
-                forceModifier
+                turnMemento,
+                stageMemento
                 ));
             
         }
