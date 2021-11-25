@@ -34,16 +34,18 @@ namespace MVC
             var playerAbilityController = new PlayerAbilityController(bulletPool, turnController, unitStorage.player, abilityFactory, abilitiesData, inputController);
             controllers.Add(playerAbilityController);
 
-            var uiController = new UIController(uiModel, playerAbilityController.Abilities, gameResetManager);
-            controllers.Add(uiController);
-
             controllers.Add(new EnemyFireController(unitStorage));
             controllers.Add(new PlayerTargetController(unitStorage));
             controllers.Add(new TakeDamageController(unitStorage, elementsController));
 
             new TankDestroyingController(unitStorage, timerController, gameResetManager);
             var momentoSaver = new MementosSaver(unitStorage, gameResetManager, turnController, playerAbilityController);
-            new SaveDataController(inputController, momentoSaver, unitStorage, gameResetManager, turnController, playerAbilityController);
+            
+            var loadHandler = new LoadHandler(gameResetManager, playerAbilityController, turnController, unitStorage, timerController);
+            new SaveDataController(inputController, momentoSaver, loadHandler);
+
+            var uiController = new UIController(uiModel, playerAbilityController.Abilities, gameResetManager, loadHandler);
+            controllers.Add(uiController);
         }
     }
 }

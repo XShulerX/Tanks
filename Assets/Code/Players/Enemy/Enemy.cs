@@ -46,6 +46,10 @@ namespace MVC
                     if (!IsDead)
                     {
                         wasKilled.Invoke(this);
+
+                        ColorBlock colors = _sliderEnemyHP.colors;
+                        colors.disabledColor = Color.red;
+                        _sliderEnemyHP.colors = colors;
                     }
                     IsDead = true;                   
                 }
@@ -106,6 +110,18 @@ namespace MVC
         public void UpdateHelthView()
         {
             _sliderEnemyHP.value = _currentHealthPoints / maxHP;
+
+            ColorBlock colors = _sliderEnemyHP.colors;
+            if (_currentHealthPoints > 0)
+            {
+                colors.disabledColor = Color.green;
+            }
+            else
+            {
+                colors.disabledColor = Color.red;
+            }
+
+            _sliderEnemyHP.colors = colors;
         }
 
         public void Fire(Transform target)

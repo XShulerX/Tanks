@@ -6,7 +6,7 @@ namespace MVC
     {
         private List<IExecute> _uiExecuteControllerlsList = new List<IExecute>();
 
-        public UIController(UIInitializationModel uiModel, Dictionary<int, Ability> abilities, GameResetOrEndManager gameResetManager)
+        public UIController(UIInitializationModel uiModel, Dictionary<int, Ability> abilities, GameResetOrEndManager gameResetManager, LoadHandler loadHandler)
         {
             var uiAdapter = new UIAdapter(abilities);
             var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel.GamePanelModel, uiAdapter.GetAbilities()));
@@ -15,6 +15,10 @@ namespace MVC
             new UILostPanelController(uiModel.LostPanelModel, gameResetManager);
             new UIWinPanelController(uiModel.WinPanelModel, gameResetManager);
             new UIGameOverController(uiModel.GameOverPanelModel, gameResetManager);
+
+            var loadPanelController = new UILoadPanelController(uiModel.LoadingPanelModel, loadHandler);
+            _uiExecuteControllerlsList.Add(loadPanelController);
+
         }
 
         public void Execute(float deltaTime)

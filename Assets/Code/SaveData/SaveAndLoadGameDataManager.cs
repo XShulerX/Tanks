@@ -16,13 +16,12 @@ namespace MVC
 
         private LoadHandler _loadHandler;
 
-        public SaveAndLoadGameDataManager(MementosSaver mementosSaver, UnitStorage unitStorage, GameResetOrEndManager gameResetOrEndManager, TurnController turnController, PlayerAbilityController playerAbilityController)
+        public SaveAndLoadGameDataManager(MementosSaver mementosSaver, LoadHandler loadHandler)
         {
             _mementoSaver = mementosSaver;
             _data = new JsonData<GameMemento>();
             _path = Path.Combine(Application.dataPath, _folderName);
-
-            _loadHandler = new LoadHandler(gameResetOrEndManager, playerAbilityController, turnController, unitStorage);
+            _loadHandler = loadHandler;
         }
 
         public void Save()
@@ -49,14 +48,6 @@ namespace MVC
             var savedData = _data.Load(file); // это готовый GameMemento
 
             _loadHandler.Load(savedData);
-
-
-
-
-            // вот тут надо обновить данные для всех участников загрузки
-            // можно прям тут, можно передать его кому то, для загрузки.
-            // если прямо тут, то тебе в этот класс надо будет передать: 
-            //UnitStorage, GameResetOrEndManager, TurnController, PlayerAbilityController для их обновления
         }
     }
 }
