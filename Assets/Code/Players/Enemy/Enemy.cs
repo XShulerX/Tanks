@@ -49,6 +49,10 @@ namespace MVC
                     if (!IsDead)
                     {
                         wasKilled.Invoke(this);
+
+                        ColorBlock colors = _sliderEnemyHP.colors;
+                        colors.disabledColor = Color.red;
+                        _sliderEnemyHP.colors = colors;
                     }
                     IsDead = true;                   
                 }
@@ -102,6 +106,18 @@ namespace MVC
         public void UpdateHelthView()
         {
             _sliderEnemyHP.value = _currentHealthPoints / _maxHP;
+
+            ColorBlock colors = _sliderEnemyHP.colors;
+            if (_currentHealthPoints > 0)
+            {
+                colors.disabledColor = Color.green;
+            }
+            else
+            {
+                colors.disabledColor = Color.red;
+            }
+
+            _sliderEnemyHP.colors = colors;
         }
 
         public Enemy SetPool(BulletPool pool)
@@ -151,12 +167,17 @@ namespace MVC
             OnMouseUpChange?.Invoke(transform.position);
         }
 
-        public void Reset(float forceModifer)
+        public void Reset(float forceModifer, bool isPlayerWin)
         {
-            _maxHP *= forceModifer;
+            if (isPlayerWin)
+            {
+                _maxHP *= forceModifer;
+            }
+
             CurrentHealthPoints = _maxHP;
             _sliderEnemyHP.value = _currentHealthPoints / _maxHP;
             SetDamageModifer(forceModifer);
+            UpdateHelthView();
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);
             IsDead = false;

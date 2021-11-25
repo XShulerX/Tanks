@@ -5,6 +5,7 @@ namespace MVC
     public class UnitCrateAndResetController: IResetable
     {
         private UnitStorage _unitStorage;
+        private bool _isPlayerWin;
 
         private float _forceModifer = 1;
 
@@ -30,7 +31,7 @@ namespace MVC
         {
             for (int i = 0; i < _unitStorage.Enemies.Count; i++)
             {
-                _unitStorage.Enemies[i].Reset(_forceModifer);
+                _unitStorage.Enemies[i].Reset(_forceModifer, _isPlayerWin);
             }
         }
 
@@ -48,6 +49,11 @@ namespace MVC
         public void IncreaseForceModifer()
         {
             _forceModifer += 0.1f;
+        }
+
+        public void SetStageStatus(bool isPlayerWin)
+        {
+            _isPlayerWin = isPlayerWin;
         }
 
         public void SetForceModifier(float modifier)

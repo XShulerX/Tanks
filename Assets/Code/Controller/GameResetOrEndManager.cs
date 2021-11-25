@@ -40,6 +40,7 @@ namespace MVC
             }
             else
             {
+                _unitController.SetStageStatus(false);
                 RestartLostGame();
             }
 
@@ -58,6 +59,7 @@ namespace MVC
 
             _stageCount++;
             _unitController.IncreaseForceModifer();
+            _unitController.SetStageStatus(true);
             winGame.Invoke(_stageCount);
         }
 

@@ -57,6 +57,10 @@ namespace MVC
                     if (!IsDead)
                     {
                         wasKilled.Invoke(this);
+
+                        ColorBlock colors = _sliderHP.colors;
+                        colors.disabledColor = Color.red;
+                        _sliderHP.colors = colors;
                     }
                     IsDead = true;
                 }
@@ -104,6 +108,18 @@ namespace MVC
         public void UpdateHelthView()
         {
             _sliderHP.value = _currentHealthPoints / maxHP;
+
+            ColorBlock colors = _sliderHP.colors;
+            if (_currentHealthPoints > 0)
+            {
+                colors.disabledColor = Color.green;
+            }
+            else
+            {
+                colors.disabledColor = Color.red;
+            }
+
+            _sliderHP.colors = colors;
         }
 
         public void Reset()
@@ -116,6 +132,7 @@ namespace MVC
             IsShoted = false;
             IsYourTurn = true;
             _turret.rotation = _turret.parent.rotation;
+            UpdateHelthView();
         }
 
         public void SwapTarget(Vector3 newTarget)

@@ -29,7 +29,7 @@ namespace MVC
             _abilityLoadCommand.Load(savedData.abilitiesMemento);
             _unitLoadCommand.Load(savedData.playerMemento, savedData.enemiesMementos);
 
-            var timer = new TimerData(0.5f, _timerController);
+            var timer = new TimerData(1f, _timerController);
             timer.TimerIsOver += EndLoad;
         }
 

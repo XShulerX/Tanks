@@ -28,7 +28,7 @@ namespace MVC
 
             if(Time.time - _lastTextChangeTime > 0.2f)
             {
-                if(_pointsCount > 5)
+                if(_pointsCount > 9)
                 {
                     ResetTextOnDefault();
                 }
