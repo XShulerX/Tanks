@@ -133,12 +133,17 @@ namespace MVC
 
         void ILoadeble.Load<T>(T mementoData)
         {
-            var playerMemento = mementoData as PlayerMementoData;
-
-            CurrentHealthPoints = playerMemento.hp;
-            TankElement = playerMemento.element;
-            UpdateHelthView();
-            SetTurretMaterial();
+            if(mementoData is PlayerMementoData playerMemento)
+            {
+                CurrentHealthPoints = playerMemento.hp;
+                TankElement = playerMemento.element;
+                UpdateHelthView();
+                SetTurretMaterial();
+            }
+            else
+            {
+                throw new Exception("Передан не тот mementoData");
+            }
         }
     }
 }

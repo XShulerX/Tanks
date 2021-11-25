@@ -78,12 +78,17 @@ namespace MVC
 
         void ILoadeble.Load<T>(T mementoData)
         {
-            var stageMemento = mementoData as StageMementoData;
-
-            ResetScene();
-            _attemptsCount = stageMemento.attemptsCount;
-            _unitController.SetForceModifier(stageMemento.forceModifer);
-            _stageCount = stageMemento.stageCount;
+            if (mementoData is StageMementoData stageMemento)
+            {
+                ResetScene();
+                _attemptsCount = stageMemento.attemptsCount;
+                _unitController.SetForceModifier(stageMemento.forceModifer);
+                _stageCount = stageMemento.stageCount;
+            }
+            else
+            {
+                throw new Exception("Передан не тот mementoData");
+            }
         }
     }
 }

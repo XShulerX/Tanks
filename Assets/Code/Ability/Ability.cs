@@ -39,10 +39,15 @@ namespace MVC {
 
         void ILoadeble.Load<T>(T mementoData)
         {
-            var abilityMemento = mementoData as AbilityMementoData;
-
-            _isOnCooldown = abilityMemento.isOnCooldown;
-            _cooldownTurns = abilityMemento.cooldownTurns;
+            if (mementoData is AbilityMementoData abilityMemento)
+            {
+                _isOnCooldown = abilityMemento.isOnCooldown;
+                _cooldownTurns = abilityMemento.cooldownTurns;
+            }
+            else
+            {
+                throw new Exception("Передан не тот mementoData");
+            }
         }
     }
 }

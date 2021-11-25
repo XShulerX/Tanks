@@ -143,11 +143,16 @@ namespace MVC
 
         void ILoadeble.Load<T>(T mementoData)
         {
-            var turnMemento = mementoData as TurnMementoData;
-
-            _globalTurnCount = turnMemento.turnCount;
-            _turnCountText.text = String.Concat("Ход ", _globalTurnCount);
-            _shootedOrDeadEnemies = turnMemento.shootedOrDeadEnemies;
+            if (mementoData is TurnMementoData turnMemento)
+            {
+                _globalTurnCount = turnMemento.turnCount;
+                _turnCountText.text = String.Concat("Ход ", _globalTurnCount);
+                _shootedOrDeadEnemies = turnMemento.shootedOrDeadEnemies;
+            }
+            else
+            {
+                throw new Exception("Передан не тот mementoData");
+            }
         }
     }
 }

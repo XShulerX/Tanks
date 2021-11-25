@@ -172,21 +172,26 @@ namespace MVC
 
         void ILoadeble.Load<T>(T mementoData)
         {
-            var enemyMemento = mementoData as EnemyMementoData;
-
-            TankElement = enemyMemento.element;
-            _currentHealthPoints = enemyMemento.hp;
-
-            if(_currentHealthPoints <= 0)
+            if (mementoData is EnemyMementoData enemyMemento)
             {
-                IsDead = true;
-                _tankObject.SetActive(false);
-                _wrackObject.SetActive(true);
-            }
+                TankElement = enemyMemento.element;
+                _currentHealthPoints = enemyMemento.hp;
 
-            _maxHP = enemyMemento.maxHP;
-            UpdateHelthView();
-            SetTurretMaterial();
+                if (_currentHealthPoints <= 0)
+                {
+                    IsDead = true;
+                    _tankObject.SetActive(false);
+                    _wrackObject.SetActive(true);
+                }
+
+                _maxHP = enemyMemento.maxHP;
+                UpdateHelthView();
+                SetTurretMaterial();
+            }
+            else
+            {
+                throw new Exception("Передан не тот mementoData");
+            }
         }
     }
 }
