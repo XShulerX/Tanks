@@ -42,7 +42,7 @@ namespace MVC
                 enemiesMementos.Add(new EnemyMementoData(enemy.Id, enemy.CurrentHealthPoints, enemy.MaxHP, enemy.TankElement));
             }
             var playerMemento = new PlayerMementoData(_unitStorage.player.CurrentHealthPoints, _unitStorage.player.TankElement);
-            var turnMemento = new TurnMementoData(_turnController.GlobalTurnCount);
+            var turnMemento = new TurnMementoData(_turnController.GlobalTurnCount, _turnController.ShootedOrDeadEnemies);
             var stageMemento = new StageMementoData(_gameResetManager.AttemptsCount, _gameResetManager.UnitController.ForceModifer, _gameResetManager.StageCount);
             var abilitiesMemento = new List<AbilityMementoData>();
             foreach(var ability in _playerAbilityController.Abilities)

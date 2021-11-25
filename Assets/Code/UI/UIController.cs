@@ -15,7 +15,9 @@ namespace MVC
             new UILostPanelController(uiModel.LostPanelModel, gameResetManager);
             new UIWinPanelController(uiModel.WinPanelModel, gameResetManager);
             new UIGameOverController(uiModel.GameOverPanelModel, gameResetManager);
-            new UILoadPanelController(uiModel.LoadPanel, loadCommandManager);
+
+            var loadPanelController = new UILoadPanelController(uiModel.LoadingPanelModel, loadCommandManager);
+            _uiExecuteControllerlsList.Add(loadPanelController);
         }
 
         public void Execute(float deltaTime)

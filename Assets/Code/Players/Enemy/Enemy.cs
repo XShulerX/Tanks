@@ -170,7 +170,15 @@ namespace MVC
             var enemyMemento = mementoData as EnemyMementoData;
 
             TankElement = enemyMemento.element;
-            CurrentHealthPoints = enemyMemento.hp;
+            _currentHealthPoints = enemyMemento.hp;
+
+            if(_currentHealthPoints <= 0)
+            {
+                IsDead = true;
+                _tankObject.SetActive(false);
+                _wrackObject.SetActive(true);
+            }
+
             _maxHP = enemyMemento.maxHP;
             UpdateHelthView();
             SetTurretMaterial();

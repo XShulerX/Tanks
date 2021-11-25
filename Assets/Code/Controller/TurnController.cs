@@ -147,6 +147,7 @@ namespace MVC
 
             _globalTurnCount = turnMemento.turnCount;
             _turnCountText.text = String.Concat("’Ó‰ ", _globalTurnCount);
+            _shootedOrDeadEnemies = turnMemento.shootedOrDeadEnemies;
         }
     }
 }
