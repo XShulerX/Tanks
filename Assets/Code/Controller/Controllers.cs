@@ -10,7 +10,7 @@ namespace MVC
         private readonly List<IResetable> _resetebleControllers;
         private readonly List<IPhysicsExecute> _physicsExecuteControllers;
 
-        private GameResetManager _resetController;
+        private GameResetOrEndManager _resetController;
         private bool _isReset;
 
         internal Controllers()
@@ -95,7 +95,7 @@ namespace MVC
             }
         }
 
-        public void SignOnResetController(GameResetManager resetController)
+        public void SignOnResetController(GameResetOrEndManager resetController)
         {
             _resetController = resetController;
             _resetController.sceneResetState += ChangeResetState;

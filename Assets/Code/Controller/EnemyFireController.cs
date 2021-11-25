@@ -14,7 +14,7 @@ namespace MVC
 
         public void Execute(float deltaTime)
         {
-            foreach(var enemy in _unitStorage.enemies)
+            foreach(var enemy in _unitStorage.Enemies)
             {
                 if (enemy.IsYourTurn && !enemy.IsDead)
                 {

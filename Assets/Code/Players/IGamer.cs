@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MVC
 {
@@ -15,5 +16,7 @@ namespace MVC
         public GameObject GetTankObject { get; }
         public GameObject GetWrackObject { get; }
         public ParticleSystem GetParticleExplosion { get; }
+
+        public Image GamerIconElement { get;}
     }
 }

@@ -7,7 +7,12 @@ namespace MVC
         void Fire(Transform target);
         public Transform transform { get; }
         public Enemy SetPool(BulletPool pool);
-        public void SetDamageModifer(float modifer);
-        public void Reset(float forceModifer);
+        public void IncreaceForce(float forceModifier);
+        public void Reset();
+        public int Id { get; }
+        public float ForceModifer { get; }
+        public float MaxHP { get; set; }
+        public void UpdateHelthView();
+        public void UpdateTurretMaterialFromLoad();
     }
 }

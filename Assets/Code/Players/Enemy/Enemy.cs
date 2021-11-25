@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MVC
 {
@@ -22,10 +23,12 @@ namespace MVC
         private float maxHP;
         [SerializeField]
         private float _currentHealthPoints;
+        [SerializeField]
+        private Slider _sliderEnemyHP;
 
         private BulletPool _bulletPool;
-        private float _damageModifer = 1;
-
+        private float _forceModifer = 1;
+        private int _id;
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public event Action<Vector3> OnMouseUpChange;
@@ -43,6 +46,10 @@ namespace MVC
                     if (!IsDead)
                     {
                         wasKilled.Invoke(this);
+
+                        ColorBlock colors = _sliderEnemyHP.colors;
+                        colors.disabledColor = Color.red;
+                        _sliderEnemyHP.colors = colors;
                     }
                     IsDead = true;                   
                 }
@@ -55,31 +62,66 @@ namespace MVC
         public ParticleSystem GetParticleExplosion { get => _tankObjectExplosion; }
         public GameObject GetTankObject { get => _tankObject; }
         public Material Material { get; set; }
+        public Image GamerIconElement { get; private set; }
+        public int Id { get => _id; }
+        public float ForceModifer { get => _forceModifer; }
+        public float MaxHP { get => maxHP; set => maxHP = value; }
 
-        private void Start()
+        private void Awake()
         {
             IsDead = false;
             IsYourTurn = false;
             _currentHealthPoints = maxHP;
+            UpdateHelthView();
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
+            GamerIconElement = GetComponentInChildren<Image>();
+
+            UpdateTurretMaterialFromLoad();
+        }
+
+        public void UpdateTurretMaterialFromLoad()
+        {
             Material = TankElement switch
             {
                 Elements.Fire => Resources.Load("ElementMaterials/Fire") as Material,
                 Elements.Terra => Resources.Load("ElementMaterials/Terra") as Material,
                 Elements.Water => Resources.Load("ElementMaterials/Water") as Material,
             };
-
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
+            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
         }
 
         public Enemy SetPool(BulletPool pool)
         {
             _bulletPool = pool;
             return this;
+        }
+
+        public Enemy SetID(int id)
+        {
+            _id = id;
+            return this;
+        }
+
+        public void UpdateHelthView()
+        {
+            _sliderEnemyHP.value = _currentHealthPoints / maxHP;
+
+            ColorBlock colors = _sliderEnemyHP.colors;
+            if (_currentHealthPoints > 0)
+            {
+                colors.disabledColor = Color.green;
+            }
+            else
+            {
+                colors.disabledColor = Color.red;
+            }
+
+            _sliderEnemyHP.colors = colors;
         }
 
         public void Fire(Transform target)
@@ -92,7 +134,7 @@ namespace MVC
             bullet.transform.rotation = _gun.rotation;
             bullet.GetComponent<MeshRenderer>().material = Material;
             var bulletEntety = bullet.GetComponent<Bullet>();
-            bulletEntety.Damage *= _damageModifer;
+            bulletEntety.Damage *= _forceModifer;
             bulletEntety.SetContainer(_bulletPool.GetContainer);
             bulletEntety.InvokeTimer();
             bulletEntety.element = TankElement;
@@ -101,13 +143,14 @@ namespace MVC
 
         public void SetDamageModifer(float modifer)
         {
-            _damageModifer = modifer;
+            _forceModifer = modifer;
         }
 
         private void OnCollisionEnter(Collision collision)
         {
             if (IsDead) return;
             OnCollisionEnterChange?.Invoke(collision, this);
+            UpdateHelthView();
         }
 
         private void OnMouseUp()
@@ -116,11 +159,16 @@ namespace MVC
             OnMouseUpChange?.Invoke(transform.position);
         }
 
-        public void Reset(float forceModifer)
+        public void IncreaceForce(float forceModifier)
         {
-            maxHP *= forceModifer;
+            maxHP *= forceModifier;
+            SetDamageModifer(forceModifier);
+        }
+
+        public void Reset()
+        {
             CurrentHealthPoints = maxHP;
-            SetDamageModifer(forceModifer);
+            UpdateHelthView();
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);
             IsDead = false;

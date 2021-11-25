@@ -16,7 +16,7 @@ namespace MVC
 
         public void Initilazation()
         {
-            foreach(var player in _unitStorage.gamers)
+            foreach(var player in _unitStorage.Gamers)
             {
                 player.OnCollisionEnterChange += TakeDamage;
             }
@@ -31,7 +31,7 @@ namespace MVC
 
         public void Cleanup()
         {
-            foreach (var player in _unitStorage.gamers)
+            foreach (var player in _unitStorage.Gamers)
             {
                 player.OnCollisionEnterChange -= TakeDamage;
             }

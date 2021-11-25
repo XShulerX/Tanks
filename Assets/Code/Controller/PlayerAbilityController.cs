@@ -10,11 +10,11 @@ namespace MVC
         private Player _player;
         private TurnController _turnController;
         private bool _isAbilityUsed;
-        private InputKeyAbilityController _inputImplementation;
+        private InputController _inputController;
 
         public Dictionary<int, Ability> Abilities => _abilities;
 
-        public PlayerAbilityController(BulletPool bulletPool, TurnController turnController, Player player, AbilityFactory abilityFactory, AbilitiesData abilitiesData)
+        public PlayerAbilityController(BulletPool bulletPool, TurnController turnController, Player player, AbilityFactory abilityFactory, AbilitiesData abilitiesData, InputController inputController)
         {
             _turnController = turnController;
             _turnController.endGlobalTurn += ReduceAbilitiesCooldown;
@@ -28,10 +28,8 @@ namespace MVC
                 ability.abilityIsEnded += EnemyTurn;
                 _abilities.Add(abilities[i].AbilitiID, ability);
             }
-
-            var inputAdapter = new InputAdapter(abilities);
-            _inputImplementation = new InputKeyAbilityController(inputAdapter.GetMatching());
-            _inputImplementation.AbilityKeyIsPressed += UseAbility;
+            _inputController = inputController;
+            _inputController.AbilityKeyIsPressed += UseAbility;
         }
 
         private void ReduceAbilitiesCooldown()
@@ -51,7 +49,7 @@ namespace MVC
             {
                 return;
             }
-            _inputImplementation.CheckKey();
+            _inputController.CheckAbilityKey();
         }
 
         private void UseAbility(int idAbility)
