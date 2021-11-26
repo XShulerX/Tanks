@@ -81,13 +81,10 @@ namespace MVC
 
             var elements = Enum.GetValues(typeof(Elements));
             TankElement = (Elements)UnityEngine.Random.Range(1, elements.Length);
-            SetTurretMaterial();
-
-            GamerIconElement = GetComponentInChildren<Image>();
-            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
+            SetTurretAndIconColor();
         }
 
-        private void SetTurretMaterial()
+        private void SetTurretAndIconColor()
         {
             Material = TankElement switch
             {
@@ -99,6 +96,9 @@ namespace MVC
             var materials = _turret.GetComponent<MeshRenderer>().materials;
             materials[0] = Material;
             _turret.GetComponent<MeshRenderer>().materials = materials;
+
+            GamerIconElement = GetComponentInChildren<Image>();
+            GamerIconElement.color = MaterialAssociationMap.GetColorForMaterial(Material);
         }
 
         public void UpdateHelthView()
@@ -131,14 +131,14 @@ namespace MVC
             _sliderHP.value = _currentHealthPoints / maxHP;
         }
 
-        void ILoadeble.Load<T>(T mementoData)
+        void ILoadeble.Load(IMementoData mementoData)
         {
             if(mementoData is PlayerMementoData playerMemento)
             {
                 CurrentHealthPoints = playerMemento.hp;
                 TankElement = playerMemento.element;
                 UpdateHelthView();
-                SetTurretMaterial();
+                SetTurretAndIconColor();
             }
             else
             {

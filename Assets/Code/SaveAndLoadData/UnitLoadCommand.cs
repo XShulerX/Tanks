@@ -2,7 +2,7 @@
 
 namespace MVC
 {
-    public class UnitLoadCommand
+    public class UnitLoadCommand: ILoadCommand
     {
         public bool Succeeded { get; private set; }
         private UnitStorage _unitStorage;
@@ -12,21 +12,27 @@ namespace MVC
             _unitStorage = unitStorage;
         }
 
-        public bool Load(PlayerMementoData playerMementoData, List<EnemyMementoData> enemyMementoDatas)
+        public bool Load(IMementoData mementoData)
         {
-            foreach (var enemy in _unitStorage.Enemies)
+            if(mementoData is EnemyMementoData enemyMementoData)
             {
-                for (int i = 0; i < enemyMementoDatas.Count; i++)
+                foreach (var enemy in _unitStorage.Enemies)
                 {
-                    if (enemy.Id == enemyMementoDatas[i].id)
+                    if (enemyMementoData.id == enemy.Id)
                     {
-                        enemy.Load<EnemyMementoData>(enemyMementoDatas[i]);
+                        enemy.Load(mementoData);
                     }
                 }
             }
 
-            (_unitStorage.player as ILoadeble).Load<PlayerMementoData>(playerMementoData);
-            Succeeded = true;
+            if (mementoData is PlayerMementoData)
+            {
+                (_unitStorage.player as ILoadeble).Load(mementoData);
+            }
+
+
+
+                Succeeded = true;
             return Succeeded;
         }
     }

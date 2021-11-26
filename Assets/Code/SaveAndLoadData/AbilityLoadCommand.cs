@@ -2,7 +2,7 @@
 
 namespace MVC
 {
-    public class AbilityLoadCommand
+    public class AbilityLoadCommand: ILoadCommand
     {
         public bool Succeeded { get; private set; }
         private PlayerAbilityController _playerAbilityController;
@@ -12,16 +12,14 @@ namespace MVC
             _playerAbilityController = playerAbilityController;
         }
 
-        public bool Load(List<AbilityMementoData> abilityMementoDatas)
+        public bool Load(IMementoData mementoData)
         {
+            
             foreach(var ability in _playerAbilityController.Abilities)
             {
-                for (int i = 0; i < abilityMementoDatas.Count; i++)
+                if(ability.Key == (mementoData as AbilityMementoData).id)
                 {
-                    if(ability.Key == abilityMementoDatas[i].id)
-                    {
-                        (ability.Value as ILoadeble).Load<AbilityMementoData>(abilityMementoDatas[i]);
-                    }
+                    (ability.Value as ILoadeble).Load(mementoData);
                 }
             }
             Succeeded = true;

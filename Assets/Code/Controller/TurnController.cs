@@ -141,7 +141,7 @@ namespace MVC
             _queueGamers.First.Value.IsYourTurn = true;
         }
 
-        void ILoadeble.Load<T>(T mementoData)
+        void ILoadeble.Load(IMementoData mementoData)
         {
             if (mementoData is TurnMementoData turnMemento)
             {

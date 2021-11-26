@@ -1,6 +1,6 @@
 ﻿namespace MVC
 {
-    public class StageLoadCommand
+    public class StageLoadCommand: ILoadCommand
     {
         public bool Succeeded { get; private set; }
         private ILoadeble _gameResetOrEndManager;
@@ -10,9 +10,9 @@
             _gameResetOrEndManager = gameResetOrEndManager;
         }
 
-        public bool Load(StageMementoData mementoData)
+        public bool Load(IMementoData mementoData)
         {
-            _gameResetOrEndManager.Load<StageMementoData>(mementoData);
+            _gameResetOrEndManager.Load(mementoData);
             Succeeded = true;
             return Succeeded;
         }

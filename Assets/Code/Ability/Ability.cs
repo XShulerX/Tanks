@@ -37,7 +37,7 @@ namespace MVC {
             _cooldownTurns = 0;
         }
 
-        void ILoadeble.Load<T>(T mementoData)
+        void ILoadeble.Load(IMementoData mementoData)
         {
             if (mementoData is AbilityMementoData abilityMemento)
             {

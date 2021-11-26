@@ -10,6 +10,7 @@ namespace MVC
         private UnitLoadCommand _unitLoadCommand;
         private TurnControllerLoadCommand _turnControllerLoadCommand;
         private AbilityLoadCommand _abilityLoadCommand;
+
         private TimerController _timerController;
 
         public LoadCommandManager(GameResetOrEndManager gameResetOrEndManager, PlayerAbilityController playerAbilityController, TurnController turnController, UnitStorage unitStorage, TimerController timerController)
@@ -26,8 +27,18 @@ namespace MVC
             isOnLoad.Invoke(true);
             _stageLoadCommand.Load(savedData.stageMemento);
             _turnControllerLoadCommand.Load(savedData.turnMemento);
-            _abilityLoadCommand.Load(savedData.abilitiesMemento);
-            _unitLoadCommand.Load(savedData.playerMemento, savedData.enemiesMementos);
+
+            foreach(var abilityMemento in savedData.abilitiesMemento)
+            {
+                _abilityLoadCommand.Load(abilityMemento);
+            }
+
+            foreach (var enemyMemento in savedData.enemiesMementos)
+            {
+                _unitLoadCommand.Load(enemyMemento);
+            }
+            
+            _unitLoadCommand.Load(savedData.playerMemento);
 
             var timer = new TimerData(1f, _timerController);
             timer.TimerIsOver += EndLoad;

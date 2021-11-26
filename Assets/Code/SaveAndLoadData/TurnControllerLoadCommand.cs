@@ -1,6 +1,6 @@
 ﻿namespace MVC
 {
-    public class TurnControllerLoadCommand
+    public class TurnControllerLoadCommand: ILoadCommand
     {
         public bool Succeeded { get; private set; }
         private ILoadeble _turnController;
@@ -10,9 +10,9 @@
             _turnController = turnController;
         }
 
-        public bool Load(TurnMementoData mementoData)
+        public bool Load(IMementoData mementoData)
         {
-            _turnController.Load<TurnMementoData>(mementoData);
+            _turnController.Load(mementoData);
             Succeeded = true;
             return Succeeded;
         }

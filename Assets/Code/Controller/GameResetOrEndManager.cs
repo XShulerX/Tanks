@@ -76,7 +76,7 @@ namespace MVC
             gameOver.Invoke();
         }
 
-        void ILoadeble.Load<T>(T mementoData)
+        void ILoadeble.Load(IMementoData mementoData)
         {
             if (mementoData is StageMementoData stageMemento)
             {
