@@ -6,12 +6,14 @@ namespace MVC
     {
         public GameInitialization(Controllers controllers, EnemyData enemyData, Player player, GameObject box, UIInitializationModel uiModel, AbilitiesData abilitiesData)
         {
+            player.Init(controllers);
+
             var poolModel = new PoolModel();
             var bulletPoolsInitialization = new BulletPoolsInitialization(poolModel);
             var bulletPool = bulletPoolsInitialization.GetBullets;
             controllers.Add(bulletPool);
 
-            var unitController = new UnitCrateAndResetController(enemyData, player, bulletPool, out UnitStorage unitStorage);
+            var unitController = new UnitCrateAndResetController(enemyData, player, bulletPool, controllers, out UnitStorage unitStorage);
             controllers.Add(unitController);
 
             var gameResetManager = new GameResetOrEndManager(unitController, controllers);
@@ -46,6 +48,8 @@ namespace MVC
 
             var uiController = new UIController(uiModel, playerAbilityController.Abilities, gameResetManager, loadComandManager);
             controllers.Add(uiController);
+
+            new FlyEnemiesManager(unitStorage.Enemies, turnController);
         }
     }
 }

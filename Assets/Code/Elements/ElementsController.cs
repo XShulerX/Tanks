@@ -52,7 +52,7 @@ namespace MVC
             var elements = Enum.GetValues(typeof(Elements));
             for (int i = 0; i < _unitStorage.Gamers.Count; i++)
             {
-                if (_unitStorage.Gamers[i].IsDead) continue;
+                if (_unitStorage.Gamers[i].AliveStateController.State.IsDead) continue;
                 _unitStorage.Gamers[i].TankElement = (Elements)UnityEngine.Random.Range(0, elements.Length);
                 for (int j = 0; j < _elements.Count; j++)
                 {

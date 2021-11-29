@@ -8,6 +8,9 @@ namespace MVC
     public sealed class Enemy : MonoBehaviour, IEnemy, ITakeDamageEnemy
     {
         public Action<IGamer> wasKilled { get; set; } = delegate (IGamer s) { };
+        private AliveStateController _aliveStateController;
+        private GroundStateController _groundStateController;
+        private Controllers _controllers;
 
         [SerializeField]
         private ParticleSystem _tankObjectExplosion;
@@ -37,7 +40,6 @@ namespace MVC
         public event Action<Vector3> OnMouseUpChange;
 
         public bool IsYourTurn { get ; set; }
-        public bool IsDead { get; set; }
         public bool IsShoted { get; set; }
         public Elements TankElement { get; set; }
         public float CurrentHealthPoints {
@@ -46,11 +48,10 @@ namespace MVC
             {
                 if (value <= 0)
                 {
-                    if (!IsDead)
+                    if (!_aliveStateController.State.IsDead)
                     {
                         wasKilled.Invoke(this);
-                    }
-                    IsDead = true;                   
+                    }             
                 }
                 _currentHealthPoints = value;
             }
@@ -66,9 +67,12 @@ namespace MVC
         public float ForceModifer { get => _forceModifer; }
         public float MaxHP { get => _maxHP; }
 
+        public AliveStateController AliveStateController => _aliveStateController;
+
+        public GroundStateController GroundStateController => _groundStateController;
+
         private void Awake()
         {
-            IsDead = false;
             IsYourTurn = false;
             _currentHealthPoints = _maxHP;
             _sliderEnemyHP.value = _currentHealthPoints / _maxHP;
@@ -116,9 +120,22 @@ namespace MVC
             return this;
         }
 
+        public Enemy SetMainController(Controllers controllers)
+        {
+            _controllers = controllers;
+            CreateStates();
+            return this;
+        }
+
+        private void CreateStates()
+        {
+            _aliveStateController = new AliveStateController(this);
+            _groundStateController = new GroundStateController(this, _controllers);
+        }
+
         public void Fire(Transform target)
         {
-            if (target.GetComponent<Player>().IsDead) return;
+            if (target.GetComponent<Player>().AliveStateController.State.IsDead) return;
             
             _turret.LookAt(new Vector3(target.position.x, _turret.position.y, target.position.z));
             var bullet = _bulletPool.GetFreeElement();
@@ -140,14 +157,14 @@ namespace MVC
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (IsDead) return;
+            if (_aliveStateController.State.IsDead) return;
             OnCollisionEnterChange?.Invoke(collision, this);
             _sliderEnemyHP.value = _currentHealthPoints / _maxHP;
         }
 
         private void OnMouseUp()
         {
-            if (IsDead) return;
+            if (_aliveStateController.State.IsDead || _groundStateController.State.IsFly) return;
             OnMouseUpChange?.Invoke(transform.position);
         }
 
@@ -164,7 +181,7 @@ namespace MVC
             UpdateHelthView();
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);
-            IsDead = false;
+            _aliveStateController.SetAliveState();
             IsShoted = false;
             IsYourTurn = false;
             _turret.rotation = _turret.parent.rotation;
@@ -179,7 +196,7 @@ namespace MVC
 
                 if (_currentHealthPoints <= 0)
                 {
-                    IsDead = true;
+                    _aliveStateController.SetDeadState(this);
                     _tankObject.SetActive(false);
                     _wrackObject.SetActive(true);
                 }

@@ -16,7 +16,7 @@ namespace MVC
         {
             foreach(var enemy in _unitStorage.Enemies)
             {
-                if (enemy.IsYourTurn && !enemy.IsDead)
+                if (enemy.IsYourTurn && enemy.AliveStateController.State.IsAlive && enemy.GroundStateController.State.IsOnGround)
                 {
                     enemy.Fire(_unitStorage.player.transform);
                     enemy.IsShoted = true;

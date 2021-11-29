@@ -37,7 +37,7 @@ namespace MVC
 
             for (int i = 0; i < unitStorage.Enemies.Count; i++)
             {
-                if (!unitStorage.Enemies[i].IsDead)
+                if (unitStorage.Enemies[i].AliveStateController.State.IsAlive && unitStorage.Enemies[i].GroundStateController.State.IsOnGround)
                 {
                     liveEnemies.Add(unitStorage.Enemies[i]);
                 }

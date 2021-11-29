@@ -67,13 +67,14 @@ namespace MVC
 
         public void Execute(float deltaTime)
         {
-            if (_player.IsDead) return;
+            if (_player.AliveStateController.State.IsDead) return;
 
             var currentPlayer = _queueGamers.First.Value;
-            if (currentPlayer.IsDead)
+            if (currentPlayer.AliveStateController.State.IsDead || currentPlayer.GroundStateController.State.IsFly)
             {
                 currentPlayer.IsYourTurn = false;
                 PassNext();
+                return;
             }
             if (!currentPlayer.IsYourTurn)
             {
@@ -113,7 +114,7 @@ namespace MVC
             foreach (var gamer in _queueGamers)
             {
                 gamer.IsShoted = false;
-                if (gamer != _player && !gamer.IsDead)
+                if (gamer != _player && gamer.AliveStateController.State.IsAlive)
                 {
                     _shootedOrDeadEnemies--;
                 }
@@ -128,7 +129,7 @@ namespace MVC
             _queueGamers.RemoveFirst();
             _queueGamers.AddLast(currentPlayer);
 
-            if (currentPlayer != _player && !currentPlayer.IsDead)
+            if (currentPlayer != _player && currentPlayer.AliveStateController.State.IsAlive)
             {
                 _shootedOrDeadEnemies++;
             }

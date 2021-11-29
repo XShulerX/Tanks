@@ -7,7 +7,6 @@ namespace MVC
     public interface IGamer : ITakeDamage, ILoadeble
     {
         bool IsYourTurn { get; set; }
-        public bool IsDead { get; set; }
         public bool IsShoted { get; set; }
         Action<IGamer> wasKilled { get; set; }
         public Material Material { get; set; }
@@ -18,5 +17,7 @@ namespace MVC
         public ParticleSystem GetParticleExplosion { get; }
 
         public Image GamerIconElement { get;}
+
+        public Transform transform { get; }
     }
 }

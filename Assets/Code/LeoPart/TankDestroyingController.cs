@@ -44,7 +44,7 @@ namespace MVC
                 var enemies = _unitStorage.Enemies;
                 for (int i = 0; i < enemies.Count; i++)
                 {
-                    if(!enemies[i].IsDead)
+                    if(enemies[i].AliveStateController.State.IsAlive)
                     {
                         return;
                     }

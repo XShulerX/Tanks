@@ -12,9 +12,9 @@ namespace MVC
         public UnitStorage UnitStorage { get => _unitStorage; }
         public float ForceModifer { get => _forceModifer; }
 
-        public UnitCrateAndResetController(EnemyData enemyData, Player player, BulletPool bulletPool, out UnitStorage unitStorage)
+        public UnitCrateAndResetController(EnemyData enemyData, Player player, BulletPool bulletPool, Controllers controllers, out UnitStorage unitStorage)
         {
-            var enemyFactory = new EnemyFactory(enemyData, bulletPool);
+            var enemyFactory = new EnemyFactory(enemyData, bulletPool, controllers);
             var enemyInitialization = new EnemyInitialization(enemyFactory);
             var enemies = new List<IEnemy>();
             enemies.AddRange(enemyInitialization.GetEnemies());

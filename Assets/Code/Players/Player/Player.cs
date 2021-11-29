@@ -8,7 +8,9 @@ namespace MVC
     {
         public Action<IGamer> wasKilled { get; set; } = delegate (IGamer s) { };
 
-        
+        private AliveStateController _aliveStateController;
+        private GroundStateController _groundStateController;
+        private Controllers _controllers;
 
         [SerializeField]
         private ParticleSystem _tankObjectExplosion;
@@ -42,7 +44,6 @@ namespace MVC
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
         public bool IsYourTurn { get ; set; }
-        public bool IsDead { get; set; }
         public bool IsShoted { get; set; }
         public Elements TankElement { get; set; }
         public Material Material { get; set; }
@@ -54,20 +55,28 @@ namespace MVC
             {
                 if(value <= 0)
                 {
-                    if (!IsDead)
+                    if (!_aliveStateController.State.IsDead)
                     {
                         wasKilled.Invoke(this);
                     }
-                    IsDead = true;
                 }
                 _currentHealthPoints = value;
             }
         }
 
+        public AliveStateController AliveStateController { get => _aliveStateController; }
+        public GroundStateController GroundStateController { get => _groundStateController; }
+
         public Player()
         {
             IsYourTurn = true;
-            IsDead = false;
+        }
+
+        public void Init(Controllers controllers)
+        {
+            _controllers = controllers;
+            _aliveStateController = new AliveStateController(this);
+            _groundStateController = new GroundStateController(this, _controllers);
         }
 
         private void Awake()
@@ -112,7 +121,7 @@ namespace MVC
             _sliderHP.value = _currentHealthPoints / maxHP;
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);
-            IsDead = false;
+            _aliveStateController.SetAliveState();
             IsShoted = false;
             IsYourTurn = true;
             _turret.rotation = _turret.parent.rotation;

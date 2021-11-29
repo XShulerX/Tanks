@@ -8,6 +8,9 @@ namespace MVC
         public float CurrentHealthPoints { get; set; }
         public Elements TankElement { get; set; }
 
+        public AliveStateController AliveStateController { get; }
+        public GroundStateController GroundStateController { get; }
+
         event Action<Collision, ITakeDamage> OnCollisionEnterChange;
     }
 }
