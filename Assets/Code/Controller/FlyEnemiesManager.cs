@@ -8,15 +8,27 @@ namespace MVC
         private List<IEnemy> _enemies;
         private TurnController _turnController;
         private int _maxFlyableEnemiesCount;
+        private GameResetOrEndManager _gameResetOrEndManager;
 
-        public FlyEnemiesManager(List<IEnemy> enemies, TurnController turnController)
+        public FlyEnemiesManager(List<IEnemy> enemies, TurnController turnController, GameResetOrEndManager gameResetOrEndManager)
         {
             _enemies = enemies;
             _turnController = turnController;
+            _gameResetOrEndManager = gameResetOrEndManager;
 
             _turnController.endGlobalTurn += RecalculateFlyableTanks;
+            _gameResetOrEndManager.sceneResetState += RecalculateOnSceneResetEnded;
+
 
             RecalculateFlyableTanks();
+        }
+
+        private void RecalculateOnSceneResetEnded(bool isOnReset)
+        {
+            if (!isOnReset)
+            {
+                RecalculateFlyableTanks();
+            }
         }
 
         private void RecalculateFlyableTanks()

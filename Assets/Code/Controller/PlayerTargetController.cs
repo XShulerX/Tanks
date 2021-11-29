@@ -27,9 +27,9 @@ namespace MVC
             }
         }
 
-        private void MouseOnEnemy(Vector3 enemyPosition)
+        private void MouseOnEnemy(IEnemy enemy)
         {
-            _unitStorage.player.SwapTarget(enemyPosition);
+            _unitStorage.player.SwapTarget(enemy);
         }
     }
 }

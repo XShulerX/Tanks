@@ -12,7 +12,7 @@ namespace MVC
         public bool IsOnGround { get => _isOnGround; }
 
         private const float TWITCH_SPEED = 3f;
-        private const float TWITCH_AMPLITUDE = 0.05f;
+        private const float TWITCH_AMPLITUDE = 0.03f;
 
         public FlyState(IGamer gamer)
         {
@@ -23,17 +23,17 @@ namespace MVC
 
         public void EnterState()
         {
-            _gamer.transform.Translate(Vector3.up * 2);
+            _gamer.GetTankObject.transform.Translate(Vector3.up * 1.5f);
         }
 
         public void ExitState()
         {
-            _gamer.transform.position = new Vector3(_gamer.transform.position.x, 0, _gamer.transform.position.z);
+            _gamer.GetTankObject.transform.position = _gamer.transform.position;
         }
 
         public void OnState()
         {
-            _gamer.transform.position = new Vector3(_gamer.transform.position.x, _gamer.transform.position.y + Mathf.Sin(Time.fixedTime * TWITCH_SPEED) * TWITCH_AMPLITUDE, _gamer.transform.position.z);
+            _gamer.GetTankObject.transform.position = new Vector3(_gamer.GetTankObject.transform.position.x, _gamer.GetTankObject.transform.position.y + Mathf.Sin(Time.fixedTime * TWITCH_SPEED) * TWITCH_AMPLITUDE, _gamer.GetTankObject.transform.position.z);
         }
     }
 }

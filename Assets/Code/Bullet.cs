@@ -27,7 +27,7 @@ namespace MVC
 
         public void InvokeTimer()
         {
-            Invoke(nameof(TimeToGoBackInPool), 2f);
+            Invoke(nameof(TimeToGoBackInPool), 0.5f);
         }
 
         public void SetContainer(Transform container)

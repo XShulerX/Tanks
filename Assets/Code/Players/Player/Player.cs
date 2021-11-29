@@ -29,7 +29,7 @@ namespace MVC
         [SerializeField]
         private Slider _sliderHP;
 
-        private Vector3 _target;
+        public IEnemy Target;
         private Material _fire;
         private Material _terra;
         private Material _water;
@@ -128,10 +128,16 @@ namespace MVC
             UpdateHelthView();
         }
 
-        public void SwapTarget(Vector3 newTarget)
+        public void SwapTarget(IEnemy enemy)
         {
-            _target = newTarget;
-            _turret.LookAt(new Vector3(_target.x, _turret.position.y, _target.z));
+            if (!(Target is null))
+            {
+                Target.ShowOrHideCircle(false);
+            }
+            Target = enemy;
+            Target.ShowOrHideCircle(true);
+            var targetPosition = Target.transform.position;
+            _turret.LookAt(new Vector3(targetPosition.x, _turret.position.y, targetPosition.z));
         }
 
         private void OnCollisionEnter(Collision collision)

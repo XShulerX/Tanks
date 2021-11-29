@@ -5,6 +5,6 @@ namespace MVC
 {
     public interface IPlayerTarget
     {
-        event Action<Vector3> OnMouseUpChange;
+        event Action<IEnemy> OnMouseUpChange;
     }
 }

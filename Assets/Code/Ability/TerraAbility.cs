@@ -30,10 +30,10 @@ namespace MVC
             _isOnCooldown = true;
         }
 
-        private Vector3 GetRandomEnemy()
+        private IEnemy GetRandomEnemy()
         {
             List<IEnemy> liveEnemies = new List<IEnemy>();
-            Vector3 enemy = Vector3.forward;
+            IEnemy enemy = null;
 
             for (int i = 0; i < unitStorage.Enemies.Count; i++)
             {
@@ -46,7 +46,7 @@ namespace MVC
             if(liveEnemies.Count > 0)
             {
                 var playerTarget = Random.Range(0, liveEnemies.Count - 1);
-                enemy = liveEnemies[playerTarget].transform.position;
+                enemy = liveEnemies[playerTarget];
             }
   
             return enemy;

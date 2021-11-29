@@ -28,6 +28,8 @@ namespace MVC
         private float _currentHealthPoints;
         [SerializeField]
         private Slider _sliderEnemyHP;
+        [SerializeField]
+        private GameObject _circleOfChoice;
 
         private BulletPool _bulletPool;
         private float _forceModifer = 1;
@@ -37,7 +39,7 @@ namespace MVC
         private Material _water;
 
         public event Action<Collision, ITakeDamage> OnCollisionEnterChange;
-        public event Action<Vector3> OnMouseUpChange;
+        public event Action<IEnemy> OnMouseUpChange;
 
         public bool IsYourTurn { get ; set; }
         public bool IsShoted { get; set; }
@@ -86,6 +88,10 @@ namespace MVC
             SetTurretAndIconColor();
         }
 
+        public void ShowOrHideCircle(bool isChoisen)
+        {
+            _circleOfChoice.SetActive(isChoisen);
+        }
         private void SetTurretAndIconColor()
         {
             Material = TankElement switch
@@ -164,8 +170,8 @@ namespace MVC
 
         private void OnMouseUp()
         {
-            if (_aliveStateController.State.IsDead || _groundStateController.State.IsFly) return;
-            OnMouseUpChange?.Invoke(transform.position);
+            if (_aliveStateController.State.IsDead) return;
+            OnMouseUpChange?.Invoke(this);
         }
 
         public void Reset(float forceModifer, bool isPlayerWin)
@@ -202,6 +208,10 @@ namespace MVC
                 }
 
                 _maxHP = enemyMemento.maxHP;
+
+                if (enemyMemento.isFly) _groundStateController.SetFlyState();
+                else _groundStateController.SetGroundState();
+
                 UpdateHelthView();
                 SetTurretAndIconColor();
             }

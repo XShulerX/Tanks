@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace MVC
 {
@@ -39,7 +38,7 @@ namespace MVC
             var enemiesMementos = new List<EnemyMementoData>(); 
             foreach (var enemy in _unitStorage.Enemies)
             {
-                enemiesMementos.Add(new EnemyMementoData(enemy.Id, enemy.CurrentHealthPoints, enemy.MaxHP, enemy.TankElement));
+                enemiesMementos.Add(new EnemyMementoData(enemy.Id, enemy.CurrentHealthPoints, enemy.MaxHP, enemy.GroundStateController.State.IsFly, enemy.TankElement));
             }
             var playerMemento = new PlayerMementoData(_unitStorage.player.CurrentHealthPoints, _unitStorage.player.TankElement);
             var turnMemento = new TurnMementoData(_turnController.GlobalTurnCount, _turnController.ShootedOrDeadEnemies);

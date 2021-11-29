@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace MVC
 {
@@ -55,10 +53,30 @@ namespace MVC
         private void UseAbility(int idAbility)
         {
             if (_abilities[idAbility].IsOnCooldown) return;
+
+            switch (_abilities[idAbility].ElementType)
+            {
+                case Elements.Water:
+                    if (_player.Target is null) return;
+                    else if (_player.Target.AliveStateController.State.IsAlive)
+                    {
+                        ActivateAbility(idAbility);
+                    }
+                    break;
+                case Elements.Fire:
+                    ActivateAbility(idAbility);
+                    break;
+                case Elements.Terra:
+                    ActivateAbility(idAbility);
+                    break;
+            }
+        }
+
+        private void ActivateAbility(int idAbility)
+        {
             _player.IsShoted = true;
             _isAbilityUsed = true;
-            _abilities[idAbility].ActivateAbility(); 
-            
+            _abilities[idAbility].ActivateAbility();
         }
 
         public void EnemyTurn()

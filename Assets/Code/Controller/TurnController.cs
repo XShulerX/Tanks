@@ -13,7 +13,7 @@ namespace MVC
 
         private LinkedList<IGamer> _queueGamers;
         private bool _isTimerOver;
-        private IGamer _player;
+        private Player _player;
         private TimerController _timerController;
         private ElementsController _elementsController;
         private TimerData _timer;
@@ -35,7 +35,7 @@ namespace MVC
             _elementsController = elementsController;
             _queueGamers = new LinkedList<IGamer>(unitStorage.Gamers); // Перешел с очереди на Линкед лист для возможности перестановки
             _timerController = timerController;
-            _player = unitStorage.Gamers[0];
+            _player = unitStorage.player;
             for (int i = 1; i < unitStorage.Gamers.Count; i++)
             {
                 _enemiesCount++;
@@ -62,7 +62,7 @@ namespace MVC
                     _enemiesCount++;
                 }
             }
-            _player = _unitStorage.Gamers[0];
+            _player = _unitStorage.player;
         }
 
         public void Execute(float deltaTime)
@@ -110,6 +110,11 @@ namespace MVC
             _queueGamers.Remove(_player);
             _queueGamers.AddFirst(_player);
             _elementsController.UpdateElements();
+            if (!(_player.Target is null))
+            {
+                _player.Target.ShowOrHideCircle(false);
+                _player.Target = null;
+            }
 
             foreach (var gamer in _queueGamers)
             {

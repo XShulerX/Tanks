@@ -24,9 +24,9 @@ namespace MVC
 
         private void TakeDamage(Collision bullet, ITakeDamage player)
         {
-            if (player.GroundStateController.State.IsFly) return;
-
             var bulletEntity = bullet.gameObject.GetComponent<Bullet>();
+            if (player.GroundStateController.State.IsFly && bulletEntity.element != Elements.Water) return;
+
             var elementModifer = _elementsController.GetModifer(player, bulletEntity.element);
             player.CurrentHealthPoints -= bulletEntity.Damage * elementModifer;
         }

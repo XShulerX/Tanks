@@ -41,6 +41,7 @@ namespace MVC
             controllers.Add(new TakeDamageController(unitStorage, elementsController));
 
             new TankDestroyingController(unitStorage, timerController, gameResetManager);
+            new FlyEnemiesManager(unitStorage.Enemies, turnController, gameResetManager);
 
             var momentoSaver = new MementosSaver(unitStorage, gameResetManager, turnController, playerAbilityController);
             var loadComandManager = new LoadCommandManager(gameResetManager, playerAbilityController, turnController, unitStorage, timerController);
@@ -48,8 +49,6 @@ namespace MVC
 
             var uiController = new UIController(uiModel, playerAbilityController.Abilities, gameResetManager, loadComandManager);
             controllers.Add(uiController);
-
-            new FlyEnemiesManager(unitStorage.Enemies, turnController);
         }
     }
 }
