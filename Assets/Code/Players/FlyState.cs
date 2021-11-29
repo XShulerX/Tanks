@@ -28,7 +28,7 @@ namespace MVC
 
         public void ExitState()
         {
-            _gamer.transform.Translate(Vector3.down * 2);
+            _gamer.transform.position = new Vector3(_gamer.transform.position.x, 0, _gamer.transform.position.z);
         }
 
         public void OnState()
