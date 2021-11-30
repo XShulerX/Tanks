@@ -64,8 +64,6 @@ namespace MVC
                     }
                     break;
                 case Elements.Fire:
-                    ActivateAbility(idAbility);
-                    break;
                 case Elements.Terra:
                     ActivateAbility(idAbility);
                     break;
