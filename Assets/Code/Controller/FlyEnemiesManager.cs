@@ -46,7 +46,7 @@ namespace MVC
                 if (enemy.AliveStateController.State.IsDead) continue;
 
                 aliveEnemies.Add(enemy);
-                if (Random.Range(0, 1) == 1)
+                if (Random.Range(0, 2) == 1)
                 {
                     flyingEnemiesCount++;
                     enemy.GroundStateController.SetFlyState();
