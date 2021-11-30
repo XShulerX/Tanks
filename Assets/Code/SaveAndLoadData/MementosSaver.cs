@@ -48,7 +48,7 @@ namespace MVC
             }
 
                 
-            var turnMemento = new TurnMementoData(_turnController.GlobalTurnCount, _turnController.ShootedOrDeadEnemies);
+            var turnMemento = new TurnMementoData(_turnController.GlobalTurnCount);
             var stageMemento = new StageMementoData(_gameResetManager.AttemptsCount, _gameResetManager.UnitController.ForceModifer, _gameResetManager.StageCount);
             var abilitiesMemento = new List<AbilityMementoData>();
 

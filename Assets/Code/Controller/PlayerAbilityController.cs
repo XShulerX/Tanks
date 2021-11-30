@@ -5,7 +5,7 @@ namespace MVC
 {
     public class PlayerAbilityController : IExecute, IResetable
     {
-        private List<Player> _players;
+        private UnitStorage _unitStorage;
         private TurnController _turnController;
         private bool _isAbilityUsed;
         private InputController _inputController;
@@ -13,17 +13,17 @@ namespace MVC
 
         public Player ActivePlayer { get => _activePlayer; }
 
-        public PlayerAbilityController(BulletPool bulletPool, TurnController turnController, List<Player> players, AbilityFactory abilityFactory, AbilitiesData abilitiesData, InputController inputController)
+        public PlayerAbilityController(BulletPool bulletPool, TurnController turnController, UnitStorage unitStorage, AbilityFactory abilityFactory, AbilitiesData abilitiesData, InputController inputController)
         {
             _turnController = turnController;
             _turnController.endGlobalTurn += ReduceAbilitiesCooldown;
             _turnController.changeActivePlayer += ChangeActivePlayer;
 
-            _players = players;
+            _unitStorage = unitStorage;
 
             var abilities = abilitiesData.AbilitiesModel;
 
-            foreach (var player in players)
+            foreach (var player in _unitStorage.Players)
             {
                 for (int i = 0; i < abilities.Count; i++)
                 {
@@ -33,7 +33,7 @@ namespace MVC
                 }
             }
 
-            _activePlayer = players[0];
+            _activePlayer = _unitStorage.Players[0];
 
             _inputController = inputController;
             _inputController.AbilityKeyIsPressed += UseAbility;
@@ -46,7 +46,7 @@ namespace MVC
 
         private void ReduceAbilitiesCooldown()
         {
-            foreach (var player in _players)
+            foreach (var player in _unitStorage.Players)
             {
                 foreach (var ability in player.Abilities)
                 {
@@ -79,31 +79,42 @@ namespace MVC
                     else if (target.AliveStateController.State.IsAlive)
                     {
                         ActivateAbility(idAbility);
+                        _activePlayer.SetTargetAsNull();
                     }
                     break;
                 case Elements.Fire:
-                case Elements.Terra:
                     ActivateAbility(idAbility);
+                    break;
+                case Elements.Terra:
+
+                    var enemy = _unitStorage.Enemies.Find(enemy => enemy.GroundStateController.State.IsOnGround && enemy.AliveStateController.State.IsAlive);
+                    if (enemy is null) return;
+
+                    ActivateAbility(idAbility);
+                    if (_activePlayer.TryGetTarget(out target))
+                    {
+                        _activePlayer.SetTargetAsNull();
+                    }
                     break;
             }
         }
 
         private void ActivateAbility(int idAbility)
         {
-            _activePlayer.IsShoted = true;
             _isAbilityUsed = true;
             _activePlayer.Abilities[idAbility].ActivateAbility();
         }
 
         public void NextTurn()
         {
+            _activePlayer.IsShoted = true;
             _activePlayer.IsYourTurn = false;
             _isAbilityUsed = false;
         }
 
         public void Reset()
         {
-            foreach (var player in _players)
+            foreach (var player in _unitStorage.Players)
             {
                 foreach (var ability in player.Abilities)
                 {

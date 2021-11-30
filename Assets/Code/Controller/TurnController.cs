@@ -20,13 +20,11 @@ namespace MVC
         private TimerData _timer;
         private Text _turnCountText;
 
-        private int _shootedOrDeadEnemies;
         private int _globalTurnCount = 1;
 
-        private const float DELAY_BEFOR_FIRE = 1f;
+        private const float DELAY = 1f;
 
         public int GlobalTurnCount { get => _globalTurnCount; }
-        public int ShootedOrDeadEnemies { get => _shootedOrDeadEnemies; }
 
         public TurnController(UnitStorage unitStorage, TimerController timerController, ElementsController elementsController, Text uiTurnCountText)
         {
@@ -35,10 +33,7 @@ namespace MVC
             _elementsController = elementsController;
             _queueGamers = new LinkedList<IGamer>(unitStorage.Gamers); // Перешел с очереди на Линкед лист для возможности перестановки
             _timerController = timerController;
-            for (int i = 1; i < unitStorage.Gamers.Count; i++)
-            {
-                unitStorage.Gamers[i].wasKilled += AddDeadEnemy;
-            }
+
             _turnCountText = uiTurnCountText;
             _turnCountText.text = "Ход 1";
         }
@@ -47,7 +42,6 @@ namespace MVC
         {
             _globalTurnCount = 1;
             _turnCountText.text = "Ход 1";
-            _shootedOrDeadEnemies = 0;
             _timer = null;
 
             for (int i = 0; i < _unitStorage.Gamers.Count; i++)
@@ -60,7 +54,8 @@ namespace MVC
         public void Execute(float deltaTime)
         {
             if (IsAllPlayersDie()) return;
-
+            
+            _activePlayer = null;
             _activePlayer = _unitStorage.Players.Find(player => player.AliveStateController.State.IsAlive && !player.IsShoted);
             if (!(_activePlayer is null))
             {
@@ -68,21 +63,17 @@ namespace MVC
                 {
                     _activePlayer.IsYourTurn = true;
                     changeActivePlayer.Invoke(_activePlayer);
-                    if (_activePlayer.TryGetTarget(out IEnemy target))
-                    {
-                        _activePlayer.SetTargetAsNull();
-                    }
                 }
 
             }
             else
             {
-                var _activeEnemy = _unitStorage.Enemies.Find(enemy => !enemy.IsShoted && enemy.AliveStateController.State.IsAlive);
+                var _activeEnemy = _unitStorage.Enemies.Find(enemy => !enemy.IsShoted && enemy.AliveStateController.State.IsAlive && enemy.GroundStateController.State.IsOnGround);
                 if (!(_activeEnemy is null))
                 {
                     if (_timer is null)
                     {
-                        _timer = new TimerData(DELAY_BEFOR_FIRE, _timerController);
+                        _timer = new TimerData(DELAY, _timerController);
                     }
 
                     _isTimerOver = _timer.IsTimerEndStatus;
@@ -96,7 +87,20 @@ namespace MVC
                 }
                 else
                 {
-                    EndTurn();
+                    if (_timer is null)
+                    {
+                        _timer = new TimerData(DELAY, _timerController);
+                    }
+
+                    _isTimerOver = _timer.IsTimerEndStatus;
+
+                    if (_isTimerOver)
+                    {
+                        EndTurn();
+                        _isTimerOver = false;
+                        _timer = null;
+                    }
+
                 }
             }
 
@@ -107,14 +111,6 @@ namespace MVC
             var player = _unitStorage.Players.Find(player => player.AliveStateController.State.IsAlive);
             if (player is null) return true;
             else return false;
-        }
-
-        private void AddDeadEnemy(IGamer enemy)
-        {
-            if (!enemy.IsShoted)
-            {
-                _shootedOrDeadEnemies++;
-            }
         }
 
         private void EndTurn()
@@ -138,7 +134,6 @@ namespace MVC
             {
                 _globalTurnCount = turnMemento.turnCount;
                 _turnCountText.text = String.Concat("Ход ", _globalTurnCount);
-                _shootedOrDeadEnemies = turnMemento.shootedOrDeadEnemies;
             }
             else
             {

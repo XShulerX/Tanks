@@ -35,7 +35,7 @@ namespace MVC
 
         public void OnState()
         {
-            if(!_gamer.AliveStateController.State.IsDead)
+            if(_gamer.AliveStateController.State.IsDead)
             {
                 _stateController.SetGroundState();
             }

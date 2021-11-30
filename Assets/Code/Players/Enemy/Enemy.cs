@@ -212,8 +212,12 @@ namespace MVC
                 if (enemyMemento.isFly) _groundStateController.SetFlyState();
                 else _groundStateController.SetGroundState();
 
-                UpdateHelthView();
-                SetTurretAndIconColor();
+                if(_aliveStateController.State.IsAlive)
+                {
+                    UpdateHelthView();
+                    SetTurretAndIconColor();
+                }
+
             }
             else
             {

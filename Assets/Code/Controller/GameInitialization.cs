@@ -38,7 +38,7 @@ namespace MVC
             var inputController = new InputController(inputAdapter.GetMatching());
             controllers.Add(inputController);
 
-            var playerAbilityController = new PlayerAbilityController(bulletPool, turnController, unitStorage.Players, abilityFactory, abilitiesData, inputController);
+            var playerAbilityController = new PlayerAbilityController(bulletPool, turnController, unitStorage, abilityFactory, abilitiesData, inputController);
             controllers.Add(playerAbilityController);
 
             controllers.Add(new EnemyFireController(unitStorage));
