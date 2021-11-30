@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MVC
 {
-    public sealed class SaveAndLoadGameDataManager
+    public sealed class SaveAndLoadRepository
     {
         private MementosSaver _mementoSaver;
         private LoadCommandManager _commandManager;
@@ -15,7 +15,7 @@ namespace MVC
         private const string _fileName = "data.bat";
         private readonly string _path;
 
-        public SaveAndLoadGameDataManager(MementosSaver mementosSaver, LoadCommandManager loadCommandManager)
+        public SaveAndLoadRepository(MementosSaver mementosSaver, LoadCommandManager loadCommandManager)
         {
             _mementoSaver = mementosSaver;
             _commandManager = loadCommandManager;

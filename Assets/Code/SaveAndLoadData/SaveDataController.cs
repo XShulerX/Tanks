@@ -7,11 +7,11 @@ namespace MVC
     public class SaveDataController
     {
         private InputController _inputController;
-        private SaveAndLoadGameDataManager _manager;
+        private SaveAndLoadRepository _manager;
         public SaveDataController(InputController inputController, MementosSaver mementosSaver, LoadCommandManager loadComandManager)
         {
             _inputController = inputController;
-            _manager = new SaveAndLoadGameDataManager(mementosSaver, loadComandManager);
+            _manager = new SaveAndLoadRepository(mementosSaver, loadComandManager);
 
             SignOnEvents();
         }
