@@ -12,18 +12,18 @@ namespace MVC {
 
         public void Execute(float deltaTime)
         {
-            var abilities = _model.Abilities;
-            for(int i = 0; i < abilities.Count; i++)
+            var abilities = _model.PlayerAbilityController.ActivePlayer.Abilities;
+            foreach(var ability in abilities)
             {
-                var panelImage = _model.AbilitiesPanelMatching[abilities[i].ElementType].GetComponent<Image>();
+                var panelImage = _model.AbilitiesPanelMatching[ability.Value.ElementType].GetComponent<Image>();
 
-                if (abilities[i].IsOnCooldown)
+                if (ability.Value.IsOnCooldown)
                 {
                     panelImage.color = _model.CooldownColor;
                 }
                 else
                 {
-                    panelImage.color = abilities[i].ElementType switch
+                    panelImage.color = ability.Value.ElementType switch
                     {
                         Elements.Fire => _model.FireColor,
                         Elements.Terra => _model.TerraColor,

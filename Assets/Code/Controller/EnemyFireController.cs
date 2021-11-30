@@ -18,7 +18,7 @@ namespace MVC
             {
                 if (enemy.IsYourTurn && enemy.AliveStateController.State.IsAlive && enemy.GroundStateController.State.IsOnGround)
                 {
-                    enemy.Fire(_unitStorage.player.transform);
+                    enemy.Fire(_unitStorage.Players[Random.Range(0,_unitStorage.Players.Count)].transform);
                     enemy.IsShoted = true;
                     enemy.IsYourTurn = false;
                 }

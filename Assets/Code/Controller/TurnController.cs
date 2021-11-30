@@ -8,19 +8,19 @@ namespace MVC
     public sealed class TurnController : IExecute, IResetable, ILoadeble
     {
         public Action endGlobalTurn = delegate () { };
+        public Action<Player> changeActivePlayer = delegate (Player player) { };
 
         private UnitStorage _unitStorage;
 
         private LinkedList<IGamer> _queueGamers;
         private bool _isTimerOver;
-        private Player _player;
+        private Player _activePlayer;
         private TimerController _timerController;
         private ElementsController _elementsController;
         private TimerData _timer;
         private Text _turnCountText;
 
         private int _shootedOrDeadEnemies;
-        private int _enemiesCount;
         private int _globalTurnCount = 1;
 
         private const float DELAY_BEFOR_FIRE = 1f;
@@ -35,10 +35,8 @@ namespace MVC
             _elementsController = elementsController;
             _queueGamers = new LinkedList<IGamer>(unitStorage.Gamers); // Перешел с очереди на Линкед лист для возможности перестановки
             _timerController = timerController;
-            _player = unitStorage.player;
             for (int i = 1; i < unitStorage.Gamers.Count; i++)
             {
-                _enemiesCount++;
                 unitStorage.Gamers[i].wasKilled += AddDeadEnemy;
             }
             _turnCountText = uiTurnCountText;
@@ -47,51 +45,68 @@ namespace MVC
 
         public void Reset()
         {
-            _enemiesCount = 0;
             _globalTurnCount = 1;
             _turnCountText.text = "Ход 1";
             _shootedOrDeadEnemies = 0;
             _timer = null;
 
-            _queueGamers.Clear();
             for (int i = 0; i < _unitStorage.Gamers.Count; i++)
             {
-                _queueGamers.AddLast(_unitStorage.Gamers[i]);
-                if (_unitStorage.Gamers[i] is Enemy)
-                {
-                    _enemiesCount++;
-                }
+                _unitStorage.Gamers[i].IsShoted = false;
+                _unitStorage.Gamers[i].IsYourTurn = false;
             }
-            _player = _unitStorage.player;
         }
 
         public void Execute(float deltaTime)
         {
-            if (_player.AliveStateController.State.IsDead) return;
+            if (IsAllPlayersDie()) return;
 
-            var currentPlayer = _queueGamers.First.Value;
-            if (currentPlayer.AliveStateController.State.IsDead || currentPlayer.GroundStateController.State.IsFly)
+            _activePlayer = _unitStorage.Players.Find(player => player.AliveStateController.State.IsAlive && !player.IsShoted);
+            if (!(_activePlayer is null))
             {
-                currentPlayer.IsYourTurn = false;
-                PassNext();
-                return;
-            }
-            if (!currentPlayer.IsYourTurn)
-            {
-                if (_timer is null)
+                if (!_activePlayer.IsYourTurn)
                 {
-                    _timer = new TimerData(DELAY_BEFOR_FIRE, _timerController);
+                    _activePlayer.IsYourTurn = true;
+                    changeActivePlayer.Invoke(_activePlayer);
+                    if (_activePlayer.TryGetTarget(out IEnemy target))
+                    {
+                        _activePlayer.SetTargetAsNull();
+                    }
                 }
 
-                _isTimerOver = _timer.IsTimerEndStatus;
-
-                if (_isTimerOver)
+            }
+            else
+            {
+                var _activeEnemy = _unitStorage.Enemies.Find(enemy => !enemy.IsShoted && enemy.AliveStateController.State.IsAlive);
+                if (!(_activeEnemy is null))
                 {
-                    PassNext();
-                    _isTimerOver = false;
-                    _timer = null;
+                    if (_timer is null)
+                    {
+                        _timer = new TimerData(DELAY_BEFOR_FIRE, _timerController);
+                    }
+
+                    _isTimerOver = _timer.IsTimerEndStatus;
+
+                    if (_isTimerOver)
+                    {
+                        _activeEnemy.IsYourTurn = true;
+                        _isTimerOver = false;
+                        _timer = null;
+                    }
+                }
+                else
+                {
+                    EndTurn();
                 }
             }
+
+        }
+
+        private bool IsAllPlayersDie()
+        {
+            var player = _unitStorage.Players.Find(player => player.AliveStateController.State.IsAlive);
+            if (player is null) return true;
+            else return false;
         }
 
         private void AddDeadEnemy(IGamer enemy)
@@ -107,43 +122,14 @@ namespace MVC
             _globalTurnCount++;
             _turnCountText.text = String.Concat("Ход ", _globalTurnCount);
 
-            _queueGamers.Remove(_player);
-            _queueGamers.AddFirst(_player);
             _elementsController.UpdateElements();
-            if (_player.TryGetTarget(out IEnemy target))
-            {
-                _player.SetTargetAsNull();
-            }
 
             foreach (var gamer in _queueGamers)
             {
                 gamer.IsShoted = false;
-                if (gamer != _player && gamer.AliveStateController.State.IsAlive)
-                {
-                    _shootedOrDeadEnemies--;
-                }
             }
             endGlobalTurn.Invoke();
             Debug.Log("EndTurn");
-        }
-
-        private void PassNext()
-        {
-            var currentPlayer = _queueGamers.First.Value;
-            _queueGamers.RemoveFirst();
-            _queueGamers.AddLast(currentPlayer);
-
-            if (currentPlayer != _player && currentPlayer.AliveStateController.State.IsAlive)
-            {
-                _shootedOrDeadEnemies++;
-            }
-
-            if (_shootedOrDeadEnemies == _enemiesCount)
-            {
-                EndTurn();
-            }
-
-            _queueGamers.First.Value.IsYourTurn = true;
         }
 
         void ILoadeble.Load(IMementoData mementoData)

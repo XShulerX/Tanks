@@ -40,14 +40,26 @@ namespace MVC
             {
                 enemiesMementos.Add(new EnemyMementoData(enemy.Id, enemy.CurrentHealthPoints, enemy.MaxHP, enemy.GroundStateController.State.IsFly, enemy.TankElement));
             }
-            var playerMemento = new PlayerMementoData(_unitStorage.player.CurrentHealthPoints, _unitStorage.player.TankElement);
+
+            var playerMementos = new List<PlayerMementoData>();
+            foreach (var player in _unitStorage.Players)
+            {
+                playerMementos.Add(new PlayerMementoData(player.CurrentHealthPoints, player.TankElement));
+            }
+
+                
             var turnMemento = new TurnMementoData(_turnController.GlobalTurnCount, _turnController.ShootedOrDeadEnemies);
             var stageMemento = new StageMementoData(_gameResetManager.AttemptsCount, _gameResetManager.UnitController.ForceModifer, _gameResetManager.StageCount);
             var abilitiesMemento = new List<AbilityMementoData>();
-            foreach(var ability in _playerAbilityController.Abilities)
+
+            foreach (var player in _unitStorage.Players)
             {
-                abilitiesMemento.Add(new AbilityMementoData(ability.Key, ability.Value.IsOnCooldown, ability.Value.CooldownTurns));
+                foreach (var ability in player.Abilities)
+                {
+                    abilitiesMemento.Add(new AbilityMementoData(ability.Key, ability.Value.IsOnCooldown, ability.Value.CooldownTurns));
+                }
             }
+
 
             if (_gameMementos.Count > 7)
             {
@@ -56,7 +68,7 @@ namespace MVC
             
             _gameMementos.Add(new GameMemento(
                 enemiesMementos,
-                playerMemento,
+                playerMementos,
                 abilitiesMemento,
                 turnMemento,
                 stageMemento

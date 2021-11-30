@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ namespace MVC
         private AliveStateController _aliveStateController;
         private GroundStateController _groundStateController;
         private Controllers _controllers;
+        private Dictionary<int, Ability> _abilities = new Dictionary<int, Ability>();
 
         [SerializeField]
         private ParticleSystem _tankObjectExplosion;
@@ -66,11 +68,7 @@ namespace MVC
 
         public AliveStateController AliveStateController { get => _aliveStateController; }
         public GroundStateController GroundStateController { get => _groundStateController; }
-
-        public Player()
-        {
-            IsYourTurn = true;
-        }
+        public Dictionary<int, Ability> Abilities { get => _abilities;}
 
         public void Init(Controllers controllers)
         {

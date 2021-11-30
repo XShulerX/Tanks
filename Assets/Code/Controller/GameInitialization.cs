@@ -1,19 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MVC
 {
     internal sealed class GameInitialization
     {
-        public GameInitialization(Controllers controllers, EnemyData enemyData, Player player, GameObject box, UIInitializationModel uiModel, AbilitiesData abilitiesData)
+        public GameInitialization(Controllers controllers, EnemyData enemyData, List<Player> players, GameObject box, UIInitializationModel uiModel, AbilitiesData abilitiesData)
         {
-            player.Init(controllers);
+            foreach (var player in players)
+            {
+                player.Init(controllers);
+            }
+
 
             var poolModel = new PoolModel();
             var bulletPoolsInitialization = new BulletPoolsInitialization(poolModel);
             var bulletPool = bulletPoolsInitialization.GetBullets;
             controllers.Add(bulletPool);
 
-            var unitController = new UnitCrateAndResetController(enemyData, player, bulletPool, controllers, out UnitStorage unitStorage);
+            var unitController = new UnitCrateAndResetController(enemyData, players, bulletPool, controllers, out UnitStorage unitStorage);
             controllers.Add(unitController);
 
             var gameResetManager = new GameResetOrEndManager(unitController, controllers);
@@ -33,7 +38,7 @@ namespace MVC
             var inputController = new InputController(inputAdapter.GetMatching());
             controllers.Add(inputController);
 
-            var playerAbilityController = new PlayerAbilityController(bulletPool, turnController, unitStorage.player, abilityFactory, abilitiesData, inputController);
+            var playerAbilityController = new PlayerAbilityController(bulletPool, turnController, unitStorage.Players, abilityFactory, abilitiesData, inputController);
             controllers.Add(playerAbilityController);
 
             controllers.Add(new EnemyFireController(unitStorage));
@@ -47,7 +52,7 @@ namespace MVC
             var loadComandManager = new LoadCommandManager(gameResetManager, playerAbilityController, turnController, unitStorage, timerController);
             new SaveDataController(inputController, momentoSaver, loadComandManager);
 
-            var uiController = new UIController(uiModel, playerAbilityController.Abilities, gameResetManager, loadComandManager);
+            var uiController = new UIController(uiModel, playerAbilityController, gameResetManager, loadComandManager);
             controllers.Add(uiController);
         }
     }

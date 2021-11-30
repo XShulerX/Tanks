@@ -27,7 +27,7 @@ namespace MVC
 
             if (mementoData is PlayerMementoData)
             {
-                (_unitStorage.player as ILoadeble).Load(mementoData);
+                (_unitStorage.Players as ILoadeble).Load(mementoData);
             }
 
 

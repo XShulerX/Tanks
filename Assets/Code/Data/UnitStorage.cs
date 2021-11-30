@@ -6,16 +6,17 @@ namespace MVC
     {
         private List<IEnemy> _enemies;
         private List<IGamer> _gamers;
-        public Player player;
+        private List<Player> _players;
 
         public List<IEnemy> Enemies { get => _enemies; }
         public List<IGamer> Gamers { get => _gamers; }
+        public List<Player> Players { get => _players; set => _players = value; }
 
-        public UnitStorage(List<IEnemy> enemiesList, List<IGamer> gamerList, Player player)
+        public UnitStorage(List<IEnemy> enemiesList, List<IGamer> gamerList, List<Player> players)
         {
             _enemies = new List<IEnemy>(enemiesList);
             _gamers = new List<IGamer>(gamerList);
-            this.player = player;
+            _players = new List<Player>(players);
         }
     }
 }
