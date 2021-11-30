@@ -110,10 +110,9 @@ namespace MVC
             _queueGamers.Remove(_player);
             _queueGamers.AddFirst(_player);
             _elementsController.UpdateElements();
-            if (!(_player.Target is null))
+            if (_player.TryGetTarget(out IEnemy target))
             {
-                _player.Target.ShowOrHideCircle(false);
-                _player.Target = null;
+                _player.SetTargetAsNull();
             }
 
             foreach (var gamer in _queueGamers)

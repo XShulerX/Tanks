@@ -29,7 +29,7 @@ namespace MVC
         [SerializeField]
         private Slider _sliderHP;
 
-        public IEnemy Target;
+        private IEnemy _target;
         private Material _fire;
         private Material _terra;
         private Material _water;
@@ -130,14 +130,32 @@ namespace MVC
 
         public void SwapTarget(IEnemy enemy)
         {
-            if (!(Target is null))
+            if (TryGetTarget(out IEnemy target))
             {
-                Target.ShowOrHideCircle(false);
+                target.ShowOrHideCircle(false);
             }
-            Target = enemy;
-            Target.ShowOrHideCircle(true);
-            var targetPosition = Target.transform.position;
+            _target = enemy;
+            _target.ShowOrHideCircle(true);
+            var targetPosition = _target.transform.position;
             _turret.LookAt(new Vector3(targetPosition.x, _turret.position.y, targetPosition.z));
+        }
+
+        public bool TryGetTarget(out IEnemy target)
+        {
+            target = _target;
+            if (target is null)
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
+        }
+
+        public void SetTargetAsNull()
+        {
+            _target.ShowOrHideCircle(false);
+            _target = null;
         }
 
         private void OnCollisionEnter(Collision collision)

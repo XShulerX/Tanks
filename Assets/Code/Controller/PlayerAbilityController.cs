@@ -57,8 +57,8 @@ namespace MVC
             switch (_abilities[idAbility].ElementType)
             {
                 case Elements.Water:
-                    if (_player.Target is null) return;
-                    else if (_player.Target.AliveStateController.State.IsAlive)
+                    if (!_player.TryGetTarget(out IEnemy target)) return;
+                    else if (target.AliveStateController.State.IsAlive)
                     {
                         ActivateAbility(idAbility);
                     }
