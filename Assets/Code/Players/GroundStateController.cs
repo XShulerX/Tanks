@@ -11,7 +11,7 @@
 
         public GroundStateController(IGamer gamer, Controllers controllers)
         {
-            _flyState = new FlyState(gamer);
+            _flyState = new FlyState(gamer, this);
             _groundState = new GroundState();
 
             _state = _groundState;
