@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MVC
@@ -9,7 +10,7 @@ namespace MVC
         [SerializeField]
         private AbilitiesData _abilitiesData;
         [SerializeField]
-        private Player player;
+        private List<Player> players;
         [SerializeField]
         private GameObject _box;
         [SerializeField]
@@ -20,7 +21,7 @@ namespace MVC
         private void Start()
         {
             _controllers = new Controllers();
-            new GameInitialization(_controllers, _enemyData, player, _box, _uiInitModel, _abilitiesData);
+            new GameInitialization(_controllers, _enemyData, players, _box, _uiInitModel, _abilitiesData);
             _controllers.Initilazation();
         }
 

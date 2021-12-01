@@ -5,23 +5,29 @@ namespace MVC
     public class AbilityLoadCommand: ILoadCommand
     {
         public bool Succeeded { get; private set; }
-        private PlayerAbilityController _playerAbilityController;
+        private UnitStorage _unitStorage;
 
-        public AbilityLoadCommand(PlayerAbilityController playerAbilityController)
+        public AbilityLoadCommand(UnitStorage unitStorage)
         {
-            _playerAbilityController = playerAbilityController;
+            _unitStorage = unitStorage;
         }
 
         public bool Load(IMementoData mementoData)
         {
-            
-            foreach(var ability in _playerAbilityController.Abilities)
+
+            foreach (var player in _unitStorage.Players)
             {
-                if(ability.Key == (mementoData as AbilityMementoData).id)
+                foreach (var ability in player.Abilities)
                 {
-                    (ability.Value as ILoadeble).Load(mementoData);
+                    var abilityMemento = mementoData as AbilityMementoData;
+
+                    if (player.Id == abilityMemento.playerID && ability.Key == abilityMemento.id)
+                    {
+                        (ability.Value as ILoadeble).Load(mementoData);
+                    }
                 }
             }
+
             Succeeded = true;
             return Succeeded;
         }

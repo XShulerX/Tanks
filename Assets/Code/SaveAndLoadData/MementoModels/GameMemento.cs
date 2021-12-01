@@ -7,15 +7,15 @@ namespace MVC
     public class GameMemento
     {
         public List<EnemyMementoData> enemiesMementos;
-        public PlayerMementoData playerMemento;
+        public List<PlayerMementoData> playersMementos;
         public List<AbilityMementoData> abilitiesMemento;
         public TurnMementoData turnMemento;
         public StageMementoData stageMemento;
 
-        public GameMemento(List<EnemyMementoData> enemiesMementos, PlayerMementoData playerMemento, List<AbilityMementoData> abilitiesMemento, TurnMementoData turnMemento, StageMementoData stageMemento)
+        public GameMemento(List<EnemyMementoData> enemiesMementos, List<PlayerMementoData> playersMementos, List<AbilityMementoData> abilitiesMemento, TurnMementoData turnMemento, StageMementoData stageMemento)
         {
             this.enemiesMementos = enemiesMementos;
-            this.playerMemento = playerMemento;
+            this.playersMementos = playersMementos;
             this.abilitiesMemento = abilitiesMemento;
             this.turnMemento = turnMemento;
             this.stageMemento = stageMemento;

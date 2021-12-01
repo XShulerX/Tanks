@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,8 @@ namespace MVC
         private AliveStateController _aliveStateController;
         private GroundStateController _groundStateController;
         private Controllers _controllers;
+        private Dictionary<int, Ability> _abilities = new Dictionary<int, Ability>();
+        private int _id;
 
         [SerializeField]
         private ParticleSystem _tankObjectExplosion;
@@ -28,6 +31,8 @@ namespace MVC
         private float _currentHealthPoints;
         [SerializeField]
         private Slider _sliderHP;
+        [SerializeField]
+        private GameObject _circleOfChoice;
 
         private IEnemy _target;
         private Material _fire;
@@ -66,11 +71,9 @@ namespace MVC
 
         public AliveStateController AliveStateController { get => _aliveStateController; }
         public GroundStateController GroundStateController { get => _groundStateController; }
-
-        public Player()
-        {
-            IsYourTurn = true;
-        }
+        public Dictionary<int, Ability> Abilities { get => _abilities;}
+        public GameObject CircleOfChoice { get => _circleOfChoice; }
+        public int Id { get => _id; }
 
         public void Init(Controllers controllers)
         {
@@ -84,7 +87,9 @@ namespace MVC
             _fire = Resources.Load("ElementMaterials/Fire") as Material;
             _terra = Resources.Load("ElementMaterials/Terra") as Material;
             _water = Resources.Load("ElementMaterials/Water") as Material;
-            
+
+            _id = Animator.StringToHash(this.name);
+
             _currentHealthPoints = maxHP;
             _sliderHP.value = _currentHealthPoints / maxHP;
 
@@ -115,17 +120,32 @@ namespace MVC
             _sliderHP.value = _currentHealthPoints / maxHP;
         }
 
-        public void Reset()
+        public void Reset(bool isWin)
         {
-            CurrentHealthPoints = maxHP;
-            _sliderHP.value = _currentHealthPoints / maxHP;
-            GetWrackObject.SetActive(false);
-            GetTankObject.SetActive(true);
-            _aliveStateController.SetAliveState();
-            IsShoted = false;
-            IsYourTurn = true;
-            _turret.rotation = _turret.parent.rotation;
-            UpdateHelthView();
+            if(isWin)
+            {
+                if(CurrentHealthPoints > 0)
+                {
+                    CurrentHealthPoints = maxHP;
+                    _sliderHP.value = _currentHealthPoints / maxHP;
+                    UpdateHelthView();
+                    _turret.rotation = _turret.parent.rotation;
+                }
+
+                IsShoted = false;
+                _circleOfChoice.SetActive(false);
+            } else
+            {
+                CurrentHealthPoints = maxHP;
+                _sliderHP.value = _currentHealthPoints / maxHP;
+                GetWrackObject.SetActive(false);
+                GetTankObject.SetActive(true);
+                _circleOfChoice.SetActive(false);
+                _aliveStateController.SetAliveState();
+                IsShoted = false;
+                _turret.rotation = _turret.parent.rotation;
+                UpdateHelthView();
+            }
         }
 
         public void SwapTarget(IEnemy enemy)
@@ -168,10 +188,28 @@ namespace MVC
         {
             if(mementoData is PlayerMementoData playerMemento)
             {
-                CurrentHealthPoints = playerMemento.hp;
+                if(playerMemento.hp > 0)
+                {
+                    _currentHealthPoints = playerMemento.hp;
+                    GetWrackObject.SetActive(false);
+                    GetTankObject.SetActive(true);
+                    _aliveStateController.SetAliveState();
+                }
+                else
+                {
+                    _currentHealthPoints = playerMemento.hp;
+                    GetWrackObject.SetActive(true);
+                    GetTankObject.SetActive(false);
+                    _aliveStateController.SetDeadState(this);
+                }
+
                 TankElement = playerMemento.element;
-                UpdateHelthView();
-                SetTurretAndIconColor();
+
+                if (_aliveStateController.State.IsAlive)
+                {
+                    UpdateHelthView();
+                    SetTurretAndIconColor();
+                }
             }
             else
             {

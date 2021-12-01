@@ -4,7 +4,7 @@ namespace MVC
 {
     public class TankDestroyingController
     {
-        public event Action playerTankWasDestroed = delegate () { };
+        public event Action allPlayerTanksWasDestroed = delegate () { };
         public event Action allEnemyTanksWasDestroed = delegate () { };
 
         private TimerController _timerController;
@@ -20,7 +20,7 @@ namespace MVC
                 _unitStorage.Gamers[i].wasKilled += DestroyTank;
             }
 
-            playerTankWasDestroed += _resetManager.PlayerLost;
+            allPlayerTanksWasDestroed += _resetManager.PlayerLost;
             allEnemyTanksWasDestroed += _resetManager.PlayerWin;
         }
 
@@ -38,7 +38,15 @@ namespace MVC
 
             if(gamer is Player)
             {
-                playerTankWasDestroed.Invoke();
+                var players = _unitStorage.Players;
+                for (int i = 0; i < players.Count; i++)
+                {
+                    if (players[i].AliveStateController.State.IsAlive)
+                    {
+                        return;
+                    }
+                }
+                allPlayerTanksWasDestroed.Invoke();
             } else
             {
                 var enemies = _unitStorage.Enemies;

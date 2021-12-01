@@ -18,7 +18,7 @@ namespace MVC
             _stageLoadCommand =  new StageLoadCommand(gameResetOrEndManager);
             _unitLoadCommand = new UnitLoadCommand(unitStorage);
             _turnControllerLoadCommand = new TurnControllerLoadCommand(turnController);
-            _abilityLoadCommand = new AbilityLoadCommand(playerAbilityController);
+            _abilityLoadCommand = new AbilityLoadCommand(unitStorage);
             _timerController = timerController;
         }
 
@@ -37,8 +37,11 @@ namespace MVC
             {
                 _unitLoadCommand.Load(enemyMemento);
             }
-            
-            _unitLoadCommand.Load(savedData.playerMemento);
+
+            foreach (var playerMemento in savedData.playersMementos)
+            {
+                _unitLoadCommand.Load(playerMemento);
+            }
 
             var timer = new TimerData(1f, _timerController);
             timer.TimerIsOver += EndLoad;

@@ -29,7 +29,8 @@ namespace MVC
 
         private void MouseOnEnemy(IEnemy enemy)
         {
-            _unitStorage.player.SwapTarget(enemy);
+            var activePlayer = _unitStorage.Players.Find(player => player.IsYourTurn);
+            if (!(activePlayer is null)) activePlayer.SwapTarget(enemy);
         }
     }
 }

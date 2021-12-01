@@ -9,6 +9,7 @@ namespace MVC
         public event Action<int> AbilityKeyIsPressed = delegate (int id) {};
         public event Action SaveKeyIsPressed = delegate () { };
         public event Action LoadKeyIsPressed = delegate () { };
+        public event Action HelpKeyIsPressed = delegate () { };
 
         private readonly Dictionary<int,KeyCode> _inputMatching;
 
@@ -38,6 +39,11 @@ namespace MVC
             if (Input.GetKeyDown(KeyCode.L))
             {
                 LoadKeyIsPressed.Invoke();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                HelpKeyIsPressed.Invoke();
             }
         }
     }

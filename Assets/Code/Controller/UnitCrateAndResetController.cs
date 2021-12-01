@@ -12,7 +12,7 @@ namespace MVC
         public UnitStorage UnitStorage { get => _unitStorage; }
         public float ForceModifer { get => _forceModifer; }
 
-        public UnitCrateAndResetController(EnemyData enemyData, Player player, BulletPool bulletPool, Controllers controllers, out UnitStorage unitStorage)
+        public UnitCrateAndResetController(EnemyData enemyData, List<Player> players, BulletPool bulletPool, Controllers controllers, out UnitStorage unitStorage)
         {
             var enemyFactory = new EnemyFactory(enemyData, bulletPool, controllers);
             var enemyInitialization = new EnemyInitialization(enemyFactory);
@@ -20,10 +20,10 @@ namespace MVC
             enemies.AddRange(enemyInitialization.GetEnemies());
 
             var gamerList = new List<IGamer>();
-            gamerList.Add(player);
+            gamerList.AddRange(players);
             gamerList.AddRange(enemies);
 
-            unitStorage = new UnitStorage(enemies, gamerList, player);
+            unitStorage = new UnitStorage(enemies, gamerList, players);
             _unitStorage = unitStorage;
         }
 
@@ -37,13 +37,17 @@ namespace MVC
 
         private void ResetPlayer()
         {
-            _unitStorage.player.Reset();
+            foreach (var player in _unitStorage.Players)
+            {
+                player.Reset(_isPlayerWin);
+            }        
         }
 
         public void Reset()
         {
             ResetEnemies();
             ResetPlayer();
+            _isPlayerWin = false;
         }
 
         public void IncreaseForceModifer()

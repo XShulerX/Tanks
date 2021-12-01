@@ -1,49 +1,67 @@
+using System;
 using System.Collections.Generic;
 
 namespace MVC
 {
     public class PlayerAbilityController : IExecute, IResetable
     {
-        private Dictionary<int, Ability> _abilities = new Dictionary<int, Ability>();
-        private Player _player;
+        private UnitStorage _unitStorage;
         private TurnController _turnController;
         private bool _isAbilityUsed;
         private InputController _inputController;
+        private Player _activePlayer;
 
-        public Dictionary<int, Ability> Abilities => _abilities;
+        public Player ActivePlayer { get => _activePlayer; }
 
-        public PlayerAbilityController(BulletPool bulletPool, TurnController turnController, Player player, AbilityFactory abilityFactory, AbilitiesData abilitiesData, InputController inputController)
+        public PlayerAbilityController(BulletPool bulletPool, TurnController turnController, UnitStorage unitStorage, AbilityFactory abilityFactory, AbilitiesData abilitiesData, InputController inputController)
         {
             _turnController = turnController;
             _turnController.endGlobalTurn += ReduceAbilitiesCooldown;
-            _player = player;
+            _turnController.changeActivePlayer += ChangeActivePlayer;
+
+            _unitStorage = unitStorage;
 
             var abilities = abilitiesData.AbilitiesModel;
 
-            for (int i = 0; i < abilities.Count; i++)
+            foreach (var player in _unitStorage.Players)
             {
-                var ability = abilityFactory.Create<Ability>(bulletPool, abilities[i]);
-                ability.abilityIsEnded += EnemyTurn;
-                _abilities.Add(abilities[i].AbilitiID, ability);
+                for (int i = 0; i < abilities.Count; i++)
+                {
+                    var ability = abilityFactory.Create<Ability>(bulletPool, abilities[i], player);
+                    ability.abilityIsEnded += NextTurn;
+                    player.Abilities.Add(abilities[i].AbilitiID, ability);
+                }
             }
+
+            _activePlayer = _unitStorage.Players[0];
+
             _inputController = inputController;
             _inputController.AbilityKeyIsPressed += UseAbility;
         }
 
+        private void ChangeActivePlayer(Player player)
+        {
+            _activePlayer = player;
+        }
+
         private void ReduceAbilitiesCooldown()
         {
-            foreach (var ability in _abilities)
+            foreach (var player in _unitStorage.Players)
             {
-                if (ability.Value.IsOnCooldown)
+                foreach (var ability in player.Abilities)
                 {
-                    ability.Value.ReduceCooldown();
+                    if (ability.Value.IsOnCooldown)
+                    {
+                        ability.Value.ReduceCooldown();
+                    }
                 }
             }
+ 
         }
 
         public void Execute(float deltaTime)
         {
-            if (!_player.IsYourTurn || _isAbilityUsed)
+            if (!_activePlayer.IsYourTurn || _isAbilityUsed)
             {
                 return;
             }
@@ -52,43 +70,57 @@ namespace MVC
 
         private void UseAbility(int idAbility)
         {
-            if (_abilities[idAbility].IsOnCooldown) return;
+            if (_activePlayer.Abilities[idAbility].IsOnCooldown) return;
 
-            switch (_abilities[idAbility].ElementType)
+            switch (_activePlayer.Abilities[idAbility].ElementType)
             {
                 case Elements.Water:
-                    if (!_player.TryGetTarget(out IEnemy target)) return;
+                    if (!_activePlayer.TryGetTarget(out IEnemy target)) return;
                     else if (target.AliveStateController.State.IsAlive)
                     {
                         ActivateAbility(idAbility);
                     }
                     break;
                 case Elements.Fire:
-                case Elements.Terra:
                     ActivateAbility(idAbility);
+                    break;
+                case Elements.Terra:
+
+                    var enemy = _unitStorage.Enemies.Find(enemy => enemy.GroundStateController.State.IsOnGround && enemy.AliveStateController.State.IsAlive);
+                    if (enemy is null) return;
+
+                    ActivateAbility(idAbility);
+
                     break;
             }
         }
 
         private void ActivateAbility(int idAbility)
         {
-            _player.IsShoted = true;
             _isAbilityUsed = true;
-            _abilities[idAbility].ActivateAbility();
+            _activePlayer.Abilities[idAbility].ActivateAbility();
         }
 
-        public void EnemyTurn()
+        public void NextTurn()
         {
-            _player.IsYourTurn = false;
+            if (_activePlayer.TryGetTarget(out IEnemy target))
+            {
+                _activePlayer.SetTargetAsNull();
+            }
+            _activePlayer.IsShoted = true;
+            _activePlayer.IsYourTurn = false;
+            _activePlayer.CircleOfChoice.SetActive(false);
             _isAbilityUsed = false;
-            _player.IsShoted = false;
         }
 
         public void Reset()
         {
-            foreach (var ability in _abilities)
+            foreach (var player in _unitStorage.Players)
             {
-                ability.Value.ResetAbility();
+                foreach (var ability in player.Abilities)
+                {
+                    ability.Value.ResetAbility();
+                }
             }
         }
     }

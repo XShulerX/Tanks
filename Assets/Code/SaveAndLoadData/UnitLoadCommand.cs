@@ -25,9 +25,15 @@ namespace MVC
                 }
             }
 
-            if (mementoData is PlayerMementoData)
+            if (mementoData is PlayerMementoData playerMementoData)
             {
-                (_unitStorage.player as ILoadeble).Load(mementoData);
+                foreach (var player in _unitStorage.Players)
+                {
+                    if (playerMementoData.id == player.Id)
+                    {
+                        (player as ILoadeble).Load(playerMementoData);
+                    }
+                }
             }
 
 
