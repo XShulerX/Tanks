@@ -79,7 +79,6 @@ namespace MVC
                     else if (target.AliveStateController.State.IsAlive)
                     {
                         ActivateAbility(idAbility);
-                        _activePlayer.SetTargetAsNull();
                     }
                     break;
                 case Elements.Fire:
@@ -91,10 +90,7 @@ namespace MVC
                     if (enemy is null) return;
 
                     ActivateAbility(idAbility);
-                    if (_activePlayer.TryGetTarget(out target))
-                    {
-                        _activePlayer.SetTargetAsNull();
-                    }
+
                     break;
             }
         }
@@ -107,8 +103,13 @@ namespace MVC
 
         public void NextTurn()
         {
+            if (_activePlayer.TryGetTarget(out IEnemy target))
+            {
+                _activePlayer.SetTargetAsNull();
+            }
             _activePlayer.IsShoted = true;
             _activePlayer.IsYourTurn = false;
+            _activePlayer.CircleOfChoice.SetActive(false);
             _isAbilityUsed = false;
         }
 

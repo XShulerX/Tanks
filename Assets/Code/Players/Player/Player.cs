@@ -30,6 +30,8 @@ namespace MVC
         private float _currentHealthPoints;
         [SerializeField]
         private Slider _sliderHP;
+        [SerializeField]
+        private GameObject _circleOfChoice;
 
         private IEnemy _target;
         private Material _fire;
@@ -69,6 +71,7 @@ namespace MVC
         public AliveStateController AliveStateController { get => _aliveStateController; }
         public GroundStateController GroundStateController { get => _groundStateController; }
         public Dictionary<int, Ability> Abilities { get => _abilities;}
+        public GameObject CircleOfChoice { get => _circleOfChoice; }
 
         public void Init(Controllers controllers)
         {
@@ -119,6 +122,7 @@ namespace MVC
             _sliderHP.value = _currentHealthPoints / maxHP;
             GetWrackObject.SetActive(false);
             GetTankObject.SetActive(true);
+            _circleOfChoice.SetActive(false);
             _aliveStateController.SetAliveState();
             IsShoted = false;
             IsYourTurn = true;

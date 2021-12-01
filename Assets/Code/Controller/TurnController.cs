@@ -13,7 +13,6 @@ namespace MVC
         private UnitStorage _unitStorage;
 
         private LinkedList<IGamer> _queueGamers;
-        private bool _isTimerOver;
         private Player _activePlayer;
         private TimerController _timerController;
         private ElementsController _elementsController;
@@ -54,11 +53,13 @@ namespace MVC
         public void Execute(float deltaTime)
         {
             if (IsAllPlayersDie()) return;
-            
+
             _activePlayer = null;
             _activePlayer = _unitStorage.Players.Find(player => player.AliveStateController.State.IsAlive && !player.IsShoted);
+
             if (!(_activePlayer is null))
             {
+                _activePlayer.CircleOfChoice.SetActive(true);
                 if (!_activePlayer.IsYourTurn)
                 {
                     _activePlayer.IsYourTurn = true;
@@ -68,42 +69,38 @@ namespace MVC
             }
             else
             {
-                var _activeEnemy = _unitStorage.Enemies.Find(enemy => !enemy.IsShoted && enemy.AliveStateController.State.IsAlive && enemy.GroundStateController.State.IsOnGround);
-                if (!(_activeEnemy is null))
+                var activeEnemy = _unitStorage.Enemies.Find(enemy => !enemy.IsShoted && enemy.AliveStateController.State.IsAlive && enemy.GroundStateController.State.IsOnGround);
+                if (!(activeEnemy is null))
                 {
-                    if (_timer is null)
-                    {
-                        _timer = new TimerData(DELAY, _timerController);
-                    }
+                    CheckOrCreateTimer();
 
-                    _isTimerOver = _timer.IsTimerEndStatus;
-
-                    if (_isTimerOver)
+                    if (_timer.IsTimerEndStatus)
                     {
-                        _activeEnemy.IsYourTurn = true;
-                        _isTimerOver = false;
+                        activeEnemy.IsYourTurn = true;
                         _timer = null;
                     }
                 }
                 else
                 {
-                    if (_timer is null)
-                    {
-                        _timer = new TimerData(DELAY, _timerController);
-                    }
+                    CheckOrCreateTimer();
 
-                    _isTimerOver = _timer.IsTimerEndStatus;
-
-                    if (_isTimerOver)
+                    if (_timer.IsTimerEndStatus)
                     {
                         EndTurn();
-                        _isTimerOver = false;
                         _timer = null;
                     }
 
                 }
             }
 
+        }
+
+        private void CheckOrCreateTimer()
+        {
+            if (_timer is null)
+            {
+                _timer = new TimerData(DELAY, _timerController);
+            }
         }
 
         private bool IsAllPlayersDie()
