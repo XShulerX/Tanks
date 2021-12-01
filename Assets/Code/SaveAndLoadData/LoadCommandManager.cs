@@ -10,6 +10,7 @@ namespace MVC
         private UnitLoadCommand _unitLoadCommand;
         private TurnControllerLoadCommand _turnControllerLoadCommand;
         private AbilityLoadCommand _abilityLoadCommand;
+        private GameResetOrEndManager _gameResetOrEndManager;
 
         private TimerController _timerController;
 
@@ -20,6 +21,7 @@ namespace MVC
             _turnControllerLoadCommand = new TurnControllerLoadCommand(turnController);
             _abilityLoadCommand = new AbilityLoadCommand(unitStorage);
             _timerController = timerController;
+            _gameResetOrEndManager = gameResetOrEndManager;
         }
 
         public void Load(GameMemento savedData)
@@ -50,6 +52,7 @@ namespace MVC
         private void EndLoad()
         {
             isOnLoad.Invoke(false);
+            _gameResetOrEndManager.SaveResetScene(true);
         }
     }
 }

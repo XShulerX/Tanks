@@ -25,7 +25,7 @@ namespace MVC
 
         private void Restart()
         {
-            _resetManager.ResetScene();
+            _resetManager.ResetScene(true);
             _model.Panel.SetActive(false);
         }
 

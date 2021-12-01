@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MVC
 {
@@ -7,26 +8,24 @@ namespace MVC
         private UnitStorage _unitStorage;
         private GameResetOrEndManager _gameResetManager;
         private TurnController _turnController;
-        private PlayerAbilityController _playerAbilityController;
 
         private List<GameMemento> _gameMementos = new List<GameMemento>(8);
 
-        public MementosSaver(UnitStorage unitStorage, GameResetOrEndManager gameResetManager, TurnController turnController, PlayerAbilityController playerAbilityController)
+        public MementosSaver(UnitStorage unitStorage, GameResetOrEndManager gameResetManager, TurnController turnController)
         {
             _unitStorage = unitStorage;
             _gameResetManager = gameResetManager;
             _turnController = turnController;
-            _playerAbilityController = playerAbilityController;
 
             _turnController.endGlobalTurn += SaveMementos;
-            _gameResetManager.sceneResetState += SaveMementosAfterReset;
+            _gameResetManager.saveResetState += CleanMementosAfterReset;
 
             SaveMementos();
         }
 
-        private void SaveMementosAfterReset(bool isInReset)
+        private void CleanMementosAfterReset(bool isNeedToSave)
         {
-            if (!isInReset)
+            if (isNeedToSave)
             {
                 _gameMementos.RemoveAt(_gameMementos.Count - 1);
                 SaveMementos();

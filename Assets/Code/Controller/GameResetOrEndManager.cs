@@ -5,6 +5,7 @@ namespace MVC
     public class GameResetOrEndManager: ILoadeble
     {
         public event Action<bool> sceneResetState = delegate (bool b) { };
+        public event Action<bool> saveResetState = delegate (bool b) { };
         public event Action gameOver = delegate () { };
         public event Action<int> lostGame = delegate (int t) { };
         public event Action<int> winGame = delegate (int t) { };
@@ -63,12 +64,18 @@ namespace MVC
             winGame.Invoke(_stageCount);
         }
 
-        public void ResetScene()
+        public void ResetScene(bool isNeedToSave)
         {
             sceneResetState.Invoke(true);
             _controllers.Reset();
             sceneResetState.Invoke(false);
+            SaveResetScene(isNeedToSave);
             _isAttemptOver = false;
+        }
+
+        public void SaveResetScene(bool isNeedToSave)
+        {
+            saveResetState.Invoke(isNeedToSave);
         }
 
         private void GameOver()
@@ -80,7 +87,7 @@ namespace MVC
         {
             if (mementoData is StageMementoData stageMemento)
             {
-                ResetScene();
+                ResetScene(false);
                 _attemptsCount = stageMemento.attemptsCount;
                 _unitController.SetForceModifier(stageMemento.forceModifer);
                 _stageCount = stageMemento.stageCount;
