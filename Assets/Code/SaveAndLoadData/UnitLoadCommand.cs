@@ -27,9 +27,12 @@ namespace MVC
 
             if (mementoData is PlayerMementoData playerMementoData)
             {
-                for (int i = 0; i < _unitStorage.Players.Count; i++)
+                foreach (var player in _unitStorage.Players)
                 {
-                    (_unitStorage.Players[i] as ILoadeble).Load(playerMementoData);
+                    if (playerMementoData.id == player.Id)
+                    {
+                        (player as ILoadeble).Load(playerMementoData);
+                    }
                 }
             }
 

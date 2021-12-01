@@ -6,10 +6,11 @@ namespace MVC
     {
         private List<IExecute> _uiExecuteControllerlsList = new List<IExecute>();
 
-        public UIController(UIInitializationModel uiModel, PlayerAbilityController abilityController, GameResetOrEndManager gameResetManager, LoadCommandManager loadCommandManager)
+        public UIController(UIInitializationModel uiModel, PlayerAbilityController abilityController, GameResetOrEndManager gameResetManager, 
+            LoadCommandManager loadCommandManager, InputController inputController)
         {
-            var uiStateController = new UIAbilityPanelsStateController(new UIAbilityPanelsStateControllerModel(uiModel.GamePanelModel, abilityController));
-            _uiExecuteControllerlsList.Add(uiStateController);
+            var uiGamePanelController = new UIGamePanelController(new UIGamePanelControllerModel(uiModel.GamePanelModel, abilityController, inputController));
+            _uiExecuteControllerlsList.Add(uiGamePanelController);
 
             new UILostPanelController(uiModel.LostPanelModel, gameResetManager);
             new UIWinPanelController(uiModel.WinPanelModel, gameResetManager);

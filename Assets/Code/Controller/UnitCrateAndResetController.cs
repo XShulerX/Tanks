@@ -39,7 +39,7 @@ namespace MVC
         {
             foreach (var player in _unitStorage.Players)
             {
-                player.Reset();
+                player.Reset(_isPlayerWin);
             }        
         }
 
@@ -47,6 +47,7 @@ namespace MVC
         {
             ResetEnemies();
             ResetPlayer();
+            _isPlayerWin = false;
         }
 
         public void IncreaseForceModifer()

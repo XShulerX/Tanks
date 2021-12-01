@@ -1,13 +1,30 @@
+using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace MVC {
-    public class UIAbilityPanelsStateController: IExecute
+    public class UIGamePanelController: IExecute
     {
-        private UIAbilityPanelsStateControllerModel _model;
+        private UIGamePanelControllerModel _model;
 
-        public UIAbilityPanelsStateController(UIAbilityPanelsStateControllerModel model)
+        public UIGamePanelController(UIGamePanelControllerModel model)
         {
             _model = model;
+
+            _model.HelpButton.onClick.AddListener(ShowHelpPanel);
+            _model.CloseHelpButton.onClick.AddListener(HideHelpPanel);
+
+            _model.InputController.HelpKeyIsPressed += ShowHelpPanel;
+        }
+
+        private void HideHelpPanel()
+        {
+            _model.HelpPanel.SetActive(false);
+        }
+
+        private void ShowHelpPanel()
+        {
+            _model.HelpPanel.SetActive(true);
         }
 
         public void Execute(float deltaTime)

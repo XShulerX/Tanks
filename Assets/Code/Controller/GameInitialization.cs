@@ -52,7 +52,7 @@ namespace MVC
             var loadComandManager = new LoadCommandManager(gameResetManager, playerAbilityController, turnController, unitStorage, timerController);
             new SaveDataController(inputController, momentoSaver, loadComandManager);
 
-            var uiController = new UIController(uiModel, playerAbilityController, gameResetManager, loadComandManager);
+            var uiController = new UIController(uiModel, playerAbilityController, gameResetManager, loadComandManager, inputController);
             controllers.Add(uiController);
         }
     }

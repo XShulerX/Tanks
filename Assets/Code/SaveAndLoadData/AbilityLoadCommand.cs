@@ -19,7 +19,9 @@ namespace MVC
             {
                 foreach (var ability in player.Abilities)
                 {
-                    if (ability.Key == (mementoData as AbilityMementoData).id)
+                    var abilityMemento = mementoData as AbilityMementoData;
+
+                    if (player.Id == abilityMemento.playerID && ability.Key == abilityMemento.id)
                     {
                         (ability.Value as ILoadeble).Load(mementoData);
                     }

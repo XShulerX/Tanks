@@ -44,7 +44,7 @@ namespace MVC
             var playerMementos = new List<PlayerMementoData>();
             foreach (var player in _unitStorage.Players)
             {
-                playerMementos.Add(new PlayerMementoData(player.CurrentHealthPoints, player.TankElement));
+                playerMementos.Add(new PlayerMementoData(player.CurrentHealthPoints, player.TankElement, player.Id));
             }
 
                 
@@ -56,7 +56,7 @@ namespace MVC
             {
                 foreach (var ability in player.Abilities)
                 {
-                    abilitiesMemento.Add(new AbilityMementoData(ability.Key, ability.Value.IsOnCooldown, ability.Value.CooldownTurns));
+                    abilitiesMemento.Add(new AbilityMementoData(player.Id, ability.Key, ability.Value.IsOnCooldown, ability.Value.CooldownTurns));
                 }
             }
 
