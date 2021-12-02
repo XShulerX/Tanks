@@ -59,40 +59,50 @@ namespace MVC
 
             if (!(_activePlayer is null))
             {
-                _activePlayer.CircleOfChoice.SetActive(true);
-                if (!_activePlayer.IsYourTurn)
-                {
-                    _activePlayer.IsYourTurn = true;
-                    changeActivePlayer.Invoke(_activePlayer);
-                }
+                PlayerTurn();
 
             }
             else
             {
-                var activeEnemy = _unitStorage.Enemies.Find(enemy => !enemy.IsShoted && enemy.AliveStateController.State.IsAlive && enemy.GroundStateController.State.IsOnGround);
-                if (!(activeEnemy is null))
-                {
-                    CheckOrCreateTimer();
-
-                    if (_timer.IsTimerEndStatus)
-                    {
-                        activeEnemy.IsYourTurn = true;
-                        _timer = null;
-                    }
-                }
-                else
-                {
-                    CheckOrCreateTimer();
-
-                    if (_timer.IsTimerEndStatus)
-                    {
-                        EndTurn();
-                        _timer = null;
-                    }
-
-                }
+                EnemyTurn();
             }
 
+        }
+
+        private void PlayerTurn()
+        {
+            _activePlayer.CircleOfChoice.SetActive(true);
+            if (!_activePlayer.IsYourTurn)
+            {
+                _activePlayer.IsYourTurn = true;
+                changeActivePlayer.Invoke(_activePlayer);
+            }
+        }
+
+        private void EnemyTurn()
+        {
+            var activeEnemy = _unitStorage.Enemies.Find(enemy => !enemy.IsShoted && enemy.AliveStateController.State.IsAlive && enemy.GroundStateController.State.IsOnGround);
+            if (!(activeEnemy is null))
+            {
+                CheckOrCreateTimer();
+
+                if (_timer.IsTimerEndStatus)
+                {
+                    activeEnemy.IsYourTurn = true;
+                    _timer = null;
+                }
+            }
+            else
+            {
+                CheckOrCreateTimer();
+
+                if (_timer.IsTimerEndStatus)
+                {
+                    EndTurn();
+                    _timer = null;
+                }
+
+            }
         }
 
         private void CheckOrCreateTimer()
